@@ -11,12 +11,16 @@
   <name>applicationCompetences</name>
   <description>A simple applicationCompetences.</description>
   <!-- FIXME change it to the project's website -->
-  <url>http://www.example.com</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>8</maven.compiler.source>
     <maven.compiler.target>8</maven.compiler.target>
+    
+    <sonar.projectKey>projetJava</sonar.projectKey>
+    <sonar.projectName>projetJava</sonar.projectName>
+    <sonar.host.url>${env.SONAR_HOST_URL}</sonar.host.url>
+    <sonar.login>${env.SONAR_TOKEN}</sonar.login>
   </properties>
 
   <dependencies>
@@ -29,7 +33,13 @@
     	<groupId>com.oracle.database.jdbc</groupId>
     	<artifactId>ojdbc11</artifactId>
     	<version>23.6.0.24.10</version>
-	</dependency>
+    </dependency>
+    <dependency>
+    <groupId>org.sonarsource.scanner.maven</groupId>
+    <artifactId>sonar-maven-plugin</artifactId>
+    <version>3.11.0.3922</version>
+</dependency>
+
   </dependencies>
 
   <build>
@@ -72,11 +82,6 @@
           <artifactId>maven-deploy-plugin</artifactId>
           <version>3.1.2</version>
         </plugin>
-	<plugin>
-    	  <groupId>org.sonarsource.scanner.maven</groupId>
-          <artifactId>sonar-maven-plugin</artifactId>
-          <version>3.9.1.2184</version> 
-	</plugin>
       </plugins>
     </pluginManagement>
   </build>

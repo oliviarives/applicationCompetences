@@ -8,6 +8,7 @@ public class MainTest {
 		System.out.println("Olivia 22/01");
 		System.out.println("TESuuTTT");
 		System.out.println("test");
+		System.out.println("test sonarQube2");
 	}
 
 }
