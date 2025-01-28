@@ -40,7 +40,6 @@
       <artifactId>sonar-maven-plugin</artifactId>
       <version>5.0.0.4389</version>
     </dependency>
-    </dependency>
     <dependency>
       <groupId>at.favre.lib</groupId>
       <artifactId>bcrypt</artifactId>
