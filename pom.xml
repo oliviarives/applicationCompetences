@@ -16,11 +16,6 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>8</maven.compiler.source>
     <maven.compiler.target>8</maven.compiler.target>
-    
-    <sonar.projectKey>projetJava</sonar.projectKey>
-    <sonar.projectName>projetJava</sonar.projectName>
-    <sonar.host.url>${env.SONAR_HOST_URL}</sonar.host.url>
-    <sonar.login>${env.SONAR_TOKEN}</sonar.login>
   </properties>
 
   <dependencies>
@@ -47,7 +42,7 @@
   </dependencies>
 
   <build>
-    <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
+    <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (peut être moved to parent pom) -->
       <plugins>
         <plugin>
           <artifactId>maven-clean-plugin</artifactId>
@@ -89,12 +84,4 @@
       </plugins>
     </pluginManagement>
   </build>
-
-  <reporting>
-    <plugins>
-      <plugin>
-        <artifactId>maven-project-info-reports-plugin</artifactId>
-      </plugin>
-    </plugins>
-  </reporting>
 </project>
