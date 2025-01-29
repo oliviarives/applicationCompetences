@@ -6,16 +6,19 @@ import java.sql.SQLException;
 import java.sql.ResultSet;*/
 
 import modele.connexion.CictOracleDataSource;
- 
+import utilitaires.Config;
+
 public class Main {
+    private static String DB_HOST = Config.get("db.host");
+    private static String DB_USER = Config.get("db.user");
+    private static String DB_PWD = Config.get("db.password");
+
+
+
     public static void main(String[] args) {
-        // Remplacez par votre login et mot de passe
-        String login = "BSC3991A";
-        String password = "2002Aralc.31";
- 
         try {
             // Crée une connexion à la base de données
-            CictOracleDataSource.creerAcces(login, password);
+            CictOracleDataSource.creerAcces(DB_USER, DB_PWD);
  
             // Récupère la connexion pour vérifier si elle fonctionne
             Connection connection = CictOracleDataSource.getConnectionBD();
