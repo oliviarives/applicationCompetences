@@ -10,7 +10,6 @@
 
   <name>applicationCompetences</name>
   <description>A simple applicationCompetences.</description>
-  <!-- FIXME change it to the project's website -->
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
