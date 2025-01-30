@@ -11,12 +11,12 @@ public class CictOracleDataSource extends OracleDataSource {
  
      private static CictOracleDataSource cod;
      private static Connection conn;
-    private static String DBHOST = Config.get("db.host");
-    private static String DBPORT = Config.get("db.port");
-    private static String DBNAME = Config.get("db.name");
+    private static String dbHost = Config.get("db.host");
+    private static String dbPort = Config.get("db.port");
+    private static String dbName = Config.get("db.name");
 
      private CictOracleDataSource(String login, String pwd) throws SQLException{
-         this.setURL("jdbc:oracle:thin:@" + DBHOST + ":" + DBPORT + ":" + DBNAME);
+         this.setURL("jdbc:oracle:thin:@" + dbHost + ":" + dbPort + ":" + dbName);
          this.setUser(login);
          this.setPassword(pwd);
      }
