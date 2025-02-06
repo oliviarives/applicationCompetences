@@ -16,9 +16,9 @@ public class CictOracleDataSource extends OracleDataSource {
  
          this.setURL("jdbc:oracle:thin:@telline.univ-tlse3.fr:1521:etupre");
  
-         this.setUser(login);
+         this.setUser("BSC3991A");
  
-         this.setPassword(pwd);
+         this.setPassword("2002Aralc.31");
  
      }
  
