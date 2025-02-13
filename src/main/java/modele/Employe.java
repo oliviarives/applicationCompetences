@@ -21,7 +21,7 @@ public class Employe {
         this.prenom = prenom;
         this.nom = nom;
         this.login = login;
-        this.hashedPwd = hashPassword(mdp);
+        this.hashedPwd = MdpUtils.hashPassword(mdp);
         this.poste = poste;
         this.dateEntree = dateEntree;
         this.actif = true; 
