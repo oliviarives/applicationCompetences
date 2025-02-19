@@ -4,6 +4,9 @@ import java.sql.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import at.favre.lib.crypto.bcrypt.BCrypt;
+
+
 public class Employe {
     private String prenom; 
     private String nom; 
