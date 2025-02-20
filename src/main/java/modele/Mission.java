@@ -1,27 +1,26 @@
 package modele;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class Mission {
     private String titre;
-    private Date dateDebut;
-    private Date dateFin;
-    private Date dateCreation;
+    private LocalDate dateDebut;
+    private LocalDate dateFin;
+    private LocalDate dateCreation;
     private String commentaires;
     private int nbEmployeTotal;
-    private String description; 
-    private Statut statut; 
-    private int idMis;    
+    private String description;
+    private Statut statut;
+    private int idMis;
     private static int CompteurId = 1;
-    
+
     private List<Employe> employes;
     private Responsable responsable;
 
-    
-    public Mission(String titre, Date dateDebut, Date dateFin, String commentaires, int nbEmployeTotal, 
-    		String description, Responsable responsable) {
+    public Mission(String titre, LocalDate dateDebut, LocalDate dateFin, String commentaires, int nbEmployeTotal,
+                  String description, Responsable responsable, Statut statut) {
         this.titre = titre;
         this.dateDebut = dateDebut;
         this.dateFin = dateFin;
@@ -29,12 +28,57 @@ public class Mission {
         this.nbEmployeTotal = nbEmployeTotal;
         this.description = description;
         this.idMis = Mission.CompteurId;
-        Mission.CompteurId ++;
+        Mission.CompteurId++;
         this.responsable = responsable;
         this.employes = new ArrayList<>();
-        this.dateCreation = new Date();
+        this.dateCreation = LocalDate.now();
+        this.statut = statut;
     }
     
+    public int getIdMis() {
+    	return this.idMis; 
+    }
+    
+    public Statut getStatut() {
+    	return this.statut; 
+    }
+    
+    public void setStatut(Statut statut) {
+    	this.statut= statut; 
+    }
+    
+    public String getTitre() {
+    	return this.titre; 
+    }
+    
+    public void setTitre(String titre) {
+    	this.titre = titre; 
+    }
+    
+    public LocalDate getDateDebut() {
+    	return this.dateDebut; 
+    }
+    
+    public void setDateDebut(LocalDate dateDebut) {
+    	this.dateDebut = dateDebut; 
+    }
+    
+    public LocalDate getDateFin() {
+    	return this.dateFin; 
+    }
+    
+    public void setDateFin(LocalDate dateFin) {
+    	this.dateFin = dateFin; 
+    }
+    
+    public String getDescription() {
+    	return this.description; 
+    }
+    
+    public void setDescription(String description) {
+    	this.description = description; 
+    }
+
     public void addEmploye(Employe employe) {
         if (employe != null && !this.employes.contains(employe)) {
             this.employes.add(employe);
@@ -47,73 +91,5 @@ public class Mission {
             this.employes.remove(employe);
             employe.removeMission(this);
         }
-    }
-
-    public String getTitre() {
-        return titre;
-    }
-
-    public void setTitre(String titre) {
-        this.titre = titre;
-    }
-
-    public Date getDateDebut() {
-        return dateDebut;
-    }
-
-    public void setDateDebut(Date dateDebut) {
-        this.dateDebut = dateDebut;
-    }
-
-    public Date getDateFin() {
-        return dateFin;
-    }
-
-    public void setDateFin(Date dateFin) {
-        this.dateFin = dateFin;
-    }
-
-    public Date getDateCreation() {
-        return dateCreation;
-    }
-
-    public void setDateCreation(Date dateCreation) {
-        this.dateCreation = dateCreation;
-    }
-
-    public String getCommentaires() {
-        return commentaires;
-    }
-
-    public void setCommentaires(String commentaires) {
-        this.commentaires = commentaires;
-    }
-
-    public int getNbEmployeTotal() {
-        return nbEmployeTotal;
-    }
-
-    public void setNbEmployeTotal(int nbEmployeTotal) {
-        this.nbEmployeTotal = nbEmployeTotal;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public List<Employe> getEmployes() {
-        return employes;
-    }
-
-    public Responsable getResponsable() {
-        return responsable;
-    }
-
-    public void setResponsable(Responsable responsable) {
-        this.responsable = responsable;
     }
 }
