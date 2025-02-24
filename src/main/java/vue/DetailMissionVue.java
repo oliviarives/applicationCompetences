@@ -4,12 +4,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.time.LocalDate;
 
-import controleur.MissionControleur;
-import modele.Mission;
+import controleur.DetailMissionControleur;
+import modele.DetailMission;
 import modele.Statut;
 
-public class MissionVue {
-    private MissionControleur controleur;
+public class DetailMissionVue {
+    private DetailMissionControleur controleur;
     private JFrame frame;
     private JLabel lblTitre, lblStatut, lblDateDebut, lblDateFin, lblDescription, lblCollaborateurs;
     private JTable tableCollaborateurs;
@@ -18,7 +18,7 @@ public class MissionVue {
     private JButton btnRetour;
 
 
-    public MissionVue(MissionControleur controleur) {
+    public DetailMissionVue(DetailMissionControleur controleur) {
         this.controleur = controleur;
         initialiserUI();
     }
@@ -101,7 +101,7 @@ public class MissionVue {
     }
 
 
-    public void afficherMission(Mission mission) {
+    public void afficherMission(DetailMission mission) {
         lblTitre.setText(mission.getTitre());
         lblStatut.setText(mission.getStatut().toString());
         lblDateDebut.setText(mission.getDateDebut().toString());
@@ -110,7 +110,7 @@ public class MissionVue {
     }
 
     private void modifierMission() {
-        Mission mission = controleur.chercherMissionParId(1);
+        DetailMission mission = controleur.chercherMissionParId(1);
         if (mission == null) {
             JOptionPane.showMessageDialog(frame, "Mission introuvable !");
             return;

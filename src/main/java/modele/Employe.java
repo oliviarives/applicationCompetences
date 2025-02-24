@@ -17,7 +17,7 @@ public class Employe {
     private boolean actif;
     private Set<Service> services; 
     private Set<Competence> competences; 
-    private Set<Mission> missions; 
+    private Set<DetailMission> missions; 
 
     public Employe(String prenom, String nom, String login, String mdp, String poste, Date dateEntree, 
                    Service[] services, Competence[] competences) {
@@ -66,13 +66,13 @@ public class Employe {
         this.services.remove(service);
     }
     
-    public void addMission(Mission mission) {
+    public void addMission(DetailMission mission) {
         if (mission != null) {
             this.missions.add(mission);
         }
     }
 
-    public void removeMission(Mission mission) {
+    public void removeMission(DetailMission mission) {
         this.missions.remove(mission);
     }
 

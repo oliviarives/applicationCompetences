@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Mission {
+public class DetailMission {
     private String titre;
     private LocalDate dateDebut;
     private LocalDate dateFin;
@@ -19,7 +19,7 @@ public class Mission {
     private List<Employe> employes;
     private Responsable responsable;
 
-    public Mission(String titre, LocalDate dateDebut, LocalDate dateFin, String commentaires, int nbEmployeTotal,
+    public DetailMission(String titre, LocalDate dateDebut, LocalDate dateFin, String commentaires, int nbEmployeTotal,
                    String description, Responsable responsable, Statut statut) {
         this.titre = titre;
         this.dateDebut = dateDebut;
@@ -27,8 +27,8 @@ public class Mission {
         this.commentaires = commentaires;
         this.nbEmployeTotal = nbEmployeTotal;
         this.description = description;
-        this.idMis = Mission.CompteurId;
-        Mission.CompteurId++;
+        this.idMis = DetailMission.CompteurId;
+        DetailMission.CompteurId++;
         this.responsable = responsable;
         this.employes = new ArrayList<>();
         this.dateCreation = LocalDate.now();

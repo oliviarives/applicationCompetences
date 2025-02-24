@@ -6,7 +6,7 @@ import java.util.Set;
 
 public class Responsable extends Employe {
 
-    private Set<Mission> missions; 
+    private Set<DetailMission> missions; 
 
     public Responsable(String prenom, String nom, String login, String mdp, String poste, Date dateEntree,
             Service[] services, Competence[] competences) {
@@ -14,21 +14,21 @@ public class Responsable extends Employe {
         this.missions = new HashSet<>();
     }
 
-    public void addMission(Mission mission) {
+    public void addMission(DetailMission mission) {
         if (mission != null) {
             mission.setResponsable(this);
             this.missions.add(mission);
         }
     }
 
-    public void removeMission(Mission mission) {
+    public void removeMission(DetailMission mission) {
         if (mission != null) {
             mission.setResponsable(null);
             this.missions.remove(mission);
         }
     }
 
-    public Set<Mission> getMissions() {
+    public Set<DetailMission> getMissions() {
         return this.missions;
     }
 }
