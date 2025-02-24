@@ -18,7 +18,6 @@ public class Mission {
     
     private List<Employe> employes;
     private Responsable responsable;
-
     
     public Mission(String titre, Date dateDebut, Date dateFin, String commentaires, int nbEmployeTotal, 
     		String description, Responsable responsable) {
