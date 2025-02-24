@@ -78,6 +78,10 @@ public class Mission {
     public void setDescription(String description) {
     	this.description = description; 
     }
+    
+    public void setResponsable(Responsable responsable) {
+    	this.responsable = responsable; 
+    }
 
     public void addEmploye(Employe employe) {
         if (employe != null && !this.employes.contains(employe)) {
