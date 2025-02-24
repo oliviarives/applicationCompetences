@@ -26,6 +26,7 @@ public class MissionControleur {
         missions.removeIf(mission -> mission.getIdMis() == id);
     }
 
+    
     public List<Mission> getMissions() {
         return new ArrayList<>(missions);
     }
