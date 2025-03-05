@@ -37,7 +37,5 @@ public class test extends JPanel {
         // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
     }
 
-    // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    // Generated using JFormDesigner Evaluation license - unknown
-    // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:on
+
 }
