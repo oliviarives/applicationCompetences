@@ -44,6 +44,12 @@
       <artifactId>jbcrypt</artifactId>
       <version>0.4</version>
     </dependency>
+    <dependency>
+      <groupId>com.github.miglayout</groupId>
+      <artifactId>miglayout-swing</artifactId>
+      <version>5.0</version> <!-- Vérifie la version correcte -->
+    </dependency>
+
   </dependencies>
 
   <build>
