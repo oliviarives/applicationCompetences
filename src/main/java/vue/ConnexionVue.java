@@ -1,10 +1,9 @@
 package vue;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.logging.Logger;
 import javax.swing.*;
 import controleur.ConnexionControleur;
 import modele.connexion.CictOracleDataSource;
@@ -13,16 +12,23 @@ import utilitaires.Config;
 
 public class ConnexionVue extends JDialog {
     private final ConnexionControleur controleur;
+    private static final Logger logger = Logger.getLogger(ConnexionVue.class.getName());
     private JPanel page;
-    private JPanel gauche;
-    private JPanel droite;
     private JTextField IdentifiantJTextField;
     private JPasswordField MdpJTextFieldPwd;
-    private JLabel MdpJLabel;
-    private JLabel IdentifiantJLabel;
-    private JLabel ConnexionJLabel;
     private JLabel messageLabel;
     private JButton loginButton;
+    @SuppressWarnings("unused")
+    private JPanel gauche;
+    @SuppressWarnings("unused")
+    private JPanel droite;
+    @SuppressWarnings("unused")
+    private JLabel MdpJLabel;
+    @SuppressWarnings("unused")
+    private JLabel IdentifiantJLabel;
+    @SuppressWarnings("unused")
+    private JLabel ConnexionJLabel;
+
 
     /**
      * Crée la fenêtre de connexion.
@@ -39,25 +45,10 @@ public class ConnexionVue extends JDialog {
         setVisible(true);
 
         // Ajouter un ActionListener aux champs de texte pour pouvoir appuyer sur le bouton Entrer du clavier
-        IdentifiantJTextField.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                verifierConnexion();
-            }
-        });
-        MdpJTextFieldPwd.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                verifierConnexion();
-            }
-        });
-        // Actions des boutons
-        loginButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                verifierConnexion();
-            }
-        });
+        IdentifiantJTextField.addActionListener(e -> verifierConnexion());
+        MdpJTextFieldPwd.addActionListener(e -> verifierConnexion());
+        loginButton.addActionListener(e -> verifierConnexion());
+
     }
 
     /**
@@ -77,9 +68,9 @@ public class ConnexionVue extends JDialog {
             ConnexionControleur controleur = new ConnexionControleur(new UtilisateurDAO(connection));
 
             // Passer le contrôleur à la vue
-            ConnexionVue dialog = new ConnexionVue(controleur);
+            new ConnexionVue(controleur);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.severe("Erreur lors de la connexion : " + e.getMessage());
         }
     }
 
