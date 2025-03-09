@@ -64,7 +64,6 @@ public class ConnexionVue extends JDialog {
                 throw new SQLException("Impossible d'obtenir une connexion valide à la base de données.");
             }
 
-            // Création du contrôleur
             ConnexionControleur controleur = new ConnexionControleur(new UtilisateurDAO(connection));
 
             // Passer le contrôleur à la vue
