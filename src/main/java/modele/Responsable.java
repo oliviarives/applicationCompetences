@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Responsable extends Employe {
-
+/*
     private Set<DetailMission> missions; 
 
     public Responsable(String prenom, String nom, String login, String mdp, String poste, Date dateEntree,
@@ -30,5 +30,5 @@ public class Responsable extends Employe {
 
     public Set<DetailMission> getMissions() {
         return this.missions;
-    }
+    }*/
 }

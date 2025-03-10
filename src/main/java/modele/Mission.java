@@ -47,9 +47,7 @@ public class Mission {
         return this.titreMis;
     }
 
-    public Date getDateDebutMis() {
-        return this.dateDebutMis;
-    }
+    public Date getDateDebutMis() {return this.dateDebutMis;}
 
     public Date getDateFinMis() {
         return this.dateFinMis;
@@ -71,4 +69,7 @@ public class Mission {
         return this.nbEmpMis;
     }
 
+    public String getLoginEmp() {
+        return this.loginEmp;
+    }
 }

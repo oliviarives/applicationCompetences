@@ -32,27 +32,34 @@ public class MissionControleur {
             }
         });*/
 
-        creationMV.getButtonConfirmer().addActionListener(
+       /* creationMV.getButtonConfirmer().addActionListener(
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e){
                         Mission misInsert= new Mission(
                                 creationMV.getTitreMisFieldValue(),
-                                Date.valueOf(creationMV.getDateDebutMisField()),
-                                Date.valueOf(creationMV.getDateFinMisField()),
+                                creationMV.getDateDebutMisField(),
+                                creationMV.getDateFinMisField(),
+                                //Date.valueOf("1970-01-01"),
+                                //Date.valueOf("1970-01-01"),
                                 creationMV.getDescriptionMisFieldValue(),
-                                Date.valueOf("00/00/0000"),
+                                new Date(System.currentTimeMillis()),
+                                //Date.valueOf("1970-01-01"),
                                 creationMV.getNbEmpField(),
-                                creationMV.getLogEmpField()
+                                creationMV.getLogEmpField(),
+                                1
+
                         );
                         try {
                             missionDAO.ajouterMission(misInsert);
+                            navControleur.getVueV().getButtonMissions().doClick();
                         } catch (SQLException ex) {
                             throw new RuntimeException(ex);
                         }
+
                     }
                 }
-        );
+        );*/
     }
 
     public void loadMissions() {

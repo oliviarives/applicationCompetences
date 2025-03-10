@@ -10,7 +10,7 @@ public class RequeteMissionAjouter extends RequeteMission {
     //Ne retourne qu'un string contenant la requete avec valeurs vides
     @Override
     public String requete() {
-        return "INSERT INTO MISSION (IDMIS,TITREMIS,NBEMPMIS,DATEDEBUTMIS,DATEFINMIS,DESCRIPTION,DATECREATION,LOGINEMP,ISDTA) VALUES (?,?,?,…)";
+        return "INSERT INTO MISSION (IDMIS,TITREMIS,NBEMPMIS,DATEDEBUTMIS,DATEFINMIS,DESCRIPTION,DATECREATION,LOGINEMP,IDSTA) VALUES (?,?,?,?,?,?,?,?,?)";
     }
 
     @Override
@@ -32,10 +32,10 @@ public class RequeteMissionAjouter extends RequeteMission {
         prSt.setString(2, obj.getTitreMis());//titreMis
         prSt.setInt(3, obj.getNbEmpMis()); //nbEmpMis
         prSt.setDate(4, obj.getDateDebutMis()); //DateDebutMis
-        prSt.setDate(5, obj.getDateFinMis()); //DateFinMis
+        prSt.setDate(5,obj.getDateFinMis()); //DateFinMis
         prSt.setString(6, obj.getDescription());//description
         prSt.setDate(7, obj.getDateCreation()); //DateCreation
-        prSt.setInt(8, obj.getNbEmpMis());//loginEmp
+        prSt.setString(8, obj.getLoginEmp());//loginEmp
         prSt.setInt(9, 1); //idSta
     }
 

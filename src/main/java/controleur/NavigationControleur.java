@@ -26,10 +26,11 @@ public class NavigationControleur {
         DAOCompetence competenceDao = new DAOCompetence();
         CompetenceControleur competenceC = new CompetenceControleur(competencesV, competenceDao);
 
-
+        AjouterMissionControleur ajoutMC = new AjouterMissionControleur(creaMissionV,missionDao,this,competenceDao);
 
         missionC.loadMissions();
         competenceC.loadCompetences();
+        ajoutMC.loadCompetences();
 
         vueV.addPage("Missions",misssionV);
         vueV.addPage("Competences",competencesV);
@@ -41,6 +42,7 @@ public class NavigationControleur {
                     @Override
                     public void actionPerformed(ActionEvent e){
                         vueV.showPage("Missions");
+                        missionC.loadMissions();
                     }
                 }
         );
@@ -65,7 +67,12 @@ public class NavigationControleur {
 
     }
 
+    public static NavigationView getVueV() {
+        return vueV;
+    }
+
     /*public void ShowModifierMissionView(){
         vueV.showPage("Creation");
     }*/
+
 }

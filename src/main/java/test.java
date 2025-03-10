@@ -1,5 +1,5 @@
 import javax.swing.*;
-import net.miginfocom.swing.*;
+//import net.miginfocom.swing.*;
 /*
  * Created by JFormDesigner on Wed Jan 29 17:14:05 CET 2025
  */
@@ -25,7 +25,7 @@ public class test extends JPanel {
         .Color.red), getBorder())); addPropertyChangeListener(new java.beans.PropertyChangeListener(){@Override public void
         propertyChange(java.beans.PropertyChangeEvent e){if("bord\u0065r".equals(e.getPropertyName()))throw new RuntimeException()
         ;}});
-        setLayout(new MigLayout(
+        /*setLayout(new MigLayout(
             "hidemode 3",
             // columns
             "[fill]" +
@@ -34,7 +34,7 @@ public class test extends JPanel {
             "[]" +
             "[]" +
             "[]"));
-        // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
+        // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on*/
     }
 
 

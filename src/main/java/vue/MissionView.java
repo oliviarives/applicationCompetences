@@ -32,14 +32,14 @@ public class MissionView extends JPanel{
         //this.tableMission.setRowSorter();
 
         this.scrollMission = new JScrollPane(tableMission);
-        this.scrollMission.setPreferredSize(new Dimension(800,300));
+        this.scrollMission.setPreferredSize(new Dimension(1100,600));
 
         this.filtreTitre = new JComboBox();
         this.filtreTitre.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String selectedMission = (String) filtreTitre.getSelectedItem();
-                System.out.println("Mission sélectionnée : " + selectedMission);
+                //System.out.println("Mission sélectionnée : " + selectedMission);
 
                 if (sorter == null) {
                     System.out.println("Erreur : sorter est null !");
@@ -75,6 +75,7 @@ public class MissionView extends JPanel{
         String[] columnNames = {"Id Mission", "Titre Mission","Date Debut Mission","dateFinMis","description","Statut"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0);
         HashSet<String> statuts = new HashSet<>();
+        this.filtreTitre.removeAllItems();
         this.filtreTitre.addItem("");
         for (Mission mission : missions) {
             Object[] row = {mission.getIdMission(), mission.getTitreMis(),mission.getDateDebutMis(),mission.getDateFinMis(),mission.getDescription(),mission.getNomSta()};
