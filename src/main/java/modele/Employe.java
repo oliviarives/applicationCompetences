@@ -8,7 +8,7 @@ import at.favre.lib.crypto.bcrypt.BCrypt;
 
 
 public class Employe {
-    private String prenom; 
+    /*private String prenom;
     private String nom; 
     private String login; 
     private String hashedPwd; 
@@ -82,6 +82,6 @@ public class Employe {
 
     public Set<Service> getServices() {
         return this.services;
-    }
+    }*/
 
 }

@@ -27,9 +27,9 @@ public class NavigationView extends JFrame {
         navigationPanel.add(buttonMissions);
         navigationPanel.add(buttonCompetences);
 
-        this.cardLayout = new CardLayout(200,20);
+        this.cardLayout = new CardLayout(40,40);
         panelCards = new JPanel( cardLayout);
-        panelCards.setPreferredSize(new Dimension(800,600));
+        panelCards.setSize(new Dimension(1100,600));
 
         panelNavigation.add(navigationPanel, BorderLayout.NORTH);
         panelNavigation.add(panelCards, BorderLayout.CENTER);

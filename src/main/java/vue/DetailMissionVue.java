@@ -9,7 +9,7 @@ import modele.DetailMission;
 import modele.Statut;
 
 public class DetailMissionVue {
-    private DetailMissionControleur controleur;
+   /* private DetailMissionControleur controleur;
     private JFrame frame;
     private JLabel lblTitre, lblStatut, lblDateDebut, lblDateFin, lblDescription, lblCollaborateurs;
     private JTable tableCollaborateurs;
@@ -155,6 +155,6 @@ public class DetailMissionVue {
     private void retourAuxMissions() {
         frame.dispose();
 
-    }
+    }*/
 
 }

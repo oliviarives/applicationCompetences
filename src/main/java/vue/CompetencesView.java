@@ -12,6 +12,7 @@ public class CompetencesView extends JPanel{
     private JTable tableCompetences;
     private JScrollPane scrollCompetences;
 
+
     public CompetencesView() {
         setLayout(new BorderLayout());
         this.tableCompetences = new JTable();
