@@ -37,7 +37,7 @@ public class ConnexionVue extends JDialog {
             ConnexionControleur controleur = new ConnexionControleur(new UtilisateurDAO(connection));
             
             // Passer le contrôleur à la vue
-            ConnexionVue dialog = new ConnexionVue(controleur);
+            ConnexionVue dialog=new ConnexionVue(controleur);
             dialog.setVisible(true);
         } catch (Exception e) {
             e.printStackTrace();
