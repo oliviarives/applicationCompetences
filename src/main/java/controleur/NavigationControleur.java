@@ -27,6 +27,7 @@ public class NavigationControleur {
         EmployeView empView = new EmployeView();
         DAOEmploye employeDao = new DAOEmploye();
         EmployeControleur empC =new EmployeControleur(empView,employeDao);
+        AccueilVue accueilV = new AccueilVue();
 
         AjouterMissionControleur ajoutMC = new AjouterMissionControleur(creaMissionV,missionDao,this,competenceDao,employeDao);
 
@@ -36,6 +37,7 @@ public class NavigationControleur {
         ajoutMC.loadEmployes();
         empC.loadEmploye();
 
+        vueV.addPage("Accueil", accueilV);
         vueV.addPage("Missions",misssionV);
         vueV.addPage("Competences",competencesV);
         vueV.addPage("Creation",creaMissionV);
@@ -78,6 +80,16 @@ public class NavigationControleur {
                     }
                 }
         );
+
+        vueV.getButtonAccueil().addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                            vueV.showPage("Accueil");
+                    }
+                }
+        );
+
 
 
 
