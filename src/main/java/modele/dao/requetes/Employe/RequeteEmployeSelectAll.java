@@ -5,10 +5,10 @@ import modele.Employe;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class RequeteEmployeAjouter extends RequeteEmploye {
+public class RequeteEmployeSelectAll extends RequeteEmploye{
     @Override
     public String requete() {
-        return "INSERT INTO EMPLOYE (LOGINEMP,PRENOMEMP,NOMEMP,DATEENTREEEMP,MDPEMP,ACTIF,POSTEEMP) VALUES (?,?,?,?,?,?,?)";
+        return "SELECT * FROM EMPLOYE";
     }
 
     @Override

@@ -8,31 +8,52 @@ import at.favre.lib.crypto.bcrypt.BCrypt;
 
 
 public class Employe {
-    /*private String prenom;
-    private String nom; 
-    private String login; 
-    private String hashedPwd; 
-    private String poste; 
+
+    private String login;
+    private String prenom;
+    private String nom;
+    private String hashedPwd;
     private Date dateEntree; 
     private boolean actif;
-    private Set<Service> services; 
-    private Set<Competence> competences; 
-    private Set<DetailMission> missions; 
+    private String poste;
 
-    public Employe(String prenom, String nom, String login, String mdp, String poste, Date dateEntree, 
-                   Service[] services, Competence[] competences) {
+
+    public Employe(String prenom, String nom, String login, String mdp, String poste, Date dateEntree) {
         this.prenom = prenom;
         this.nom = nom;
         this.login = login;
         this.hashedPwd = MdpUtils.hashPassword(mdp);
         this.poste = poste;
         this.dateEntree = dateEntree;
-        this.actif = true; 
-        this.services = new HashSet<>();
-        this.competences = new HashSet<>();
-        this.missions = new HashSet<>();
+        this.actif = true;
+    }
 
-        if (services != null) {
+    public String getLogin() {
+        return this.login;
+    }
+
+    public String getPrenom() {
+        return this.prenom;
+    }
+
+    public String getNom() {
+        return this.nom;
+    }
+
+    public String getPoste(){
+        return this.poste;
+    }
+
+    public Date getDateEntree() {
+        return this.dateEntree;
+    }
+
+    public boolean getActif() {
+        return this.actif;
+    }
+}
+
+        /*if (services != null) {
             for (Service service : services) {
                 this.addService(service);
             }
@@ -82,6 +103,6 @@ public class Employe {
 
     public Set<Service> getServices() {
         return this.services;
-    }*/
+    }
 
-}
+}*/

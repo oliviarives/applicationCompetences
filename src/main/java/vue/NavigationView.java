@@ -7,6 +7,7 @@ import java.awt.image.CropImageFilter;
 public class NavigationView extends JFrame {
     private JButton buttonMissions;
     private JButton buttonCompetences;
+    private JButton buttonEmploye;
     private JPanel panelNavigation;
     private CardLayout cardLayout;
     private JPanel panelCards;
@@ -24,8 +25,10 @@ public class NavigationView extends JFrame {
         navigationPanel.setLayout(new FlowLayout(FlowLayout.CENTER,10, 10));
         this.buttonMissions = new JButton("Missions");
         this.buttonCompetences = new JButton("Competences");
+        this.buttonEmploye = new JButton("Employe");
         navigationPanel.add(buttonMissions);
         navigationPanel.add(buttonCompetences);
+        navigationPanel.add(buttonEmploye);
 
         this.cardLayout = new CardLayout(40,40);
         panelCards = new JPanel( cardLayout);
@@ -41,11 +44,15 @@ public class NavigationView extends JFrame {
     }
 
     public JButton getButtonMissions() {
-        return buttonMissions;
+        return this.buttonMissions;
     }
 
     public JButton getButtonCompetences() {
-        return buttonCompetences;
+        return this.buttonCompetences;
+    }
+
+    public JButton getButtonEmploye() {
+        return this.buttonEmploye;
     }
 
     public void addPage(String name, JPanel page) {

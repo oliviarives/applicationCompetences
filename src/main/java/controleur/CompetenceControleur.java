@@ -13,7 +13,7 @@ public class CompetenceControleur {
 
     public CompetenceControleur(CompetencesView vue, DAOCompetence daoC) {
         this.vueC = vue;
-        this.competenceDAO=daoC;
+        this.competenceDAO = daoC;
 
     }
 
