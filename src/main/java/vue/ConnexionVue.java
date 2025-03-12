@@ -14,7 +14,7 @@ import utilitaires.Config;
 
 public class ConnexionVue extends JDialog {
 
-    private static final long serialVersionUID = 1L;
+    private static final long   serialVersionUID = 1L;
     private JTextField identifiantField;
     private JPasswordField passwordField;
     private JLabel messageLabel;

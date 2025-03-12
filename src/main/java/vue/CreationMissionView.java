@@ -1,6 +1,7 @@
 package vue;
 
 import modele.Competence;
+import modele.Employe;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -28,6 +29,8 @@ public class CreationMissionView extends JPanel {
     private JPanel affichage;
     private JTable competenceTable;
     private JScrollPane competenceScrollPane;
+    private JTable employesTable;
+    private JScrollPane employeScrollPane;
     private CardLayout cardLayout;
     private JPanel cardLayoutPanel;
     private JLabel titreLabel;
@@ -102,9 +105,13 @@ public class CreationMissionView extends JPanel {
         this.competenceScrollPane = new JScrollPane(competenceTable);
         this.competenceScrollPane.setPreferredSize(new Dimension(300,300));
         this.cardLayoutPanel.add(this.competenceScrollPane,"tabCompetences");
-        this.cardLayoutPanel.add(this.affichage,"affichage");
 
 
+        //partie Ajout Employe
+        this.employesTable = new JTable();
+        this.employeScrollPane = new JScrollPane(employesTable);
+        this.employeScrollPane.setPreferredSize(new Dimension(300,300));
+        this.cardLayoutPanel.add(this.employeScrollPane,"tabEmployes");
 
 
         splitPane.setLeftComponent(formulaire);
@@ -141,7 +148,7 @@ public class CreationMissionView extends JPanel {
     }
 
     public void setCompetencesAjout(List<Competence> competences) {
-        System.out.println("Mise à jour de la table des compétences avec " + competences.size() + " entrées."); // Debug
+        //System.out.println("Mise à jour de la table des compétences avec " + competences.size() + " entrées."); // Debug
         String[] columnNames = {"Id", "Categorie","Nom (En)","Nom (FR)"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0);
 
@@ -151,6 +158,19 @@ public class CreationMissionView extends JPanel {
         }
 
         this.competenceTable.setModel(model);
+
+    }
+
+    public void setEmploye(List<Employe> emp) {
+        String[] columnNames = {"Prenom","Nom","Poste"};
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0);
+
+        for (Employe e : emp) {
+            Object[] row = {e.getPrenom(),e.getNom(),e.getPoste()};
+            model.addRow(row);
+        }
+
+        this.employesTable.setModel(model);
 
     }
 

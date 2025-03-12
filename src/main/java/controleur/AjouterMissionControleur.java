@@ -1,8 +1,10 @@
 package controleur;
 
 import modele.Competence;
+import modele.Employe;
 import modele.Mission;
 import modele.dao.DAOCompetence;
+import modele.dao.DAOEmploye;
 import modele.dao.DAOMission;
 import vue.CreationMissionView;
 
@@ -17,12 +19,14 @@ public class AjouterMissionControleur {
     private DAOMission daoMission;
     private NavigationControleur navC;
     private DAOCompetence daoCompetence;
+    private DAOEmploye daoEmploye;
 
-    public AjouterMissionControleur(CreationMissionView creationMV, DAOMission daoMission, NavigationControleur navigationC,DAOCompetence daoComp) {
+    public AjouterMissionControleur(CreationMissionView creationMV, DAOMission daoMission, NavigationControleur navigationC,DAOCompetence daoComp,DAOEmploye daoEmp) {
         this.creationMV = creationMV;
         this.daoMission = daoMission;
         this.navC = navigationC;
         this.daoCompetence = daoComp;
+        this.daoEmploye = daoEmp;
 
 
         creationMV.getButtonConfirmer().addActionListener(
@@ -67,7 +71,7 @@ public class AjouterMissionControleur {
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e){
-                        creationMV.showPage("affichage");
+                        creationMV.showPage("tabEmployes");
                     }
                 }
         );
@@ -79,7 +83,12 @@ public class AjouterMissionControleur {
 
     public void loadCompetences(){
         List<Competence> competencesTable = daoCompetence.findAll();
-        System.out.println("Compétences chargées: " + competencesTable.size()); // Debug
+        //System.out.println("Compétences chargées: " + competencesTable.size()); // Debug
         creationMV.setCompetencesAjout(competencesTable);
+    }
+    public void loadEmployes(){
+        List<Employe> employeTable = daoEmploye.findAll();
+
+        creationMV.setEmploye(employeTable);
     }
 }

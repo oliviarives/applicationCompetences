@@ -21,9 +21,9 @@ public class MissionControleur {
 
     public MissionControleur(MissionView vue, DAOMission daoM, NavigationControleur navC, CreationMissionView creationMV) {
         this.vueM = vue;
-        this.missionDAO=daoM;
-        this.navControleur=navC;
-        this.creationMV=creationMV;
+        this.missionDAO = daoM;
+        this.navControleur = navC;
+        this.creationMV = creationMV;
 
         /*vueM.getButtonModifierMission().addActionListener(new ActionListener() {
             @Override
