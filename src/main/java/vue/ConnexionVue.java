@@ -80,12 +80,9 @@ public class ConnexionVue extends JDialog {
         String identifiant = IdentifiantJTextField.getText();
         String motDePasse = new String(MdpJTextFieldPwd.getPassword());
 
-        boolean connexionReussie = this.controleur.tenterConnexion(identifiant, motDePasse, messageLabel, this);
+        boolean connexionReussie = this.controleur.tenterConnexion(identifiant, motDePasse);
 
         if (connexionReussie) {
-            messageLabel.setText("Connexion réussie !");
-            messageLabel.setForeground(Color.GREEN);
-
             setVisible(false); // Masque la fenêtre
             dispose(); // Ferme la fenêtre
 

@@ -18,7 +18,8 @@ public class NavigationControleur {
         MissionView misssionV = new MissionView();
         DAOMission missionDao = new DAOMission();
         CreationMissionView creaMissionV = new CreationMissionView();
-        MissionControleur missionC = new MissionControleur(misssionV, missionDao, this, creaMissionV);
+        ModificationMissionView modifMissionV = new ModificationMissionView();
+        MissionControleur missionC = new MissionControleur(misssionV, missionDao, this, creaMissionV, modifMissionV);
 
         CompetencesView competencesV = new CompetencesView();
         DAOCompetence competenceDao = new DAOCompetence();
@@ -27,19 +28,25 @@ public class NavigationControleur {
         EmployeView empView = new EmployeView();
         DAOEmploye employeDao = new DAOEmploye();
         EmployeControleur empC =new EmployeControleur(empView,employeDao);
+        AccueilVue accueilV = new AccueilVue();
 
         AjouterMissionControleur ajoutMC = new AjouterMissionControleur(creaMissionV,missionDao,this,competenceDao,employeDao);
+        
+        ModifierMissionControleur modifMC = new ModifierMissionControleur(modifMissionV, missionDao, this, competenceDao);
 
         missionC.loadMissions();
         competenceC.loadCompetences();
         ajoutMC.loadCompetences();
         ajoutMC.loadEmployes();
         empC.loadEmploye();
+        modifMC.loadCompetences();
 
+        vueV.addPage("Accueil", accueilV);
         vueV.addPage("Missions",misssionV);
         vueV.addPage("Competences",competencesV);
         vueV.addPage("Creation",creaMissionV);
         vueV.addPage("Employe",empView);
+        vueV.addPage("Modification", modifMissionV);
 
 
         vueV.getButtonMissions().addActionListener(
@@ -70,7 +77,7 @@ public class NavigationControleur {
                 }
         );
 
-        misssionV.getButtonModifierMission().addActionListener(
+        misssionV.getButtonAjouterMission().addActionListener(
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e){
@@ -78,6 +85,25 @@ public class NavigationControleur {
                     }
                 }
         );
+        
+        misssionV.getButtonModifierMission().addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e){
+                        vueV.showPage("Modification");
+                    }
+                }
+        );
+
+        vueV.getButtonAccueil().addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                            vueV.showPage("Accueil");
+                    }
+                }
+        );
+
 
 
 
