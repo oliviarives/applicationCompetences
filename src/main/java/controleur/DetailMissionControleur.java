@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DetailMissionControleur {
-    private List<DetailMission> missions;
+   /* private List<DetailMission> missions;
 
     public DetailMissionControleur() {
 
@@ -39,5 +39,5 @@ public class DetailMissionControleur {
         if (mission != null) {
             mission.setStatut(nouveauStatut);
         }
-    }
+    }*/
 }

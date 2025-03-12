@@ -9,7 +9,7 @@ public class ConnexionControleur {
     private UtilisateurDAO utilisateurDAO;
 
     public ConnexionControleur(UtilisateurDAO utilisateurDAO) {
-        this.utilisateurDAO = utilisateurDAO;
+        this.utilisateurDAO=utilisateurDAO;
     }
 
     public boolean tenterConnexion(String identifiant, String motDePasse, JLabel messageLabel, JDialog dialog) {

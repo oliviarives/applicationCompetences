@@ -1,6 +1,7 @@
 package controleur;
 
 import modele.dao.DAOCompetence;
+import modele.dao.DAOEmploye;
 import modele.dao.DAOMission;
 import vue.*;
 
@@ -12,7 +13,7 @@ public class NavigationControleur {
     private static NavigationView vueV;
 
     public NavigationControleur( NavigationView navView) throws SQLException {
-        this.vueV = navView;
+        this.vueV =navView;
 
         MissionView misssionV = new MissionView();
         DAOMission missionDao = new DAOMission();
@@ -23,17 +24,24 @@ public class NavigationControleur {
         DAOCompetence competenceDao = new DAOCompetence();
         CompetenceControleur competenceC = new CompetenceControleur(competencesV, competenceDao);
 
+        EmployeView empView = new EmployeView();
+        DAOEmploye employeDao = new DAOEmploye();
+        EmployeControleur empC =new EmployeControleur(empView,employeDao);
         AccueilVue accueilV = new AccueilVue();
 
+        AjouterMissionControleur ajoutMC = new AjouterMissionControleur(creaMissionV,missionDao,this,competenceDao,employeDao);
 
         missionC.loadMissions();
         competenceC.loadCompetences();
+        ajoutMC.loadCompetences();
+        ajoutMC.loadEmployes();
+        empC.loadEmploye();
 
         vueV.addPage("Accueil", accueilV);
         vueV.addPage("Missions",misssionV);
         vueV.addPage("Competences",competencesV);
         vueV.addPage("Creation",creaMissionV);
-
+        vueV.addPage("Employe",empView);
 
 
         vueV.getButtonMissions().addActionListener(
@@ -41,6 +49,7 @@ public class NavigationControleur {
                     @Override
                     public void actionPerformed(ActionEvent e){
                         vueV.showPage("Missions");
+                        missionC.loadMissions();
                     }
                 }
         );
@@ -50,6 +59,15 @@ public class NavigationControleur {
                     @Override
                     public void actionPerformed(ActionEvent e){
                         vueV.showPage("Competences");
+                    }
+                }
+        );
+
+        vueV.getButtonEmploye().addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e){
+                        vueV.showPage("Employe");
                     }
                 }
         );
@@ -73,9 +91,16 @@ public class NavigationControleur {
         );
 
 
+
+
+    }
+
+    public static NavigationView getVueV() {
+        return vueV;
     }
 
     /*public void ShowModifierMissionView(){
         vueV.showPage("Creation");
     }*/
+
 }

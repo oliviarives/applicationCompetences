@@ -37,9 +37,10 @@ public class DAOMission {
     }
 
     public void ajouterMission(Mission mis) throws SQLException{
-        PreparedStatement ps = cn.prepareStatement(new RequeteMissionAjouter().requete());
-        new RequeteMissionAjouter().parametres(ps, mis);
-        ps.executeUpdate();
+        RequeteMissionAjouter req=new RequeteMissionAjouter();
+        PreparedStatement ps = cn.prepareStatement(req.requete());
+        req.parametres(ps, mis);
+        ps.executeQuery();
     }
 
    /* public Mission getMissionTitre(String titre) throws SQLException{

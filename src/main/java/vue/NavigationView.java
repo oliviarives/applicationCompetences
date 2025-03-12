@@ -8,6 +8,7 @@ public class NavigationView extends JFrame {
     private JButton buttonMissions;
     private JButton buttonCompetences;
     private JButton buttonAccueil;
+    private JButton buttonEmploye;
     private JPanel panelNavigation;
     private CardLayout cardLayout;
     private JPanel panelCards;
@@ -26,13 +27,15 @@ public class NavigationView extends JFrame {
         this.buttonAccueil = new JButton("Accueil");
         this.buttonMissions = new JButton("Missions");
         this.buttonCompetences = new JButton("Competences");
+        this.buttonEmploye = new JButton("Employe");
         navigationPanel.add(buttonAccueil);
         navigationPanel.add(buttonMissions);
         navigationPanel.add(buttonCompetences);
+        navigationPanel.add(buttonEmploye);
 
-        this.cardLayout = new CardLayout(200,20);
+        this.cardLayout = new CardLayout(40,40);
         panelCards = new JPanel( cardLayout);
-        panelCards.setPreferredSize(new Dimension(800,600));
+        panelCards.setSize(new Dimension(1100,600));
 
         panelNavigation.add(navigationPanel, BorderLayout.NORTH);
         panelNavigation.add(panelCards, BorderLayout.CENTER);
@@ -44,11 +47,15 @@ public class NavigationView extends JFrame {
     }
 
     public JButton getButtonMissions() {
-        return buttonMissions;
+        return this.buttonMissions;
     }
 
     public JButton getButtonCompetences() {
-        return buttonCompetences;
+        return this.buttonCompetences;
+    }
+
+    public JButton getButtonEmploye() {
+        return this.buttonEmploye;
     }
 
     public JButton getButtonAccueil() {

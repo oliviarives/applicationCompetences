@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DetailMission {
-    private String titre;
+    /*private String titre;
     private LocalDate dateDebut;
     private LocalDate dateFin;
     private LocalDate dateCreation;
@@ -95,5 +95,5 @@ public class DetailMission {
             this.employes.remove(employe);
             employe.removeMission(this);
         }
-    }
+    }*/
 }
