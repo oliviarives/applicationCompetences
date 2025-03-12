@@ -68,7 +68,7 @@ public class ConnexionVue extends JDialog {
         gbc.anchor = GridBagConstraints.LINE_END;
         contentPanel.add(new JLabel("Identifiant:"), gbc);
 
-        gbc = new GridBagConstraints();
+        gbc=new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 0;
         gbc.insets = new Insets(5, 5, 5, 5);
