@@ -20,7 +20,7 @@ public class MissionView extends JPanel{
     private JComboBox filtreTitre;
     private TableRowSorter<DefaultTableModel> sorter;
     private JButton ajouterMission;
-    private JButton ModifierMission;
+    private JButton modifierMission;
     private JLabel labelFiltreStatut;
 
 
@@ -62,10 +62,10 @@ public class MissionView extends JPanel{
         add(this.panelFiltreMission, BorderLayout.NORTH);
         add(scrollMission,BorderLayout.CENTER);
         this.ajouterMission = new JButton("Creer une nouvelle mission");
-        this.ModifierMission = new JButton("Modifier");
+        this.modifierMission = new JButton("Modifier");
         this.panelBtnModif = new JPanel(new FlowLayout(FlowLayout.CENTER));
         this.panelBtnModif.add(this.ajouterMission);
-        this.panelBtnModif.add(this.ModifierMission);
+        this.panelBtnModif.add(this.modifierMission);
         add(this.panelBtnModif, BorderLayout.SOUTH);
         //add(ajouterMission,BorderLayout.SOUTH);
 
@@ -95,7 +95,11 @@ public class MissionView extends JPanel{
 
 
 
-    public JButton getButtonModifierMission(){
+    public JButton getButtonAjouterMission(){
         return this.ajouterMission;
+    }
+    
+    public JButton getButtonModifierMission(){
+        return this.modifierMission;
     }
 }

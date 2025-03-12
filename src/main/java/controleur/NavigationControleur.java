@@ -18,7 +18,8 @@ public class NavigationControleur {
         MissionView misssionV = new MissionView();
         DAOMission missionDao = new DAOMission();
         CreationMissionView creaMissionV = new CreationMissionView();
-        MissionControleur missionC = new MissionControleur(misssionV, missionDao, this, creaMissionV);
+        ModificationMissionView modifMissionV = new ModificationMissionView();
+        MissionControleur missionC = new MissionControleur(misssionV, missionDao, this, creaMissionV, modifMissionV);
 
         CompetencesView competencesV = new CompetencesView();
         DAOCompetence competenceDao = new DAOCompetence();
@@ -29,17 +30,21 @@ public class NavigationControleur {
         EmployeControleur empC =new EmployeControleur(empView,employeDao);
 
         AjouterMissionControleur ajoutMC = new AjouterMissionControleur(creaMissionV,missionDao,this,competenceDao,employeDao);
+        
+        ModifierMissionControleur modifMC = new ModifierMissionControleur(modifMissionV, missionDao, this, competenceDao);
 
         missionC.loadMissions();
         competenceC.loadCompetences();
         ajoutMC.loadCompetences();
         ajoutMC.loadEmployes();
         empC.loadEmploye();
+        modifMC.loadCompetences();
 
         vueV.addPage("Missions",misssionV);
         vueV.addPage("Competences",competencesV);
         vueV.addPage("Creation",creaMissionV);
         vueV.addPage("Employe",empView);
+        vueV.addPage("Modification", modifMissionV);
 
 
         vueV.getButtonMissions().addActionListener(
@@ -70,11 +75,20 @@ public class NavigationControleur {
                 }
         );
 
-        misssionV.getButtonModifierMission().addActionListener(
+        misssionV.getButtonAjouterMission().addActionListener(
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e){
                         vueV.showPage("Creation");
+                    }
+                }
+        );
+        
+        misssionV.getButtonModifierMission().addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e){
+                        vueV.showPage("Modification");
                     }
                 }
         );
