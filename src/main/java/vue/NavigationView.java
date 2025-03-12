@@ -2,25 +2,24 @@ package vue;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.CropImageFilter;
+//import java.awt.image.CropImageFilter;
 
 public class NavigationView extends JFrame {
-    private JButton buttonMissions;
-    private JButton buttonCompetences;
-    private JButton buttonAccueil;
-    private JButton buttonEmploye;
-    private JPanel panelNavigation;
-    private CardLayout cardLayout;
-    private JPanel panelCards;
+    private final JButton buttonMissions;
+    private final JButton buttonCompetences;
+    private final JButton buttonAccueil;
+    private final JButton buttonEmploye;
+    private final CardLayout cardLayout;
+    private final JPanel panelCards;
 
     public NavigationView() {
         setTitle("Barre de navigation");
         setSize(1200, 700);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        this.panelNavigation = new JPanel();
-        this.panelNavigation.setLayout(new BorderLayout());
+        JPanel panelNavigation = new JPanel();
+        panelNavigation.setLayout(new BorderLayout());
 
         JPanel navigationPanel = new JPanel();
         navigationPanel.setLayout(new FlowLayout(FlowLayout.CENTER,10, 10));

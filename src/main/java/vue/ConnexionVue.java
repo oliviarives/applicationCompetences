@@ -1,5 +1,5 @@
 package vue;
-
+import controleur.NavigationControleur;
 import java.awt.*;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -39,7 +39,7 @@ public class ConnexionVue extends JDialog {
 
         // Configurer la fenêtre
         setContentPane(page);
-        setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
@@ -68,6 +68,7 @@ public class ConnexionVue extends JDialog {
 
             // Passer le contrôleur à la vue
             new ConnexionVue(controleur);
+
         } catch (Exception e) {
             logger.severe("Erreur lors de la connexion : " + e.getMessage());
         }
@@ -79,18 +80,21 @@ public class ConnexionVue extends JDialog {
     private void verifierConnexion() {
         String identifiant = IdentifiantJTextField.getText();
         String motDePasse = new String(MdpJTextFieldPwd.getPassword());
+        NavigationView navigationView = new NavigationView();
 
         boolean connexionReussie = this.controleur.tenterConnexion(identifiant, motDePasse);
 
         if (connexionReussie) {
+            // Ouvrir la fenêtre d'accueil
+            try {
+                new NavigationControleur(navigationView);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+
+            navigationView.setVisible(true);
             setVisible(false); // Masque la fenêtre
             dispose(); // Ferme la fenêtre
-
-            // Ouvrir la fenêtre d'accueil
-            SwingUtilities.invokeLater(() -> {
-                AccueilVue accueil = new AccueilVue();
-                accueil.setVisible(true);
-            });
         } else {
             messageLabel.setText("Identifiant ou mot de passe incorrect !");
             messageLabel.setForeground(Color.RED);
