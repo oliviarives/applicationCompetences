@@ -2,10 +2,7 @@ package controleur;
 
 import modele.dao.DAOCompetence;
 import modele.dao.DAOMission;
-import vue.CompetencesView;
-import vue.CreationMissionView;
-import vue.MissionView;
-import vue.NavigationView;
+import vue.*;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -26,14 +23,17 @@ public class NavigationControleur {
         DAOCompetence competenceDao = new DAOCompetence();
         CompetenceControleur competenceC = new CompetenceControleur(competencesV, competenceDao);
 
+        AccueilVue accueilV = new AccueilVue();
 
 
         missionC.loadMissions();
         competenceC.loadCompetences();
 
+        vueV.addPage("Accueil", accueilV);
         vueV.addPage("Missions",misssionV);
         vueV.addPage("Competences",competencesV);
         vueV.addPage("Creation",creaMissionV);
+
 
 
         vueV.getButtonMissions().addActionListener(
@@ -62,6 +62,16 @@ public class NavigationControleur {
                     }
                 }
         );
+
+        vueV.getButtonAccueil().addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                            vueV.showPage("Accueil");
+                    }
+                }
+        );
+
 
     }
 

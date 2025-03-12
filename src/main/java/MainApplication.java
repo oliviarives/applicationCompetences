@@ -12,7 +12,5 @@ public class MainApplication {
         NavigationControleur navigationController = new NavigationControleur(navigationView);
 
         navigationView.setVisible(true);
-
-
     }
 }

@@ -25,13 +25,13 @@ public class DAOCompetence {
 
     }
 
-    protected Competence creerInstance(ResultSet rset) throws SQLException{
-        return new Competence(
-                rset.getString("idCatCmp"),
-                rset.getString("nomCmpEn"),
-                rset.getString("nomCmpFr")
-        );
-    }
+//    protected Competence creerInstance(ResultSet rset) throws SQLException{
+//        return new Competence(
+//                rset.getString("idCatCmp"),
+//                rset.getString("nomCmpEn"),
+//                rset.getString("nomCmpFr")
+//        );
+//    }
 
     public void ajouterCompetence(Competence cmp) throws SQLException{
         PreparedStatement ps = cn.prepareStatement(new RequeteCompetenceAjouter().requete());
@@ -45,8 +45,8 @@ public class DAOCompetence {
             PreparedStatement req = cn.prepareStatement(new RequeteCompetenceSelectAll().requete());
             try (ResultSet curseur = req.executeQuery()) {
                 while (curseur.next()) {
-                    Competence instance = creerInstance(curseur);
-                    resultats.add(instance);
+                   // Competence instance = creerInstance(curseur);
+                   // resultats.add(instance);
                 }
             } catch (SQLException e) {
                 System.err.println(e.getMessage());

@@ -24,10 +24,10 @@ public class CompetencesView extends JPanel{
         String[] columnNames = {"Id Competence", "Id Categorie","Nom (En)","Nom (FR)"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0);
 
-        for (Competence cmp : competences) {
-            Object[] row = {cmp.getIdCmp(),cmp.getIdCatCmp(),cmp.getNomCmpEn(),cmp.getNomCmpFr()};
-            model.addRow(row);
-        }
+//        for (Competence cmp : competences) {
+//            Object[] row = {cmp.getIdCmp(),cmp.getIdCatCmp(),cmp.getNomCmpEn(),cmp.getNomCmpFr()};
+//            model.addRow(row);
+//        }
 
         this.tableCompetences.setModel(model);
 
