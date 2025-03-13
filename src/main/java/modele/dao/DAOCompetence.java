@@ -47,7 +47,7 @@ public class DAOCompetence {
                 while (curseur.next()) {
                     Competence instance = creerInstance(curseur);
                     resultats.add(instance);
-                    System.out.println("Compétence récupérée: " + instance.getNomCmpFr()); // Debug
+                    //System.out.println("Compétence récupérée: " + instance.getNomCmpFr()); // Debug
                 }
             } catch (SQLException e) {
                 System.err.println(e.getMessage());

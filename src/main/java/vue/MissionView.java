@@ -73,7 +73,11 @@ public class MissionView extends JPanel{
 
     public void setMissions(List<Mission> missions) {
         String[] columnNames = {"Id Mission", "Titre Mission","Date Debut Mission","dateFinMis","description","Statut"};
-        DefaultTableModel model = new DefaultTableModel(columnNames, 0);
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0){
+            public boolean isCellEditable(int row, int col) {
+                return false;
+            }
+        };
         HashSet<String> statuts = new HashSet<>();
         this.filtreTitre.removeAllItems();
         this.filtreTitre.addItem("");

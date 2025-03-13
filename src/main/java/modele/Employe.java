@@ -27,6 +27,13 @@ public class Employe {
         this.dateEntree = dateEntree;
         this.actif = true;
     }
+    //Constructeur pour affichage
+    public Employe(String prenom, String nom, String poste) {
+        this.prenom = prenom;
+        this.nom = nom;
+        this.poste = poste;
+
+    }
 
     public String getLogin() {
         return this.login;
