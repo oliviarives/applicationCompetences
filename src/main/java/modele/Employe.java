@@ -75,7 +75,7 @@ public class Employe {
 
     public String gethashedPwd() {
     	return this.hashedPwd;
-
+    }
 
     public int getIdcmp() {
         return this.idcmp;
