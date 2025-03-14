@@ -15,28 +15,27 @@ public class NavigationControleur {
     public NavigationControleur( NavigationView navView) throws SQLException {
         this.vueV =navView;
 
-        MissionView misssionV = new MissionView();
-        EmployeView employeV = new EmployeView();
-        DAOMission missionDao = new DAOMission();
-        DAOEmploye employeDAO = new DAOEmploye();
-        CreationMissionView creaMissionV = new CreationMissionView();
-        ModificationMissionView modifMissionV = new ModificationMissionView();
-        MissionControleur missionC = new MissionControleur(misssionV, missionDao, this, creaMissionV, modifMissionV);
-        EmployeControleur employeC = new EmployeControleur(employeV, employeDAO, this);
-
         CompetencesView competencesV = new CompetencesView();
         DAOCompetence competenceDao = new DAOCompetence();
         CompetenceControleur competenceC = new CompetenceControleur(competencesV, competenceDao);
 
         EmployeView empView = new EmployeView();
-        DAOEmploye employeDao = new DAOEmploye(); 
+        DAOEmploye employeDao = new DAOEmploye();
         EmployeControleur empC = new EmployeControleur(empView,employeDao, this);
-        AjoutPersonnelVue ajoutPersonnelV = new AjoutPersonnelVue();
-        AccueilVue accueilV = new AccueilVue();
 
+        MissionView misssionV = new MissionView();
+        ModificationMissionView modifMissionV = new ModificationMissionView();
+        CreationMissionView creaMissionV = new CreationMissionView();
+        DAOMission missionDao = new DAOMission();
+        MissionControleur missionC = new MissionControleur(misssionV, missionDao, this, creaMissionV, modifMissionV);
         AjouterMissionControleur ajoutMC = new AjouterMissionControleur(creaMissionV,missionDao,this,competenceDao,employeDao);
-        
         ModifierMissionControleur modifMC = new ModifierMissionControleur(modifMissionV, missionDao, this, competenceDao);
+
+
+        AjoutPersonnelVue ajoutPersonnelV = new AjoutPersonnelVue();
+        AjouterPersonnelControleur ajoutPersonnelC= new AjouterPersonnelControleur(ajoutPersonnelV, employeDao, this);
+
+        AccueilVue accueilV = new AccueilVue();
 
         missionC.loadMissions();
         competenceC.loadCompetences();

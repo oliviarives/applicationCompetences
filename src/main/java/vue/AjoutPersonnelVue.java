@@ -1,4 +1,5 @@
-//ATTENTION : prévoir le cas où le login ne serait pas unique 
+//ATTENTION : prévoir le cas où le login ne serait pas unique
+//PREVOIR LES CHAMPS DE SAISIE OBLIGATOIRES
 
 package vue;
 
@@ -159,18 +160,28 @@ public class AjoutPersonnelVue extends JPanel {
         });
     }
 
-    public Employe getEmploye() {
-        String prenom = prenomField.getText();
-        String nom = nomField.getText();
-        String login = loginField.getText();
-        String mdp = new String(mdpField.getPassword());
-        String poste = posteField.getText();
-        java.util.Date date = (java.util.Date) dateEntreeSpinner.getValue();
-        Date dateEntree = new Date(date.getTime());
+    public JTextField getPrenomField() {
+        return prenomField;
+    }
 
-        String mdpHashed = MdpUtils.hashPassword(mdp);
+    public JTextField getNomField() {
+        return nomField;
+    }
 
-        return new Employe(prenom, nom, login, mdpHashed, poste, dateEntree);
+    public JTextField getLoginField() {
+        return loginField;
+    }
+
+    public JPasswordField getMdpField() {
+        return mdpField;
+    }
+
+    public JTextField getPosteField() {
+        return posteField;
+    }
+
+    public JSpinner getDateEntreeSpinner() {
+        return dateEntreeSpinner;
     }
 
     private void effacerChamps() {
