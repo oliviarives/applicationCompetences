@@ -1,6 +1,5 @@
 package vue;
 
-import modele.Competence;
 import modele.Employe;
 
 import javax.swing.*;
@@ -9,11 +8,11 @@ import java.awt.*;
 import java.util.List;
 
 public class EmployeView extends JPanel {
-    private JTable tableEmploye;
-    private JScrollPane scrollEmploye;
-    private JPanel panelBouttons;
-    private JButton bouttonModifierEmploye;
-    private JButton bouttonAjouterEmploye;
+    private final JTable tableEmploye;
+    private final JScrollPane scrollEmploye;
+    private final JPanel panelBouttons;
+    private final JButton bouttonModifierEmploye;
+    private final JButton bouttonAjouterEmploye;
 
     public EmployeView() {
         this.bouttonAjouterEmploye = new JButton("Ajouter");
@@ -40,6 +39,6 @@ public class EmployeView extends JPanel {
         }
 
         this.tableEmploye.setModel(model);
-
+        this.tableEmploye.setDefaultEditor(Object.class, null);
     }
 }

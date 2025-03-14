@@ -1,12 +1,12 @@
 package modele.dao;
+import utilitaires.Config;
 
-import modele.Competence;
 import modele.Employe;
-import modele.Mission;
 import modele.connexion.CictOracleDataSource;
 import modele.dao.requetes.Employe.RequeteEmployeSelectAll;
 import modele.dao.requetes.Employe.RequeteEmployeSelectByCmp;
 import modele.dao.requetes.Mission.RequeteMissionSelectAll;
+
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -20,9 +20,11 @@ import java.util.Set;
 public class DAOEmploye {
     private Connection cn;
     private ArrayList<Employe> listeEmployeByCmp;
+    private static String dbUser = Config.get("db.user");
+    private static String dbPwd = Config.get("db.password");
 
     public DAOEmploye() throws SQLException {
-        CictOracleDataSource.creerAcces("BSC3991A","2002Aralc.31");
+        CictOracleDataSource.creerAcces(dbUser,dbPwd);
         this.cn = CictOracleDataSource.getConnectionBD();
         try {
             PreparedStatement req = cn.prepareStatement(new RequeteEmployeSelectByCmp().requete());
