@@ -13,7 +13,8 @@ public class NavigationView extends JFrame {
     private final JPanel panelCards;
 
     public NavigationView() {
-        setTitle("Barre de navigation");
+        setTitle("Mission im-Possible");
+        setBackground(new Color(40,62,80));
         setSize(1200, 700);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
@@ -42,6 +43,7 @@ public class NavigationView extends JFrame {
         add(panelNavigation);
 
         setLocationRelativeTo(null);
+
 
     }
 
