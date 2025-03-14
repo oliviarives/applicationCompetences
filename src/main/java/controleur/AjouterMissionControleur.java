@@ -22,6 +22,8 @@ public class AjouterMissionControleur {
     private NavigationControleur navC;
     private DAOCompetence daoCompetence;
     private DAOEmploye daoEmploye;
+    private List<Competence> listeCompetencesSelectionnees;
+    private List<Employe> listeEmployesSelectiones;
 
     public AjouterMissionControleur(CreationMissionView creationMV, DAOMission daoMission, NavigationControleur navigationC,DAOCompetence daoComp,DAOEmploye daoEmp) {
         this.creationMV = creationMV;
@@ -29,7 +31,7 @@ public class AjouterMissionControleur {
         this.navC = navigationC;
         this.daoCompetence = daoComp;
         this.daoEmploye = daoEmp;
-
+       // this.listeEmployesSelectiones = daoEmploye.findEmpByCompetences(listeCompetencesSelectionnees);
 
         creationMV.getButtonConfirmer().addActionListener(
                 new ActionListener() {
@@ -85,6 +87,9 @@ public class AjouterMissionControleur {
                     if (cmp != null) {
                         creationMV.ajouterCompetenceAjoutee(cmp);
                     }
+                    List<Competence>  lcmpAjout= creationMV.getCompetencesAjoutees();
+                    List<Employe> listeEmployesSelectiones2 = daoEmploye.findEmpByCompetences(lcmpAjout);
+                    creationMV.setEmploye(listeEmployesSelectiones2); // Mise à jour de la table des employés
                 }
             }
         });
@@ -131,6 +136,9 @@ public class AjouterMissionControleur {
                         DefaultTableModel model = (DefaultTableModel) creationMV.getListeCompetenceAjoutee().getModel();
                         model.removeRow(selectedRow);
                     }
+                    listeCompetencesSelectionnees = creationMV.getCompetencesAjoutees();
+                    listeEmployesSelectiones = daoEmploye.findEmpByCompetences(listeCompetencesSelectionnees);
+                    creationMV.setEmploye(listeEmployesSelectiones);
                 }
             }
         });
@@ -144,6 +152,7 @@ public class AjouterMissionControleur {
                         DefaultTableModel model = (DefaultTableModel) creationMV.getListeEmployesAjoutee().getModel();
                         model.removeRow(selectedRow);
                     }
+
                 }
             }
         });

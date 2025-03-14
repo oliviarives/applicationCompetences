@@ -10,6 +10,7 @@ import java.awt.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 
@@ -297,5 +298,21 @@ public class CreationMissionView extends JPanel {
         Object[] row = {emp.getPrenom(), emp.getNom(), emp.getPoste()};
         model.addRow(row);
     }
+    //retourne une liste des compétences ajoutées à la mission
+    public List<Competence> getCompetencesAjoutees() {
+        List<Competence> competences = new ArrayList<>();
+        DefaultTableModel model = (DefaultTableModel) listeCompetenceAjoutee.getModel();
+        for (int i = 0; i < model.getRowCount(); i++) {
+            int idCmp = (int) model.getValueAt(i, 0);
+            String idCatCmp = (String) model.getValueAt(i, 1);
+            String nomEn = (String) model.getValueAt(i, 2);
+            String nomFr = (String) model.getValueAt(i, 3);
+
+            competences.add(new Competence(idCmp, idCatCmp, nomEn, nomFr));
+        }
+
+        return competences;
+    }
+
 }
 

@@ -5,11 +5,10 @@ import modele.Employe;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class RequeteEmployeSelectAll extends RequeteEmploye{
+public class RequeteEmployeSelectByCmp extends RequeteEmploye{
     @Override
     public String requete() {
-        return "SELECT * FROM EMPLOYE";
-        //return "SELECT * FROM EMPLOYE";
+        return "SELECT DISTINCT * FROM EMPLOYE E, POSSEDER P, COMPETENCE C WHERE E.LOGINEMP=P.LOGINEMP AND P.IDCATCMP=C.IDCATCMP AND P.IDCMP=C.IDCMP";
     }
 
     @Override

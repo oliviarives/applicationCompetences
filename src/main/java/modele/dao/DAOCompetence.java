@@ -27,11 +27,14 @@ public class DAOCompetence {
 
     protected Competence creerInstance(ResultSet rset) throws SQLException{
         return new Competence(
+                rset.getInt("idCmp"),
                 rset.getString("idCatCmp"),
                 rset.getString("nomCmpEn"),
                 rset.getString("nomCmpFr")
         );
     }
+
+
 
     public void ajouterCompetence(Competence cmp) throws SQLException{
         PreparedStatement ps = cn.prepareStatement(new RequeteCompetenceAjouter().requete());
