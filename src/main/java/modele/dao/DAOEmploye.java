@@ -1,6 +1,6 @@
 package modele.dao;
 import utilitaires.Config;
-
+import modele.Competence;
 import modele.Employe;
 import modele.connexion.CictOracleDataSource;
 import modele.dao.requetes.Employe.RequeteEmployeSelectAll;
