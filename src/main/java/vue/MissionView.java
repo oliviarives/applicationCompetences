@@ -8,6 +8,7 @@ import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Date;
 import java.util.HashSet;
 import java.util.List;
 
@@ -106,4 +107,26 @@ public class MissionView extends JPanel{
     public JButton getButtonModifierMission(){
         return this.modifierMission;
     }
+
+    public Mission getMissionSelectionnee() {
+        int selectedRow = tableMission.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Veuillez sélectionner une mission.");
+            return null;
+        }
+
+        int idMission = (int) tableMission.getValueAt(selectedRow, 0);
+        String titre = (String) tableMission.getValueAt(selectedRow, 1);
+        Date dateDebut = (Date) tableMission.getValueAt(selectedRow, 2);
+        Date dateFin = (Date) tableMission.getValueAt(selectedRow, 3);
+        String description = (String) tableMission.getValueAt(selectedRow, 4);
+        String nomSta = (String) tableMission.getValueAt(selectedRow, 5);
+
+        return new Mission(titre, dateDebut, dateFin, description, new Date(System.currentTimeMillis()), 0, nomSta);
+    }
+
+    public JTable getMissionTable(){
+        return this.tableMission;
+    }
+
 }

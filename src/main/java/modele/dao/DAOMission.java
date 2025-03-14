@@ -72,4 +72,20 @@ public class DAOMission {
         }
         return resultats;
     }
+
+    public void modifierMission(Mission mis) throws SQLException {
+        String sql = "UPDATE MISSION SET titreMis=?, dateDebutMis=?, dateFinMis=?, description=?, nbEmpMis=? WHERE idMis=?";
+        try (PreparedStatement ps = cn.prepareStatement(sql)) {
+            ps.setString(1, mis.getTitreMis());
+            ps.setDate(2, mis.getDateDebutMis());
+            ps.setDate(3, mis.getDateFinMis());
+            ps.setString(4, mis.getDescription());
+            ps.setInt(5, mis.getNbEmpMis());
+            ps.setInt(6, mis.getIdMission());
+            ps.executeUpdate();
+        }
+    }
+
+
+
 }
