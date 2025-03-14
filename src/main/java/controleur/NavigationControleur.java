@@ -30,11 +30,23 @@ public class NavigationControleur {
 
         EmployeView empView = new EmployeView();
         DAOEmploye employeDao = new DAOEmploye();
-        EmployeControleur empC = new EmployeControleur(empView, employeDao);
+
+        EmployeControleur empC = new EmployeControleur(empView,employeDao, this);
         AccueilVue accueilV = new AccueilVue();
 
-        AjouterMissionControleur ajoutMC = new AjouterMissionControleur(creaMissionV, missionDao, this, competenceDao, employeDao);
-        ModifierMissionControleur modifMC = new ModifierMissionControleur(modifMissionV, missionDao, this, competenceDao, employeDao);
+        MissionView misssionV = new MissionView();
+        ModificationMissionView modifMissionV = new ModificationMissionView();
+        CreationMissionView creaMissionV = new CreationMissionView();
+        DAOMission missionDao = new DAOMission();
+        MissionControleur missionC = new MissionControleur(misssionV, missionDao, this, creaMissionV, modifMissionV);
+        AjouterMissionControleur ajoutMC = new AjouterMissionControleur(creaMissionV,missionDao,this,competenceDao,employeDao);
+        ModifierMissionControleur modifMC = new ModifierMissionControleur(modifMissionV, missionDao, this, competenceDao);
+
+
+        AjoutPersonnelVue ajoutPersonnelV = new AjoutPersonnelVue();
+        AjouterPersonnelControleur ajoutPersonnelC= new AjouterPersonnelControleur(ajoutPersonnelV, employeDao, this);
+
+        AccueilVue accueilV = new AccueilVue();
 
         missionC.loadMissions();
         competenceC.loadCompetences();
@@ -49,35 +61,64 @@ public class NavigationControleur {
         vueV.addPage("Creation", creaMissionV);
         vueV.addPage("Employe", empView);
         vueV.addPage("Modification", modifMissionV);
+        vueV.addPage("AjouterEmploye", ajoutPersonnelV);
 
-        vueV.getButtonMissions().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                vueV.showPage("Missions");
-                missionC.loadMissions();
-            }
-        });
 
-        vueV.getButtonCompetences().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                vueV.showPage("Competences");
-            }
-        });
+        vueV.getButtonMissions().addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e){
+                        vueV.showPage("Missions");
+                        missionC.loadMissions();
+                    }
+                }
+        );
 
-        vueV.getButtonEmploye().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                vueV.showPage("Employe");
-            }
-        });
+        vueV.getButtonCompetences().addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e){
+                        vueV.showPage("Competences");
+                    }
+                }
+        );
 
-        missionV.getButtonAjouterMission().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                vueV.showPage("Creation");
-            }
-        });
+        vueV.getButtonEmploye().addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e){
+                        vueV.showPage("Employe");
+                    }
+                }
+        );
+
+        empView.getBouttonAjouterEmploye().addActionListener(
+        		new ActionListener() {
+        			@Override 
+        			public void actionPerformed(ActionEvent e) {
+        				vueV.showPage("AjouterEmploye");
+        			}
+        		}
+        		
+        		);
+        
+        misssionV.getButtonAjouterMission().addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e){
+                        vueV.showPage("Creation");
+                    }
+                }
+        );
+        
+        misssionV.getButtonModifierMission().addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e){
+                        vueV.showPage("Modification");
+                    }
+                }
+        );
 
         missionV.getButtonModifierMission().addActionListener(new ActionListener() {
             @Override

@@ -152,12 +152,9 @@ public class AjouterMissionControleur {
                         DefaultTableModel model = (DefaultTableModel) creationMV.getListeEmployesAjoutee().getModel();
                         model.removeRow(selectedRow);
                     }
-
                 }
             }
         });
-
-
     }
 
     public void loadCompetences(){

@@ -73,12 +73,17 @@ public class Employe {
         return this.actif;
     }
 
+    public String gethashedPwd() {
+    	return this.hashedPwd;
+
+
     public int getIdcmp() {
         return this.idcmp;
     }
 
     public String getIdCatCmp() {
         return this.idCatCmp;
+
     }
 }
 
