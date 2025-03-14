@@ -1,10 +1,12 @@
 package controleur;
 
+import modele.Mission;
 import modele.dao.DAOCompetence;
 import modele.dao.DAOEmploye;
 import modele.dao.DAOMission;
 import vue.*;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
@@ -12,8 +14,15 @@ import java.sql.SQLException;
 public class NavigationControleur {
     private static NavigationView vueV;
 
-    public NavigationControleur( NavigationView navView) throws SQLException {
-        this.vueV =navView;
+    public NavigationControleur(NavigationView navView) throws SQLException {
+        this.vueV = navView;
+
+        MissionView missionV = new MissionView();
+        DAOMission missionDao = new DAOMission();
+        CreationMissionView creaMissionV = new CreationMissionView();
+        ModificationMissionView modifMissionV = new ModificationMissionView();
+
+        MissionControleur missionC = new MissionControleur(missionV, missionDao, this, creaMissionV, modifMissionV);
 
         CompetencesView competencesV = new CompetencesView();
         DAOCompetence competenceDao = new DAOCompetence();
@@ -21,7 +30,9 @@ public class NavigationControleur {
 
         EmployeView empView = new EmployeView();
         DAOEmploye employeDao = new DAOEmploye();
+
         EmployeControleur empC = new EmployeControleur(empView,employeDao, this);
+        AccueilVue accueilV = new AccueilVue();
 
         MissionView misssionV = new MissionView();
         ModificationMissionView modifMissionV = new ModificationMissionView();
@@ -43,12 +54,12 @@ public class NavigationControleur {
         ajoutMC.loadEmployes();
         empC.loadEmploye();
         modifMC.loadCompetences();
+        modifMC.loadEmployes();
 
-        vueV.addPage("Accueil", accueilV);
-        vueV.addPage("Missions",misssionV);
-        vueV.addPage("Competences",competencesV);
-        vueV.addPage("Creation",creaMissionV);
-        vueV.addPage("Employe",empView);
+        vueV.addPage("Missions", missionV);
+        vueV.addPage("Competences", competencesV);
+        vueV.addPage("Creation", creaMissionV);
+        vueV.addPage("Employe", empView);
         vueV.addPage("Modification", modifMissionV);
         vueV.addPage("AjouterEmploye", ajoutPersonnelV);
 
@@ -109,26 +120,32 @@ public class NavigationControleur {
                 }
         );
 
-        vueV.getButtonAccueil().addActionListener(
-                new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                            vueV.showPage("Accueil");
-                    }
+        missionV.getButtonModifierMission().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Mission missionSelectionnee = missionV.getMissionSelectionnee();
+                if (missionSelectionnee != null) {
+                    modifMissionV.setMission(missionSelectionnee);
+                    vueV.showPage("Modification");
                 }
-        );
+            }
+        });
 
+        vueV.getButtonAccueil().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                vueV.showPage("Accueil");
+            }
+        });
 
-
-
+       /* missionV.getMissionTable().addMouseListener(new java.awt.event.MouseAdapter(){
+            @Override
+            public void mouseCliked()
+                                                    }
+        );*/
     }
 
     public static NavigationView getVueV() {
         return vueV;
     }
-
-    /*public void ShowModifierMissionView(){
-        vueV.showPage("Creation");
-    }*/
-
 }

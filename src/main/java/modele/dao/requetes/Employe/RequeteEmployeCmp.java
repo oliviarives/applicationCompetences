@@ -1,15 +1,14 @@
 package modele.dao.requetes.Employe;
 
 import modele.Employe;
-
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class RequeteEmployeSelectAll extends RequeteEmploye{
+public class RequeteEmployeCmp extends RequeteEmploye{
+
     @Override
-    public String requete() {
-        return "SELECT * FROM EMPLOYE";
-        //return "SELECT * FROM EMPLOYE";
+    public String requete(){
+        return "SELECT c.NOMCMPFR, e.loginemp FROM competence, posseder p, employe e WHERE c.idcatcmp = p.idcatcmp AND p.loginemp = e.loginemp";
     }
 
     @Override

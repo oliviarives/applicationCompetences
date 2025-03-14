@@ -1,6 +1,5 @@
 package vue;
 
-import modele.Competence;
 import modele.Employe;
 import controleur.AjouterPersonnelControleur;
 
@@ -12,11 +11,11 @@ import java.awt.event.ActionListener;
 import java.util.List;
 
 public class EmployeView extends JPanel {
-    private JTable tableEmploye;
-    private JScrollPane scrollEmploye;
-    private JPanel panelBouttons;
-    private JButton bouttonModifierEmploye;
-    private JButton bouttonAjouterEmploye;
+    private final JTable tableEmploye;
+    private final JScrollPane scrollEmploye;
+    private final JPanel panelBouttons;
+    private final JButton bouttonModifierEmploye;
+    private final JButton bouttonAjouterEmploye;
 
     public EmployeView() {
         setLayout(new BorderLayout());
@@ -40,8 +39,13 @@ public class EmployeView extends JPanel {
     }
 
     public void setEmploye(List<Employe> emp) {
-        String[] columnNames = {"Prenom", "Nom", "Poste"};
-        DefaultTableModel model = new DefaultTableModel(columnNames, 0);
+
+        String[] columnNames = {"Prenom","Nom","Poste"};
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0){
+            public boolean isCellEditable(int row, int col) {
+                return false;
+            }
+        };
 
         for (Employe e : emp) {
             Object[] row = {e.getPrenom(), e.getNom(), e.getPoste()};
@@ -56,6 +60,7 @@ public class EmployeView extends JPanel {
     }
     
     public JButton getButtonModifierEmploye() {
+        this.tableEmploye.setDefaultEditor(Object.class, null);
         return this.bouttonModifierEmploye;
     }
 }
