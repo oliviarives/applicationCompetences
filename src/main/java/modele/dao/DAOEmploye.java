@@ -17,6 +17,7 @@ public class DAOEmploye {
     private static String dbUser = Config.get("db.user");
     private static String dbPwd = Config.get("db.password");
 
+
     public DAOEmploye() throws SQLException {
         CictOracleDataSource.creerAcces(dbUser,dbPwd);
         this.cn = CictOracleDataSource.getConnectionBD();
