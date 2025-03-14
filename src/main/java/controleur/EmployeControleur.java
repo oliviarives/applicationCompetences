@@ -1,9 +1,7 @@
 package controleur;
 
-import modele.Competence;
 import modele.Employe;
 import modele.dao.DAOEmploye;
-import vue.CreationMissionView;
 import vue.EmployeView;
 
 import java.util.List;
@@ -11,16 +9,16 @@ import java.util.List;
 public class EmployeControleur {
     private EmployeView empView;
     private DAOEmploye daoEmploye;
+    private NavigationControleur navC;
 
-
-    public EmployeControleur(EmployeView vue,DAOEmploye daoEmp) {
-        this.daoEmploye =daoEmp;
-        this.empView = vue;
+    public EmployeControleur(EmployeView empView, DAOEmploye daoEmploye, NavigationControleur navC) {
+        this.empView = empView;
+        this.daoEmploye = daoEmploye;
+        this.navC = navC; 
     }
-
+    
     public void loadEmploye() {
         List<Employe> emp = daoEmploye.findAll();
         empView.setEmploye(emp);
     }
-
 }

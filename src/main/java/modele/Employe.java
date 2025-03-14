@@ -51,6 +51,10 @@ public class Employe {
     public boolean getActif() {
         return this.actif;
     }
+    
+    public String gethashedPwd() {
+    	return this.hashedPwd;
+    }
 }
 
         /*if (services != null) {

@@ -4,7 +4,9 @@ import modele.Competence;
 import modele.Employe;
 import modele.Mission;
 import modele.connexion.CictOracleDataSource;
+import modele.dao.requetes.Employe.RequeteEmployeAjouter;
 import modele.dao.requetes.Employe.RequeteEmployeSelectAll;
+import modele.dao.requetes.Mission.RequeteMissionAjouter;
 import modele.dao.requetes.Mission.RequeteMissionSelectAll;
 
 import java.sql.Connection;
@@ -33,6 +35,14 @@ public class DAOEmploye {
                 rset.getDate("dateEntreeEmp")
         );
     }
+    
+    public void ajouterPersonnel(Employe employe) throws SQLException {
+        RequeteEmployeAjouter req = new RequeteEmployeAjouter();
+        PreparedStatement ps = cn.prepareStatement(req.requete());
+        req.parametres(ps, employe);
+        ps.executeQuery();
+    }
+  
 
     public List<Employe> findAll() {
         List<Employe> resultats = new ArrayList<>();

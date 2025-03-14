@@ -16,18 +16,22 @@ public class NavigationControleur {
         this.vueV =navView;
 
         MissionView misssionV = new MissionView();
+        EmployeView employeV = new EmployeView();
         DAOMission missionDao = new DAOMission();
+        DAOEmploye employeDAO = new DAOEmploye();
         CreationMissionView creaMissionV = new CreationMissionView();
         ModificationMissionView modifMissionV = new ModificationMissionView();
         MissionControleur missionC = new MissionControleur(misssionV, missionDao, this, creaMissionV, modifMissionV);
+        EmployeControleur employeC = new EmployeControleur(employeV, employeDAO, this);
 
         CompetencesView competencesV = new CompetencesView();
         DAOCompetence competenceDao = new DAOCompetence();
         CompetenceControleur competenceC = new CompetenceControleur(competencesV, competenceDao);
 
         EmployeView empView = new EmployeView();
-        DAOEmploye employeDao = new DAOEmploye();
-        EmployeControleur empC =new EmployeControleur(empView,employeDao);
+        DAOEmploye employeDao = new DAOEmploye(); 
+        EmployeControleur empC = new EmployeControleur(empView,employeDao, this);
+        AjoutPersonnelVue ajoutPersonnelV = new AjoutPersonnelVue();
         AccueilVue accueilV = new AccueilVue();
 
         AjouterMissionControleur ajoutMC = new AjouterMissionControleur(creaMissionV,missionDao,this,competenceDao,employeDao);
@@ -47,6 +51,7 @@ public class NavigationControleur {
         vueV.addPage("Creation",creaMissionV);
         vueV.addPage("Employe",empView);
         vueV.addPage("Modification", modifMissionV);
+        vueV.addPage("AjouterEmploye", ajoutPersonnelV);
 
 
         vueV.getButtonMissions().addActionListener(
@@ -77,6 +82,16 @@ public class NavigationControleur {
                 }
         );
 
+        empView.getBouttonAjouterEmploye().addActionListener(
+        		new ActionListener() {
+        			@Override 
+        			public void actionPerformed(ActionEvent e) {
+        				vueV.showPage("AjouterEmploye");
+        			}
+        		}
+        		
+        		);
+        
         misssionV.getButtonAjouterMission().addActionListener(
                 new ActionListener() {
                     @Override

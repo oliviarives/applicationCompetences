@@ -76,9 +76,6 @@ public class AjouterMissionControleur {
                 }
         );
 
-
-
-
     }
 
     public void loadCompetences(){
