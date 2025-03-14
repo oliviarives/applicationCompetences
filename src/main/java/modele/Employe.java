@@ -16,8 +16,10 @@ public class Employe {
     private Date dateEntree; 
     private boolean actif;
     private String poste;
+    private String idCatCmp;
+    private int idcmp;
 
-
+    //constructeur from BD
     public Employe(String prenom, String nom, String login, String mdp, String poste, Date dateEntree) {
         this.prenom = prenom;
         this.nom = nom;
@@ -26,6 +28,25 @@ public class Employe {
         this.poste = poste;
         this.dateEntree = dateEntree;
         this.actif = true;
+    }
+    //Constructeur pour affichage
+    public Employe(String prenom, String nom, String poste) {
+        this.prenom = prenom;
+        this.nom = nom;
+        this.poste = poste;
+
+    }
+    //constructeur pour compétence
+    public Employe(String prenom, String nom, String login, String mdp, String poste, Date dateEntree, String idcatc,int idcmp) {
+        this.prenom = prenom;
+        this.nom = nom;
+        this.login = login;
+        this.hashedPwd = MdpUtils.hashPassword(mdp);
+        this.poste = poste;
+        this.dateEntree = dateEntree;
+        this.actif = true;
+        this.idCatCmp = idcatc;
+        this.idcmp = idcmp;
     }
 
     public String getLogin() {
@@ -50,6 +71,14 @@ public class Employe {
 
     public boolean getActif() {
         return this.actif;
+    }
+
+    public int getIdcmp() {
+        return this.idcmp;
+    }
+
+    public String getIdCatCmp() {
+        return this.idCatCmp;
     }
 }
 

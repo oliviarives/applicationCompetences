@@ -28,8 +28,11 @@ public class EmployeView extends JPanel {
 
     public void setEmploye(List<Employe> emp) {
         String[] columnNames = {"Prenom","Nom","Poste"};
-        DefaultTableModel model = new DefaultTableModel(columnNames, 0);
-
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0){
+            public boolean isCellEditable(int row, int col) {
+                return false;
+            }
+        };
         for (Employe e : emp) {
             Object[] row = {e.getPrenom(),e.getNom(),e.getPoste()};
             model.addRow(row);

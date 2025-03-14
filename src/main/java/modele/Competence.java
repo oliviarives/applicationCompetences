@@ -60,8 +60,17 @@ public class Competence {
     private String nomCmpFr;
     public static int compteurCmp=0;
 
+    //Constructeur pour nouvelle mission (3 arguments)
     public Competence(String idCat, String nomEn, String nomFr) {
         this.idCmp = ++compteurCmp;
+        this.idCatCmp = idCat;
+        this.nomCmpEn = nomEn;
+        this.nomCmpFr = nomFr;
+    }
+
+    //Constructeur pour instance de compétence déjà existante dans BD (4 arguments)
+    public Competence(int id,String idCat, String nomEn, String nomFr) {
+        this.idCmp = id;
         this.idCatCmp = idCat;
         this.nomCmpEn = nomEn;
         this.nomCmpFr = nomFr;
