@@ -50,7 +50,12 @@
       <artifactId>miglayout-swing</artifactId>
       <version>5.0</version>
     </dependency>
-
+    <!-- Dependance flatlaf-->
+      <dependency>
+        <groupId>com.formdev</groupId>
+        <artifactId>flatlaf</artifactId>
+        <version>3.5.4</version>
+      </dependency>
 
   </dependencies>
 
