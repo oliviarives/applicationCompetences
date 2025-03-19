@@ -2,6 +2,7 @@ package vue;
 
 import modele.Competence;
 import modele.Employe;
+import utilitaires.StyleManager;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -43,6 +44,7 @@ public class CreationMissionView extends JPanel {
 
 
     public CreationMissionView() {
+        StyleManager.setupFlatLaf();
         setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
 
         //Partie Formulaire Mission
