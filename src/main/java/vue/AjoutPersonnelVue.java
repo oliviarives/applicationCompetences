@@ -2,7 +2,14 @@ package vue;
 
 import javax.swing.*;
 import java.awt.*;
+
 import java.io.Serial;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Date;
+import modele.Employe;
+import modele.MdpUtils;
+import utilitaires.StyleManager;
 
 public class AjoutPersonnelVue extends JPanel {
     @Serial
@@ -19,6 +26,7 @@ public class AjoutPersonnelVue extends JPanel {
     private final JLabel messageLabel;
 
     public AjoutPersonnelVue() {
+        StyleManager.setupFlatLaf();
         setLayout(new BorderLayout());
 
         JPanel formulaire = new JPanel(new GridBagLayout());
