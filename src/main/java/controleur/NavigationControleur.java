@@ -1,5 +1,6 @@
 package controleur;
 
+import modele.Employe;
 import modele.Mission;
 import modele.dao.DAOCompetence;
 import modele.dao.DAOEmploye;
@@ -9,16 +10,33 @@ import vue.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.util.List;
 
 public class NavigationControleur {
     private static NavigationView vueV;
+    private CompetencesView competencesV = new CompetencesView();
+    private DAOCompetence competenceDao = new DAOCompetence();
+    private CompetenceControleur competenceC = new CompetenceControleur(competencesV, competenceDao);
 
-    public NavigationControleur(NavigationView navView) throws SQLException {
-        this.vueV = navView;
+    private EmployeView empView = new EmployeView();
+    private DAOEmploye employeDao = new DAOEmploye();
+    private EmployeControleur empC = new EmployeControleur(empView,employeDao, this);
 
-        CompetencesView competencesV = new CompetencesView();
-        DAOCompetence competenceDao = new DAOCompetence();
-        CompetenceControleur competenceC = new CompetenceControleur(competencesV, competenceDao);
+    private MissionView misssionV = new MissionView();
+    private ModificationMissionView modifMissionV = new ModificationMissionView();
+    private CreationMissionView creaMissionV = new CreationMissionView();
+    private DAOMission missionDao = new DAOMission();
+    private MissionControleur missionC = new MissionControleur(misssionV, missionDao, this, creaMissionV, modifMissionV);
+    private AjouterMissionControleur ajoutMC = new AjouterMissionControleur(creaMissionV,missionDao,this,competenceDao,employeDao);
+    private ModifierMissionControleur modifMC = new ModifierMissionControleur(modifMissionV, missionDao, this, competenceDao, employeDao);
+
+    private AjoutPersonnelVue ajoutPersonnelV = new AjoutPersonnelVue();
+    private AjouterPersonnelControleur ajoutPersonnelC= new AjouterPersonnelControleur(ajoutPersonnelV, employeDao, this);
+
+    private AccueilVue accueilV = new AccueilVue();
+
+    public NavigationControleur( NavigationView navView) throws SQLException {
+        this.vueV =navView;
 
         EmployeView empView = new EmployeView();
         DAOEmploye employeDao = new DAOEmploye();
@@ -34,8 +52,6 @@ public class NavigationControleur {
 
         AjoutPersonnelVue ajoutPersonnelV = new AjoutPersonnelVue();
         AjouterPersonnelControleur ajoutPersonnelC = new AjouterPersonnelControleur(ajoutPersonnelV, employeDao, this);
-
-        AccueilVue accueilV = new AccueilVue();
 
         missionC.loadMissions();
         competenceC.loadCompetences();
@@ -106,6 +122,11 @@ public class NavigationControleur {
                 vueV.showPage("Accueil");
             }
         });
+    }
+
+    public void loadEmploye() {
+        List<Employe> emp = this.employeDao.findAll();
+        empView.setEmploye(emp);
     }
 
     public static NavigationView getVueV() {

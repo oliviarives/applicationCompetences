@@ -1,6 +1,8 @@
 package vue;
 import controleur.NavigationControleur;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Logger;
@@ -75,7 +77,7 @@ public class ConnexionVue extends JDialog {
     }
 
     /**
-     * Vérifie la connexion (appel au contrôleur).
+     * Vérifie la connexion
      */
     private void verifierConnexion() {
         String identifiant = IdentifiantJTextField.getText();
@@ -85,19 +87,31 @@ public class ConnexionVue extends JDialog {
         boolean connexionReussie = this.controleur.tenterConnexion(identifiant, motDePasse);
 
         if (connexionReussie) {
-            // Ouvrir la fenêtre d'accueil
             try {
                 new NavigationControleur(navigationView);
+                navigationView.setVisible(true);
+                setVisible(false);
+                dispose();
+
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
-
-            navigationView.setVisible(true);
-            setVisible(false); // Masque la fenêtre
-            dispose(); // Ferme la fenêtre
         } else {
+            // Affichage du message d'erreur
             messageLabel.setText("Identifiant ou mot de passe incorrect !");
             messageLabel.setForeground(Color.RED);
+
+            // Démarrer un Timer pour effacer le message après 3 secondes
+            Timer timer = new Timer(3000, new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    messageLabel.setText(""); // Effacer le message
+                }
+            });
+
+            timer.setRepeats(false); // Exécuter une seule fois
+            timer.start();
         }
     }
 }
+

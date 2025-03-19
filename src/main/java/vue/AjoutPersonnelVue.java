@@ -1,10 +1,9 @@
-//ATTENTION : prévoir le cas où le login ne serait pas unique
-//PREVOIR LES CHAMPS DE SAISIE OBLIGATOIRES
-
 package vue;
 
 import javax.swing.*;
 import java.awt.*;
+
+import java.io.Serial;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Date;
@@ -13,133 +12,77 @@ import modele.MdpUtils;
 import utilitaires.StyleManager;
 
 public class AjoutPersonnelVue extends JPanel {
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private JButton buttonConfirmer;
-    private JButton buttonEffacer;
-    private JTextField prenomField;
-    private JTextField nomField;
-    private JTextField loginField;
-    private JPasswordField mdpField;
-    private JTextField posteField;
-    private JSpinner dateEntreeSpinner;
-    private JLabel messageLabel;
+    @Serial
+    private static final long serialVersionUID = 1L;
+
+    private final JButton buttonConfirmer;
+    private final JButton buttonEffacer;
+    private final JTextField prenomField;
+    private final JTextField nomField;
+    private final JTextField loginField;
+    private final JTextField mdpField;
+    private final JTextField posteField;
+    private final JSpinner dateEntreeSpinner;
+    private final JLabel messageLabel;
 
     public AjoutPersonnelVue() {
         StyleManager.setupFlatLaf();
         setLayout(new BorderLayout());
 
         JPanel formulaire = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc;
+        GridBagConstraints gbc = new GridBagConstraints();
 
-        // Prénom
-        gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 0;
+        // Configuration générale
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.anchor = GridBagConstraints.LINE_END;
-        formulaire.add(new JLabel("Prénom "), gbc);
 
-        gbc = new GridBagConstraints();
+        // Prénom
+        gbc.gridx = 0; gbc.gridy = 0;
+        formulaire.add(new JLabel("Prénom : "), gbc);
         gbc.gridx = 1;
-        gbc.gridy = 0;
-        gbc.insets = new Insets(5, 5, 5, 5);
-        gbc.fill = GridBagConstraints.HORIZONTAL;
         prenomField = new JTextField(20);
         formulaire.add(prenomField, gbc);
 
         // Nom
-        gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        gbc.insets = new Insets(5, 5, 5, 5);
-        gbc.anchor = GridBagConstraints.LINE_END;
-        formulaire.add(new JLabel("Nom "), gbc);
-
-        gbc = new GridBagConstraints();
+        gbc.gridx = 0; gbc.gridy = 1;
+        formulaire.add(new JLabel("Nom : "), gbc);
         gbc.gridx = 1;
-        gbc.gridy = 1;
-        gbc.insets = new Insets(5, 5, 5, 5);
-        gbc.fill = GridBagConstraints.HORIZONTAL;
         nomField = new JTextField(20);
         formulaire.add(nomField, gbc);
 
         // Login
-        gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        gbc.insets = new Insets(5, 5, 5, 5);
-        gbc.anchor = GridBagConstraints.LINE_END;
-        formulaire.add(new JLabel("Login "), gbc);
-
-        gbc = new GridBagConstraints();
+        gbc.gridx = 0; gbc.gridy = 2;
+        formulaire.add(new JLabel("Login : "), gbc);
         gbc.gridx = 1;
-        gbc.gridy = 2;
-        gbc.insets = new Insets(5, 5, 5, 5);
-        gbc.fill = GridBagConstraints.HORIZONTAL;
         loginField = new JTextField(20);
         formulaire.add(loginField, gbc);
 
         // Mot de passe
-        gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 3;
-        gbc.insets = new Insets(5, 5, 5, 5);
-        gbc.anchor = GridBagConstraints.LINE_END;
-        formulaire.add(new JLabel("Mot de passe "), gbc);
-
-        gbc = new GridBagConstraints();
+        gbc.gridx = 0; gbc.gridy = 3;
+        formulaire.add(new JLabel("Mot de passe : "), gbc);
         gbc.gridx = 1;
-        gbc.gridy = 3;
-        gbc.insets = new Insets(5, 5, 5, 5);
-        gbc.fill = GridBagConstraints.HORIZONTAL;
         mdpField = new JPasswordField(20);
         formulaire.add(mdpField, gbc);
 
         // Poste
-        gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 4;
-        gbc.insets = new Insets(5, 5, 5, 5);
-        gbc.anchor = GridBagConstraints.LINE_END;
-        formulaire.add(new JLabel("Poste "), gbc);
-
-        gbc = new GridBagConstraints();
+        gbc.gridx = 0; gbc.gridy = 4;
+        formulaire.add(new JLabel("Poste : "), gbc);
         gbc.gridx = 1;
-        gbc.gridy = 4;
-        gbc.insets = new Insets(5, 5, 5, 5);
-        gbc.fill = GridBagConstraints.HORIZONTAL;
         posteField = new JTextField(20);
         formulaire.add(posteField, gbc);
 
         // Date d'entrée
-        gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 5;
-        gbc.insets = new Insets(5, 5, 5, 5);
-        gbc.anchor = GridBagConstraints.LINE_END;
-        formulaire.add(new JLabel("Date d'entrée "), gbc);
-
-        gbc = new GridBagConstraints();
+        gbc.gridx = 0; gbc.gridy = 5;
+        formulaire.add(new JLabel("Date d'entrée : "), gbc);
         gbc.gridx = 1;
-        gbc.gridy = 5;
-        gbc.insets = new Insets(5, 5, 5, 5);
-        gbc.fill = GridBagConstraints.HORIZONTAL;
         dateEntreeSpinner = new JSpinner(new SpinnerDateModel());
         JSpinner.DateEditor dateEditor = new JSpinner.DateEditor(dateEntreeSpinner, "dd/MM/yyyy");
         dateEntreeSpinner.setEditor(dateEditor);
         dateEntreeSpinner.setValue(new java.util.Date());
         formulaire.add(dateEntreeSpinner, gbc);
 
-        // Message
-        gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 6;
-        gbc.gridwidth = 2;
-        gbc.insets = new Insets(10, 5, 5, 5);
-        gbc.anchor = GridBagConstraints.CENTER;
+        // Message d'erreur
+        gbc.gridx = 0; gbc.gridy = 6; gbc.gridwidth = 2;
         messageLabel = new JLabel("", SwingConstants.CENTER);
         messageLabel.setForeground(Color.RED);
         formulaire.add(messageLabel, gbc);
@@ -151,54 +94,24 @@ public class AjoutPersonnelVue extends JPanel {
         buttonPanel.add(buttonConfirmer);
         buttonPanel.add(buttonEffacer);
 
+        // Ajout des composants à la vue
         add(formulaire, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);
-
-        buttonEffacer.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                effacerChamps();
-            }
-        });
     }
 
-    public JTextField getPrenomField() {
-        return prenomField;
-    }
+    // Getters pour récupérer les valeurs des champs
+    public JTextField getPrenomField() { return prenomField; }
+    public JTextField getNomField() { return nomField; }
+    public JTextField getLoginField() { return loginField; }
+    public JTextField getMdpField() { return mdpField; }
+    public JTextField getPosteField() { return posteField; }
+    public JSpinner getDateEntreeField() { return dateEntreeSpinner; }
 
-    public JTextField getNomField() {
-        return nomField;
-    }
+    // Getters pour les boutons
+    public JButton getButtonConfirmer() { return buttonConfirmer; }
+    public JButton getButtonEffacer() { return buttonEffacer; }
 
-    public JTextField getLoginField() {
-        return loginField;
-    }
-
-    public JPasswordField getMdpField() {
-        return mdpField;
-    }
-
-    public JTextField getPosteField() {
-        return posteField;
-    }
-
-    public JSpinner getDateEntreeSpinner() {
-        return dateEntreeSpinner;
-    }
-
-    private void effacerChamps() {
-        prenomField.setText("");
-        nomField.setText("");
-        loginField.setText("");
-        mdpField.setText("");
-        posteField.setText("");
-        dateEntreeSpinner.setValue(new java.util.Date());
-    }
-
-    public JButton getButtonConfirmer() {
-        return buttonConfirmer;
-    }
-
+    // Affichage des messages
     public void afficherMessage(String message) {
         messageLabel.setText(message);
     }

@@ -1,14 +1,13 @@
 package modele.dao;
+
 import utilitaires.Config;
 import modele.Competence;
 import modele.Employe;
 import modele.connexion.CictOracleDataSource;
 import modele.dao.requetes.Employe.RequeteEmployeAjouter;
 import modele.dao.requetes.Employe.RequeteEmployeSelectAll;
-import modele.dao.requetes.Mission.RequeteMissionAjouter;
+import modele.dao.requetes.Employe.RequeteLoginExist;
 import modele.dao.requetes.Employe.RequeteEmployeSelectByCmp;
-import modele.dao.requetes.Mission.RequeteMissionSelectAll;
-
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -20,24 +19,23 @@ import java.util.List;
 import java.util.Set;
 
 public class DAOEmploye {
-    private Connection cn;
+    private final Connection cn;
     private ArrayList<Employe> listeEmployeByCmp;
     private static String dbUser = Config.get("db.user");
     private static String dbPwd = Config.get("db.password");
 
     public DAOEmploye() throws SQLException {
-        CictOracleDataSource.creerAcces(dbUser,dbPwd);
+        CictOracleDataSource.creerAcces(dbUser, dbPwd);
         this.cn = CictOracleDataSource.getConnectionBD();
         try {
             PreparedStatement req = cn.prepareStatement(new RequeteEmployeSelectByCmp().requete());
-            this.listeEmployeByCmp= resultSetToArray(req.executeQuery());
-        }catch(SQLException e){
+            this.listeEmployeByCmp = resultSetToArray(req.executeQuery());
+        } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
     }
 
-
-    protected Employe creerInstance(ResultSet rset) throws SQLException{
+    protected Employe creerInstance(ResultSet rset) throws SQLException {
         return new Employe(
                 rset.getString("prenomEmp"),
                 rset.getString("nomEmp"),
@@ -47,16 +45,23 @@ public class DAOEmploye {
                 rset.getDate("dateEntreeEmp")
         );
     }
-    
+
     public void ajouterPersonnel(Employe employe) throws SQLException {
         RequeteEmployeAjouter req = new RequeteEmployeAjouter();
         PreparedStatement ps = cn.prepareStatement(req.requete());
         req.parametres(ps, employe);
         ps.executeQuery();
     }
-  
 
-    protected Employe creerInstanceCmp(ResultSet rset) throws SQLException{
+    public boolean loginExist(String login) throws SQLException {
+        RequeteLoginExist req = new RequeteLoginExist();
+        PreparedStatement ps = cn.prepareStatement(req.requete());
+        req.parametres(ps, login);
+        ResultSet rs = ps.executeQuery();
+        return rs.next(); // Retourne vrai si un login existe déjà
+    }
+
+    protected Employe creerInstanceCmp(ResultSet rset) throws SQLException {
         return new Employe(
                 rset.getString("prenomEmp"),
                 rset.getString("nomEmp"),
@@ -78,15 +83,13 @@ public class DAOEmploye {
                     Employe instance = creerInstance(curseur);
                     resultats.add(instance);
                 }
-            } catch (SQLException e) {
-                System.err.println(e.getMessage());
             }
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
         return resultats;
     }
-    //filtrer employés par leurs compétenes
+
     public List<Employe> findEmpByCmp() {
         List<Employe> resultats = new ArrayList<>();
         try {
@@ -96,8 +99,6 @@ public class DAOEmploye {
                     Employe instance = creerInstance(curseur);
                     resultats.add(instance);
                 }
-            } catch (SQLException e) {
-                System.err.println(e.getMessage());
             }
         } catch (SQLException e) {
             System.err.println(e.getMessage());
@@ -105,51 +106,33 @@ public class DAOEmploye {
         return resultats;
     }
 
-
-
     public List<Employe> findEmpByCompetences(List<Competence> competences) {
         Set<Employe> lemp = new HashSet<>();
-        List<Integer> intCmpAjoutes = new ArrayList<>();
         List<String> stringCmpAjoutes = new ArrayList<>();
-        for(Competence cmp : competences) {
-            stringCmpAjoutes.add(cmp.getIdCatCmp()+"."+cmp.getIdCmp());
-            System.out.println("1"+cmp.getIdCatCmp()+"."+cmp.getIdCmp());
+
+        for (Competence cmp : competences) {
+            stringCmpAjoutes.add(cmp.getIdCatCmp() + "." + cmp.getIdCmp());
         }
-        //try {
-            //PreparedStatement req = cn.prepareStatement(new RequeteEmployeSelectByCmp().requete());
-            //try (ResultSet curseur = req.executeQuery()) {
-                //this.listeEmployeByCmp = curseur;
 
-                for(Employe emp: listeEmployeByCmp) {
-                    System.out.println(emp.getIdCatCmp()+"."+emp.getIdcmp());
-                    if (stringCmpAjoutes.contains(emp.getIdCatCmp()+"."+emp.getIdcmp()) ){
-                        lemp.add(emp);
-                    }
-                }
-        /*}catch(SQLException e){
-            System.err.println(e.getMessage());
-        }*/
-        List<Employe> resultats = new ArrayList<>(lemp);
-        return resultats;
+        for (Employe emp : listeEmployeByCmp) {
+            if (stringCmpAjoutes.contains(emp.getIdCatCmp() + "." + emp.getIdcmp())) {
+                lemp.add(emp);
+            }
+        }
+
+        return new ArrayList<>(lemp);
     }
-
 
     public ArrayList<Employe> resultSetToArray(ResultSet resultSet) throws SQLException {
         ArrayList<Employe> resultats = new ArrayList<>();
         while (resultSet.next()) {
             Employe instance = creerInstanceCmp(resultSet);
-            System.out.println(instance.getNom());
             resultats.add(instance);
         }
         return resultats;
     }
 
-}
-
-
-
-
-   /* public List<Employe> findEmpByCompetences(List<Competence> competences) {
+    /* public List<Employe> findEmpByCompetences(List<Competence> competences) {
         List<Employe> resultats = new ArrayList<>();
 
         if (competences.isEmpty()) {
@@ -158,12 +141,11 @@ public class DAOEmploye {
 
         String query = new RequeteEmployeSelectByCmp().requete();
 
-
         for (int i = 0; i < competences.size(); i++) {
             if (i > 0) {
-                query+=(" OR ");
+                query += (" OR ");
             }
-            query+=("(C.IDCMP = ?)");
+            query += ("(C.IDCMP = ?)");
         }
         System.out.println(query);
 
@@ -188,4 +170,5 @@ public class DAOEmploye {
         }
 
         return resultats;
-    }*/
+    } */
+}
