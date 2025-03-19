@@ -25,7 +25,6 @@ public class DAOEmploye {
     private static String dbPwd = Config.get("db.password");
 
     public DAOEmploye() throws SQLException {
-        CictOracleDataSource.creerAcces(dbUser, dbPwd);
         this.cn = CictOracleDataSource.getConnectionBD();
         try {
             PreparedStatement req = cn.prepareStatement(new RequeteEmployeSelectByCmp().requete());

@@ -8,12 +8,14 @@ import oracle.jdbc.datasource.impl.OracleDataSource;
 import utilitaires.Config;
 
 public class CictOracleDataSource extends OracleDataSource {
- 
+
      private static CictOracleDataSource cod;
      private static Connection conn;
      private static String dbHost = Config.get("db.host");
      private static String dbPort = Config.get("db.port");
      private static String dbName = Config.get("db.name");
+     private static String dbPwd = Config.get("db.password");
+     private static String dbUser = Config.get("db.user");
 
      private CictOracleDataSource(String login, String pwd) throws SQLException{
          this.setURL("jdbc:oracle:thin:@" + dbHost + ":" + dbPort + ":" + dbName);
@@ -21,7 +23,7 @@ public class CictOracleDataSource extends OracleDataSource {
          this.setPassword(pwd);
      }
  
-    public static void creerAcces(String login, String pwd) throws SQLException {
+    private static void creerAcces(String login, String pwd) throws SQLException {
              CictOracleDataSource.cod = new CictOracleDataSource(login, pwd);
              System.out.println("Connexion en cours");
              CictOracleDataSource.conn = CictOracleDataSource.cod.getConnection();
@@ -29,6 +31,13 @@ public class CictOracleDataSource extends OracleDataSource {
      }
  
     public static Connection getConnectionBD() {
+         if (conn == null) {
+             try {
+                 creerAcces(dbUser, dbPwd);
+             } catch (SQLException e) {
+                 throw new RuntimeException(e);
+             }
+         }
          return conn;
      }
  

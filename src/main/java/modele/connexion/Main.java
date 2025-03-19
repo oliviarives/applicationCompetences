@@ -1,10 +1,9 @@
-package modele.connexion;
+/*package modele.connexion;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-/*import java.sql.Statement;
-import java.sql.ResultSet;*/
+
 
 import modele.connexion.CictOracleDataSource;
 import utilitaires.Config;
@@ -27,7 +26,7 @@ public class Main {
               
             }
             //Test de requete
-           /* String query="SELECT * FROM PERSONNELS";
+           String query="SELECT * FROM PERSONNELS";
             try (Statement statement = connection.createStatement();
             		ResultSet resultSet = statement.executeQuery(query)) {
             	while (resultSet.next()) {
@@ -38,7 +37,7 @@ public class Main {
             	}
             }catch (SQLException e) {
             	e.printStackTrace();
-            }*/
+            }
  
         } catch (SQLException e) {
             // Gère les erreurs de connexion
@@ -49,4 +48,4 @@ public class Main {
             CictOracleDataSource.closeConnection();
         }
     }
-}
+}*/
