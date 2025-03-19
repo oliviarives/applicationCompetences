@@ -2,14 +2,7 @@ package vue;
 
 import javax.swing.*;
 import java.awt.*;
-
 import java.io.Serial;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.sql.Date;
-import modele.Employe;
-import modele.MdpUtils;
-import utilitaires.StyleManager;
 
 public class AjoutPersonnelVue extends JPanel {
     @Serial
@@ -17,61 +10,64 @@ public class AjoutPersonnelVue extends JPanel {
 
     private final JButton buttonConfirmer;
     private final JButton buttonEffacer;
+    private final JButton buttonAjouterCompetence;
     private final JTextField prenomField;
     private final JTextField nomField;
     private final JTextField loginField;
-    private final JTextField mdpField;
+    private final JPasswordField mdpField;
     private final JTextField posteField;
     private final JSpinner dateEntreeSpinner;
     private final JLabel messageLabel;
+    private final JTable tableCompetencesEmploye;
+    private final JTable tableToutesCompetences;
 
     public AjoutPersonnelVue() {
-        StyleManager.setupFlatLaf();
         setLayout(new BorderLayout());
 
+        // Panel Principal avec JSplitPane
+        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+        splitPane.setDividerLocation(500); // Sépare la partie gauche (formulaire) de la droite (tableau)
+
+        // Panel Gauche (Formulaire + Tableau des compétences de l'employé)
+        JPanel panelGauche = new JPanel(new BorderLayout());
+
+        // FORMULAIRE
         JPanel formulaire = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-
-        // Configuration générale
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.anchor = GridBagConstraints.LINE_END;
 
-        // Prénom
+        // Champs de saisie
         gbc.gridx = 0; gbc.gridy = 0;
         formulaire.add(new JLabel("Prénom : "), gbc);
         gbc.gridx = 1;
         prenomField = new JTextField(20);
         formulaire.add(prenomField, gbc);
 
-        // Nom
         gbc.gridx = 0; gbc.gridy = 1;
         formulaire.add(new JLabel("Nom : "), gbc);
         gbc.gridx = 1;
         nomField = new JTextField(20);
         formulaire.add(nomField, gbc);
 
-        // Login
         gbc.gridx = 0; gbc.gridy = 2;
         formulaire.add(new JLabel("Login : "), gbc);
         gbc.gridx = 1;
         loginField = new JTextField(20);
         formulaire.add(loginField, gbc);
 
-        // Mot de passe
         gbc.gridx = 0; gbc.gridy = 3;
         formulaire.add(new JLabel("Mot de passe : "), gbc);
         gbc.gridx = 1;
         mdpField = new JPasswordField(20);
         formulaire.add(mdpField, gbc);
 
-        // Poste
         gbc.gridx = 0; gbc.gridy = 4;
         formulaire.add(new JLabel("Poste : "), gbc);
         gbc.gridx = 1;
         posteField = new JTextField(20);
         formulaire.add(posteField, gbc);
 
-        // Date d'entrée
         gbc.gridx = 0; gbc.gridy = 5;
         formulaire.add(new JLabel("Date d'entrée : "), gbc);
         gbc.gridx = 1;
@@ -81,21 +77,47 @@ public class AjoutPersonnelVue extends JPanel {
         dateEntreeSpinner.setValue(new java.util.Date());
         formulaire.add(dateEntreeSpinner, gbc);
 
-        // Message d'erreur
-        gbc.gridx = 0; gbc.gridy = 6; gbc.gridwidth = 2;
+        // Ajout du formulaire au panel gauche
+        panelGauche.add(formulaire, BorderLayout.NORTH);
+
+        // TABLEAU DES COMPÉTENCES DE L'EMPLOYÉ (en bas du formulaire)
+        tableCompetencesEmploye = new JTable(new String[][]{}, new String[]{"Compétence", "Niveau"});
+        JScrollPane scrollCompetences = new JScrollPane(tableCompetencesEmploye);
+        scrollCompetences.setPreferredSize(new Dimension(450, 150));
+        scrollCompetences.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollCompetences.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
+        panelGauche.add(scrollCompetences, BorderLayout.CENTER);
+
+        // PANEL DROITE (Tableau principal : Toutes les compétences)
+        JPanel panelDroite = new JPanel(new BorderLayout());
+        tableToutesCompetences = new JTable(new String[][]{}, new String[]{"Nom", "Poste", "Date d'entrée"});
+        JScrollPane scrollToutesCompetences = new JScrollPane(tableToutesCompetences);
+        scrollToutesCompetences.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollToutesCompetences.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
+        panelDroite.add(scrollToutesCompetences, BorderLayout.CENTER);
+
+        // Ajout des panneaux au SplitPane
+        splitPane.setLeftComponent(panelGauche);
+        splitPane.setRightComponent(panelDroite);
+
+        // MESSAGE D'ERREUR OU VALIDATION
         messageLabel = new JLabel("", SwingConstants.CENTER);
         messageLabel.setForeground(Color.RED);
-        formulaire.add(messageLabel, gbc);
 
-        // Boutons
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        // PANEL BOUTONS
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         buttonConfirmer = new JButton("Confirmer");
+        buttonAjouterCompetence = new JButton("Ajouter une compétence");
         buttonEffacer = new JButton("Effacer");
         buttonPanel.add(buttonConfirmer);
+        buttonPanel.add(buttonAjouterCompetence);
         buttonPanel.add(buttonEffacer);
 
-        // Ajout des composants à la vue
-        add(formulaire, BorderLayout.CENTER);
+        // Ajout des composants principaux
+        add(splitPane, BorderLayout.CENTER);
+        add(messageLabel, BorderLayout.NORTH);
         add(buttonPanel, BorderLayout.SOUTH);
     }
 
@@ -103,13 +125,18 @@ public class AjoutPersonnelVue extends JPanel {
     public JTextField getPrenomField() { return prenomField; }
     public JTextField getNomField() { return nomField; }
     public JTextField getLoginField() { return loginField; }
-    public JTextField getMdpField() { return mdpField; }
+    public JPasswordField getMdpField() { return mdpField; }
     public JTextField getPosteField() { return posteField; }
     public JSpinner getDateEntreeField() { return dateEntreeSpinner; }
 
     // Getters pour les boutons
     public JButton getButtonConfirmer() { return buttonConfirmer; }
+    public JButton getButtonAjouterCompetence() { return buttonAjouterCompetence; }
     public JButton getButtonEffacer() { return buttonEffacer; }
+
+    // Getters pour les tableaux
+    public JTable getTableCompetencesEmploye() { return tableCompetencesEmploye; }
+    public JTable getTableToutesCompetences() { return tableToutesCompetences; }
 
     // Affichage des messages
     public void afficherMessage(String message) {

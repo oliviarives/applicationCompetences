@@ -20,7 +20,6 @@ public class DAOCompetence {
     private Connection cn;
 
     public DAOCompetence() throws SQLException {
-        CictOracleDataSource.creerAcces("BSC3991A","2002Aralc.31");
         this.cn = CictOracleDataSource.getConnectionBD();
 
     }

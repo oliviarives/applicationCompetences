@@ -58,15 +58,12 @@ public class ConnexionVue extends JDialog {
      */
     public static void main(String[] args) {
         try {
-            // Création de l'accès à la bd
-            CictOracleDataSource.creerAcces(Config.get("db.user"), Config.get("db.password"));
-
             Connection connection = CictOracleDataSource.getConnectionBD();
             if (connection == null || connection.isClosed()) {
                 throw new SQLException("Impossible d'obtenir une connexion valide à la base de données.");
             }
 
-            ConnexionControleur controleur = new ConnexionControleur(new UtilisateurDAO(connection));
+            ConnexionControleur controleur = new ConnexionControleur(new UtilisateurDAO());
 
             // Passer le contrôleur à la vue
             new ConnexionVue(controleur);
