@@ -6,6 +6,7 @@ import utilitaires.StyleManager;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import javax.swing.text.DateFormatter;
 import java.awt.*;
 import java.text.DateFormat;
@@ -249,17 +250,22 @@ public class CreationMissionView extends JPanel {
     }
 
     public void setEmploye(List<Employe> emp) {
-        String[] columnNames = {"Prenom","Nom","Poste"};
+        String[] columnNames = {"login","Prenom","Nom","Poste"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0){
             public boolean isCellEditable(int row, int col) {
                 return false;
             }
         };
         for (Employe e : emp) {
-            Object[] row = {e.getPrenom(),e.getNom(),e.getPoste()};
+            Object[] row = {e.getLogin(),e.getPrenom(),e.getNom(),e.getPoste()};
             model.addRow(row);
         }
         this.employesTable.setModel(model);
+        TableColumn column = this.employesTable.getColumnModel().getColumn(0);
+        column.setMinWidth(0);
+        column.setMaxWidth(0);
+        column.setPreferredWidth(0);
+        column.setResizable(false);
     }
 
 
@@ -316,7 +322,6 @@ public class CreationMissionView extends JPanel {
 
             competences.add(new Competence(idCmp, idCatCmp, nomEn, nomFr));
         }
-
         return competences;
     }
     //retourne une liste d'employe ajoutés à la mission pour insertion BD à cretion mission
@@ -331,6 +336,7 @@ public class CreationMissionView extends JPanel {
         List<String> resultSet = new ArrayList<>(empsALogin);
         return  resultSet;
     }
+
 
 }
 
