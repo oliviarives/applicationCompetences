@@ -11,12 +11,11 @@ public class RequeteCompetenceSelectAll extends RequeteCompetence {
         return "SELECT * FROM COMPETENCE";
     }
 
-    @Override
+
     public void parametres(PreparedStatement prSt, String... id) throws SQLException {
 
     }
 
-    @Override
     public void parametres(PreparedStatement prSt, Competence obj) throws SQLException {
 
     }
