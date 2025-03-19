@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.sql.Date;
 import modele.Employe;
 import modele.MdpUtils;
+import utilitaires.StyleManager;
 
 public class AjoutPersonnelVue extends JPanel {
     /**
@@ -27,6 +28,7 @@ public class AjoutPersonnelVue extends JPanel {
     private JLabel messageLabel;
 
     public AjoutPersonnelVue() {
+        StyleManager.setupFlatLaf();
         setLayout(new BorderLayout());
 
         JPanel formulaire = new JPanel(new GridBagLayout());

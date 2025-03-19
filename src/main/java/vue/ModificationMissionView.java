@@ -3,6 +3,7 @@ package vue;
 import modele.Competence;
 import modele.Employe;
 import modele.Mission;
+import utilitaires.StyleManager;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -16,6 +17,7 @@ import java.util.EnumMap;
 import java.util.List;
 
 public class ModificationMissionView extends JPanel {
+
     private JButton buttonConfirmer;
     private JTextField titreMisField;
     private JTextArea descriptionMisField;
@@ -43,7 +45,8 @@ public class ModificationMissionView extends JPanel {
 
 
     public ModificationMissionView() {
-        setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
+        StyleManager.setupFlatLaf();
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         //Partie Formulaire Mission
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -71,7 +74,7 @@ public class ModificationMissionView extends JPanel {
 
 
         this.titreMisField = new JTextField(20);
-        this.descriptionMisField = new JTextArea(3,30);
+        this.descriptionMisField = new JTextArea(3, 30);
         this.dateDebutMisField = new JFormattedTextField(dateFormatter);
         this.dateDebutMisField.setValue(new Date(System.currentTimeMillis()));
         this.dateFinMisField = new JFormattedTextField(dateFormatter);
@@ -154,21 +157,20 @@ public class ModificationMissionView extends JPanel {
         //partie Ajout compétence
         this.competenceTable = new JTable();
         this.competenceScrollPane = new JScrollPane(competenceTable);
-        this.competenceScrollPane.setPreferredSize(new Dimension(150,200));
-        this.cardLayoutPanel.add(this.competenceScrollPane,"tabCompetences");
-
+        this.competenceScrollPane.setPreferredSize(new Dimension(150, 200));
+        this.cardLayoutPanel.add(this.competenceScrollPane, "tabCompetences");
 
 
         //partie Ajout Employe
         this.employesTable = new JTable();
         this.employeScrollPane = new JScrollPane(employesTable);
-        this.cardLayoutPanel.add(this.employeScrollPane,"tabEmployes");
+        this.cardLayoutPanel.add(this.employeScrollPane, "tabEmployes");
 
         //Construction visuel final
         JPanel panelForm = new JPanel(new BorderLayout());
         JScrollPane scrollFormulaire = new JScrollPane(formulaire);
-        panelForm.add(scrollFormulaire,BorderLayout.CENTER);
-        panelForm.add(panelBouttons,BorderLayout.SOUTH);
+        panelForm.add(scrollFormulaire, BorderLayout.CENTER);
+        panelForm.add(panelBouttons, BorderLayout.SOUTH);
         splitPane.setLeftComponent(panelForm);
         splitPane.setRightComponent(cardLayoutPanel);
         add(titreLabel);
@@ -189,7 +191,7 @@ public class ModificationMissionView extends JPanel {
     }
 
     public java.sql.Date getDateDebutMisField() {
-        return java.sql.Date.valueOf( this.dateDebutMisField.getText());
+        return java.sql.Date.valueOf(this.dateDebutMisField.getText());
     }
 
     public String getLogEmpField() {
@@ -215,40 +217,43 @@ public class ModificationMissionView extends JPanel {
     public JTable getListeCompetenceAjoutee() {
         return this.listeCompetenceAjoutee;
     }
+
     public JTable getListeEmployesAjoutee() {
         return this.listeEmployesAjoutee;
     }
+
     public JTable getCompetenceTable() {
         return this.competenceTable;
     }
+
     public JTable getEmployesTable() {
         return this.employesTable;
     }
 
     public void setCompetencesAjout(List<Competence> competences) {
         //System.out.println("Mise à jour de la table des compétences avec " + competences.size() + " entrées."); // Debug
-        String[] columnNames = {"Id", "Categorie","Nom (En)","Nom (FR)"};
-        DefaultTableModel model = new DefaultTableModel(columnNames, 0){
+        String[] columnNames = {"Id", "Categorie", "Nom (En)", "Nom (FR)"};
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
             public boolean isCellEditable(int row, int col) {
                 return false;
             }
         };
         for (Competence cmp : competences) {
-            Object[] row = {cmp.getIdCmp(),cmp.getIdCatCmp(),cmp.getNomCmpEn(),cmp.getNomCmpFr()};
+            Object[] row = {cmp.getIdCmp(), cmp.getIdCatCmp(), cmp.getNomCmpEn(), cmp.getNomCmpFr()};
             model.addRow(row);
         }
         this.competenceTable.setModel(model);
     }
 
     public void setEmploye(List<Employe> emp) {
-        String[] columnNames = {"Prenom","Nom","Poste"};
-        DefaultTableModel model = new DefaultTableModel(columnNames, 0){
+        String[] columnNames = {"Prenom", "Nom", "Poste"};
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
             public boolean isCellEditable(int row, int col) {
                 return false;
             }
         };
         for (Employe e : emp) {
-            Object[] row = {e.getPrenom(),e.getNom(),e.getPoste()};
+            Object[] row = {e.getPrenom(), e.getNom(), e.getPoste()};
             model.addRow(row);
         }
         this.employesTable.setModel(model);
@@ -284,12 +289,14 @@ public class ModificationMissionView extends JPanel {
         }
         return null; // Aucune ligne sélectionnée
     }
+
     //ajout compétence selectionner a tables des compétences ajoutées à la mission
     public void ajouterCompetenceAjoutee(Competence cmp) {
         DefaultTableModel model = (DefaultTableModel) listeCompetenceAjoutee.getModel();
         Object[] row = {cmp.getIdCmp(), cmp.getIdCatCmp(), cmp.getNomCmpEn(), cmp.getNomCmpFr()};
         model.addRow(row);
     }
+
     //ajout employé selectionner a tables des employés ajoutés à la mission
     public void ajouterEmployesAjoutee(Employe emp) {
         DefaultTableModel model = (DefaultTableModel) listeEmployesAjoutee.getModel();
@@ -323,7 +330,3 @@ public class ModificationMissionView extends JPanel {
         return competences;
     }
 }
-
-
-
-

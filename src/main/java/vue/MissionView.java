@@ -1,6 +1,7 @@
 package vue;
 
 import modele.Mission;
+import utilitaires.StyleManager;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -26,6 +27,7 @@ public class MissionView extends JPanel{
 
 
     public MissionView() {
+        StyleManager.setupFlatLaf();
         setLayout(new BorderLayout());
 
         this.tableMission = new JTable();
@@ -54,7 +56,7 @@ public class MissionView extends JPanel{
                 }
             }
         });
-        this.labelFiltreStatut = new JLabel("Filtre statut");
+        this.labelFiltreStatut = new JLabel("Statut : ");
         //add(labelFiltreStatut, BorderLayout.WEST);
         ///add(filtreTitre,BorderLayout.NORTH);
         this.panelFiltreMission = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -63,7 +65,7 @@ public class MissionView extends JPanel{
         add(this.panelFiltreMission, BorderLayout.NORTH);
         add(scrollMission,BorderLayout.CENTER);
         this.ajouterMission = new JButton("Creer une nouvelle mission");
-        this.modifierMission = new JButton("Modifier");
+        this.modifierMission = new JButton("Modifier une mission");
         this.panelBtnModif = new JPanel(new FlowLayout(FlowLayout.CENTER));
         this.panelBtnModif.add(this.ajouterMission);
         this.panelBtnModif.add(this.modifierMission);
@@ -73,7 +75,7 @@ public class MissionView extends JPanel{
     }
 
     public void setMissions(List<Mission> missions) {
-        String[] columnNames = {"Id Mission", "Titre Mission","Date Debut Mission","dateFinMis","description","Statut"};
+        String[] columnNames = {"Id Mission", "Nom Mission","Date de début","date de fin","Description","Statut"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0){
             public boolean isCellEditable(int row, int col) {
                 return false;
@@ -111,7 +113,7 @@ public class MissionView extends JPanel{
     public Mission getMissionSelectionnee() {
         int selectedRow = tableMission.getSelectedRow();
         if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Veuillez sélectionner une mission.");
+            JOptionPane.showMessageDialog(this, "Veuillez sélectionner la mission que vous souhaitez modifier.");
             return null;
         }
 

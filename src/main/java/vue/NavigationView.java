@@ -1,8 +1,9 @@
 package vue;
 
+import utilitaires.StyleManager;
+
 import javax.swing.*;
 import java.awt.*;
-//import java.awt.image.CropImageFilter;
 
 public class NavigationView extends JFrame {
     private final JButton buttonMissions;
@@ -13,29 +14,37 @@ public class NavigationView extends JFrame {
     private final JPanel panelCards;
 
     public NavigationView() {
+        StyleManager.setupFlatLaf();
         setTitle("Mission im-Possible");
-        setBackground(new Color(40,62,80));
-        setSize(1200, 700);
+        setSize(900, 700);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
+        // Définir la couleur de fond du contentPane
+        getContentPane().setBackground(new Color(237, 227, 228)); // Couleur de fond personnalisée
+
         JPanel panelNavigation = new JPanel();
         panelNavigation.setLayout(new BorderLayout());
+        panelNavigation.setBackground(new Color(237, 227, 228)); // Couleur de fond pour le panelNavigation
 
         JPanel navigationPanel = new JPanel();
-        navigationPanel.setLayout(new FlowLayout(FlowLayout.CENTER,10, 10));
-        this.buttonAccueil = new JButton("Accueil");
-        this.buttonMissions = new JButton("Missions");
-        this.buttonCompetences = new JButton("Competences");
-        this.buttonEmploye = new JButton("Employe");
+        navigationPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        navigationPanel.setBackground(new Color(237, 227, 228)); // Couleur de fond pour le navigationPanel
+
+        this.buttonAccueil = new JButton("ACCUEIL");
+        this.buttonMissions = new JButton("MISSIONS");
+        this.buttonCompetences = new JButton("COMPETENCES");
+        this.buttonEmploye = new JButton("EMPLOYES");
+
         navigationPanel.add(buttonAccueil);
         navigationPanel.add(buttonMissions);
         navigationPanel.add(buttonCompetences);
         navigationPanel.add(buttonEmploye);
 
-        this.cardLayout = new CardLayout(40,40);
-        panelCards = new JPanel( cardLayout);
-        panelCards.setSize(new Dimension(1100,600));
+        this.cardLayout = new CardLayout(40, 40);
+        panelCards = new JPanel(cardLayout);
+        panelCards.setBackground(new Color(237, 227, 228)); // Couleur de fond pour le panelCards
+        panelCards.setSize(new Dimension(1100, 600));
 
         panelNavigation.add(navigationPanel, BorderLayout.NORTH);
         panelNavigation.add(panelCards, BorderLayout.CENTER);
@@ -43,8 +52,6 @@ public class NavigationView extends JFrame {
         add(panelNavigation);
 
         setLocationRelativeTo(null);
-
-
     }
 
     public JButton getButtonMissions() {

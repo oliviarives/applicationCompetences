@@ -2,6 +2,7 @@ package vue;
 
 import modele.Employe;
 import controleur.AjouterPersonnelControleur;
+import utilitaires.StyleManager;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -18,6 +19,7 @@ public class EmployeView extends JPanel {
     private final JButton bouttonAjouterEmploye;
 
     public EmployeView() {
+        StyleManager.setupFlatLaf();
         setLayout(new BorderLayout());
         
         // Initialisation des boutons
