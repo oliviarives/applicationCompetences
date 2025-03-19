@@ -50,8 +50,12 @@ public class AjouterMissionControleur {
                                 creationMV.getLogEmpField(),
                                 1
                         );
+                        List<Competence> cmpAjoutees = creationMV.getCompetencesAjoutees();
+                        List<String> logEmpAjoutes = creationMV.getLogEmployeAjoutees();
                         try {
                             daoMission.ajouterMission(misInsert);
+                            daoMission.ajouterMissionCmp(misInsert, cmpAjoutees);
+                            daoMission.ajouterMissionEmp(misInsert, logEmpAjoutes);
                             navC.getVueV().getButtonMissions().doClick();
                         } catch (SQLException ex) {
                             throw new RuntimeException(ex);

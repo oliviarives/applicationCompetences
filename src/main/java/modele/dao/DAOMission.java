@@ -7,11 +7,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import modele.Competence;
 import modele.Mission;
 import modele.connexion.CictOracleDataSource;
-import modele.dao.requetes.Mission.RequeteMissionAjouter;
-import modele.dao.requetes.Mission.RequeteMissionById;
-import modele.dao.requetes.Mission.RequeteMissionSelectAll;
+import modele.dao.requetes.Mission.*;
 import modele.dao.requetes.Requete;
 
 public class DAOMission {
@@ -41,6 +40,24 @@ public class DAOMission {
         PreparedStatement ps = cn.prepareStatement(req.requete());
         req.parametres(ps, mis);
         ps.executeQuery();
+    }
+
+    public void ajouterMissionCmp(Mission mis, List<Competence> lcmpA) throws SQLException{
+        for (Competence cmp : lcmpA) {
+            RequeteMissionNecesiiterCmp req = new RequeteMissionNecesiiterCmp();
+            PreparedStatement ps = cn.prepareStatement(req.requete());
+            req.parametres(ps, mis,cmp);
+            ps.executeQuery();
+        }
+    }
+
+    public void ajouterMissionEmp(Mission mis,List<String> lEmpA) throws SQLException{
+        for (String l: lEmpA) {
+            RequeteCollaborerEmpMis req = new RequeteCollaborerEmpMis();
+            PreparedStatement ps = cn.prepareStatement(req.requete());
+            req.parametres(ps, mis, l);
+            ps.executeQuery();
+        }
     }
 
    /* public Mission getMissionTitre(String titre) throws SQLException{

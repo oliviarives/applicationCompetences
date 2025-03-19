@@ -13,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.HashSet;
 import java.util.List;
 
 // @TODO CB select calendar
@@ -41,6 +42,9 @@ public class CreationMissionView extends JPanel {
     private JScrollPane listeCompetenceScrollPane;
     private JTable listeEmployesAjoutee;
     private JScrollPane listeEmployesScrollPane;
+    private List<Competence> listeCmpAffichees;
+    private List<Employe> listeEmpAffiches;
+    private List<String> listeLoginEmpAjout;
 
 
     public CreationMissionView() {
@@ -314,6 +318,18 @@ public class CreationMissionView extends JPanel {
         }
 
         return competences;
+    }
+    //retourne une liste d'employe ajoutés à la mission pour insertion BD à cretion mission
+    public List<String> getLogEmployeAjoutees() {
+        HashSet<String> empsALogin = new HashSet<>();
+        DefaultTableModel model = (DefaultTableModel) listeEmployesAjoutee.getModel();
+        //recuperation des login des emp ajoutés pour comparaison
+        for (int i = 0; i < model.getRowCount(); i++) {
+            String loginEmp = (String) model.getValueAt(i, 0);
+            empsALogin.add(loginEmp);
+        }
+        List<String> resultSet = new ArrayList<>(empsALogin);
+        return  resultSet;
     }
 
 }

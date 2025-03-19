@@ -11,12 +11,12 @@ public class RequeteEmployeCmp extends RequeteEmploye{
         return "SELECT c.NOMCMPFR, e.loginemp FROM competence, posseder p, employe e WHERE c.idcatcmp = p.idcatcmp AND p.loginemp = e.loginemp";
     }
 
-    @Override
+
     public void parametres(PreparedStatement prSt, String... id) throws SQLException {
 
     }
 
-    @Override
+
     public void parametres(PreparedStatement prSt, Employe obj) throws SQLException {
 
     }

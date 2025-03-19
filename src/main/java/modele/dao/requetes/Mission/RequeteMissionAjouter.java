@@ -13,7 +13,7 @@ public class RequeteMissionAjouter extends RequeteMission {
         return "INSERT INTO MISSION (IDMIS,TITREMIS,NBEMPMIS,DATEDEBUTMIS,DATEFINMIS,DESCRIPTION,DATECREATION,LOGINEMP,IDSTA) VALUES (?,?,?,?,?,?,?,?,?)";
     }
 
-    @Override
+
     public void parametres(PreparedStatement prSt, String... id) throws SQLException {
         prSt.setInt(1, Integer.parseInt(id[0])); //idMis
         prSt.setString(2, id[1]);//titreMis
@@ -26,7 +26,7 @@ public class RequeteMissionAjouter extends RequeteMission {
         prSt.setInt(9, Integer.parseInt(id[8])); //idSta
     }
 
-    @Override
+
     public void parametres(PreparedStatement prSt, Mission obj) throws SQLException {
         prSt.setInt(1, obj.getIdMission()); //idMis
         prSt.setString(2, obj.getTitreMis());//titreMis

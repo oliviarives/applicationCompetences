@@ -11,12 +11,11 @@ public class RequeteEmployeSelectByCmp extends RequeteEmploye{
         return "SELECT DISTINCT * FROM EMPLOYE E, POSSEDER P, COMPETENCE C WHERE E.LOGINEMP=P.LOGINEMP AND P.IDCATCMP=C.IDCATCMP AND P.IDCMP=C.IDCMP";
     }
 
-    @Override
+
     public void parametres(PreparedStatement prSt, String... id) throws SQLException {
 
     }
 
-    @Override
     public void parametres(PreparedStatement prSt, Employe obj) throws SQLException {
 
     }
