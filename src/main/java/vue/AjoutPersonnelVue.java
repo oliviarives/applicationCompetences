@@ -1,8 +1,13 @@
 package vue;
 
+import modele.Competence;
+
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.io.Serial;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AjoutPersonnelVue extends JPanel {
     @Serial
@@ -10,7 +15,8 @@ public class AjoutPersonnelVue extends JPanel {
 
     private final JButton buttonConfirmer;
     private final JButton buttonEffacer;
-    private final JButton buttonAjouterCompetence;
+    private final JButton buttonAjouter;
+    private final JButton buttonRetirer;
     private final JTextField prenomField;
     private final JTextField nomField;
     private final JTextField loginField;
@@ -24,20 +30,19 @@ public class AjoutPersonnelVue extends JPanel {
     public AjoutPersonnelVue() {
         setLayout(new BorderLayout());
 
-        // Panel Principal avec JSplitPane
+        // === Panel Principal avec JSplitPane ===
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-        splitPane.setDividerLocation(500); // Sépare la partie gauche (formulaire) de la droite (tableau)
+        splitPane.setDividerLocation(550);
 
-        // Panel Gauche (Formulaire + Tableau des compétences de l'employé)
+        // === PANEL GAUCHE (Formulaire + Compétences Employé) ===
         JPanel panelGauche = new JPanel(new BorderLayout());
 
-        // FORMULAIRE
+        // === Formulaire ===
         JPanel formulaire = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.anchor = GridBagConstraints.LINE_END;
 
-        // Champs de saisie
         gbc.gridx = 0; gbc.gridy = 0;
         formulaire.add(new JLabel("Prénom : "), gbc);
         gbc.gridx = 1;
@@ -72,56 +77,75 @@ public class AjoutPersonnelVue extends JPanel {
         formulaire.add(new JLabel("Date d'entrée : "), gbc);
         gbc.gridx = 1;
         dateEntreeSpinner = new JSpinner(new SpinnerDateModel());
-        JSpinner.DateEditor dateEditor = new JSpinner.DateEditor(dateEntreeSpinner, "dd/MM/yyyy");
-        dateEntreeSpinner.setEditor(dateEditor);
+        dateEntreeSpinner.setEditor(new JSpinner.DateEditor(dateEntreeSpinner, "dd/MM/yyyy"));
         dateEntreeSpinner.setValue(new java.util.Date());
         formulaire.add(dateEntreeSpinner, gbc);
 
-        // Ajout du formulaire au panel gauche
         panelGauche.add(formulaire, BorderLayout.NORTH);
 
-        // TABLEAU DES COMPÉTENCES DE L'EMPLOYÉ (en bas du formulaire)
-        tableCompetencesEmploye = new JTable(new String[][]{}, new String[]{"Compétence", "Niveau"});
+        // === Tableau compétences employé + titre ===
+        JPanel panelTableEmploye = new JPanel(new BorderLayout());
+        panelTableEmploye.add(new JLabel("Compétences de l'employé", SwingConstants.CENTER), BorderLayout.NORTH);
+        DefaultTableModel modelCompetencesEmploye = new DefaultTableModel(new String[]{"Catégorie", "Compétence", "Titre"}, 0) {
+            public boolean isCellEditable(int row, int col) {  //cellules de la table ne sont plus editables
+                return false;
+            }
+        };
+        tableCompetencesEmploye = new JTable(modelCompetencesEmploye);
         JScrollPane scrollCompetences = new JScrollPane(tableCompetencesEmploye);
         scrollCompetences.setPreferredSize(new Dimension(450, 150));
-        scrollCompetences.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        scrollCompetences.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        panelTableEmploye.add(scrollCompetences, BorderLayout.CENTER);
+        panelGauche.add(panelTableEmploye, BorderLayout.CENTER);
 
-        panelGauche.add(scrollCompetences, BorderLayout.CENTER);
-
-        // PANEL DROITE (Tableau principal : Toutes les compétences)
+        // PANEL DROITE (Toutes les compétences + flèches)
         JPanel panelDroite = new JPanel(new BorderLayout());
-        tableToutesCompetences = new JTable(new String[][]{}, new String[]{"Nom", "Poste", "Date d'entrée"});
-        JScrollPane scrollToutesCompetences = new JScrollPane(tableToutesCompetences);
-        scrollToutesCompetences.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        scrollToutesCompetences.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
+        panelDroite.add(new JLabel("Liste des compétences", SwingConstants.CENTER), BorderLayout.NORTH);
+
+        // Tableau
+        DefaultTableModel modelToutesCompetences = new DefaultTableModel(new String[]{"Catégorie", "Compétence", "Titre"}, 0) {
+            public boolean isCellEditable(int row, int col) {  //cellules de la table ne sont plus editables
+                return false;
+            }
+        };
+
+        tableToutesCompetences = new JTable(modelToutesCompetences);
+        JScrollPane scrollToutesCompetences = new JScrollPane(tableToutesCompetences);
         panelDroite.add(scrollToutesCompetences, BorderLayout.CENTER);
 
-        // Ajout des panneaux au SplitPane
+        // Ajout des flèches au centre
+        JPanel panelCentre = new JPanel();
+        panelCentre.setLayout(new BoxLayout(panelCentre, BoxLayout.Y_AXIS));
+        buttonAjouter = new JButton("←");
+        buttonRetirer = new JButton("→");
+        buttonAjouter.setAlignmentX(Component.CENTER_ALIGNMENT);
+        buttonRetirer.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panelCentre.add(Box.createVerticalGlue());
+        panelCentre.add(buttonAjouter);
+        panelCentre.add(Box.createRigidArea(new Dimension(0, 10)));
+        panelCentre.add(buttonRetirer);
+        panelCentre.add(Box.createVerticalGlue());
+
         splitPane.setLeftComponent(panelGauche);
         splitPane.setRightComponent(panelDroite);
 
-        // MESSAGE D'ERREUR OU VALIDATION
+        add(splitPane, BorderLayout.CENTER);
+        add(panelCentre, BorderLayout.EAST);
+
+        // Message + boutons
         messageLabel = new JLabel("", SwingConstants.CENTER);
         messageLabel.setForeground(Color.RED);
+        add(messageLabel, BorderLayout.NORTH);
 
-        // PANEL BOUTONS
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         buttonConfirmer = new JButton("Confirmer");
-        buttonAjouterCompetence = new JButton("Ajouter une compétence");
         buttonEffacer = new JButton("Effacer");
         buttonPanel.add(buttonConfirmer);
-        buttonPanel.add(buttonAjouterCompetence);
         buttonPanel.add(buttonEffacer);
-
-        // Ajout des composants principaux
-        add(splitPane, BorderLayout.CENTER);
-        add(messageLabel, BorderLayout.NORTH);
         add(buttonPanel, BorderLayout.SOUTH);
     }
 
-    // Getters pour récupérer les valeurs des champs
+    // Getters
     public JTextField getPrenomField() { return prenomField; }
     public JTextField getNomField() { return nomField; }
     public JTextField getLoginField() { return loginField; }
@@ -129,16 +153,58 @@ public class AjoutPersonnelVue extends JPanel {
     public JTextField getPosteField() { return posteField; }
     public JSpinner getDateEntreeField() { return dateEntreeSpinner; }
 
-    // Getters pour les boutons
     public JButton getButtonConfirmer() { return buttonConfirmer; }
-    public JButton getButtonAjouterCompetence() { return buttonAjouterCompetence; }
     public JButton getButtonEffacer() { return buttonEffacer; }
+    public JButton getButtonAjouter() { return buttonAjouter; }
+    public JButton getButtonRetirer() { return buttonRetirer; }
 
-    // Getters pour les tableaux
     public JTable getTableCompetencesEmploye() { return tableCompetencesEmploye; }
     public JTable getTableToutesCompetences() { return tableToutesCompetences; }
 
-    // Affichage des messages
+    public void setToutesCompetences(java.util.List<Competence> competences) {
+        DefaultTableModel model = new DefaultTableModel(new String[]{"Catégorie", "Compétence", "Titre"}, 0);
+        for (Competence cmp : competences) {
+            model.addRow(new Object[]{cmp.getIdCatCmp(), cmp.getIdCmp(), cmp.getNomCmpFr()});
+        }
+        tableToutesCompetences.setModel(model);
+    }
+
+    public Competence getCompetenceSelectionneeToutesCmp() {
+        int selectedRow = tableToutesCompetences.getSelectedRow();
+        if (selectedRow != -1) {
+            String idCategorie = (String) tableToutesCompetences.getValueAt(selectedRow, 0);
+            int idCompetence = (int) tableToutesCompetences.getValueAt(selectedRow, 1);
+            String nomFr = (String) tableToutesCompetences.getValueAt(selectedRow, 2);
+
+            return new Competence(idCompetence, idCategorie, null, nomFr);
+        }
+        return null;
+    }
+
+    public Competence getCompetenceSelectionneeEmploye() {
+        int selectedRow = tableCompetencesEmploye.getSelectedRow();
+        if (selectedRow != -1) {
+            String idCategorie = (String) tableCompetencesEmploye.getValueAt(selectedRow, 0);
+            int idCompetence = (int) tableCompetencesEmploye.getValueAt(selectedRow, 1);
+            String nomFr = (String) tableCompetencesEmploye.getValueAt(selectedRow, 2);
+
+            return new Competence(idCompetence, idCategorie, null, nomFr);
+        }
+        return null;
+    }
+
+    public List<Competence> getCompetencesAjoutees() {
+        List<Competence> competences = new ArrayList<>();
+        DefaultTableModel model = (DefaultTableModel) tableCompetencesEmploye.getModel();
+        for (int i = 0; i < model.getRowCount(); i++) {
+            String idCatCmp = (String) model.getValueAt(i, 0);
+            int idCmp = (int) model.getValueAt(i, 1);
+            String nomFr = (String) model.getValueAt(i, 2);
+            competences.add(new Competence(idCmp, idCatCmp, "", nomFr));
+        }
+        return competences;
+    }
+
     public void afficherMessage(String message) {
         messageLabel.setText(message);
     }

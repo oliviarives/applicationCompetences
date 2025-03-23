@@ -1,16 +1,16 @@
 package controleur;
 
-import modele.dao.UtilisateurDAO;
+import modele.dao.DAOUtilisateur;
 
 public class ConnexionControleur {
 
-    private final UtilisateurDAO utilisateurDAO;
+    private final DAOUtilisateur DAOUtilisateur;
 
-    public ConnexionControleur(UtilisateurDAO utilisateurDAO) {
-        this.utilisateurDAO=utilisateurDAO;
+    public ConnexionControleur(DAOUtilisateur DAOUtilisateur) {
+        this.DAOUtilisateur = DAOUtilisateur;
     }
 
     public boolean tenterConnexion(String identifiant, String motDePasse) {
-        return utilisateurDAO.verifierUtilisateur(identifiant, motDePasse);
+        return DAOUtilisateur.verifierUtilisateur(identifiant, motDePasse);
     }
 }
