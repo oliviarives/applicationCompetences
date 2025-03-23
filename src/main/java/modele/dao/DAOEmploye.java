@@ -1,4 +1,7 @@
 package modele.dao;
+import modele.Mission;
+import modele.dao.requetes.Mission.RequeteCollaborerEmpMis;
+import oracle.jdbc.proxy.annotation.Pre;
 import utilitaires.Config;
 import modele.Competence;
 import modele.Employe;
@@ -11,19 +14,18 @@ import modele.dao.requetes.Mission.RequeteMissionSelectAll;
 
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class DAOEmploye {
     private Connection cn;
     private ArrayList<Employe> listeEmployeByCmp;
     private static String dbUser = Config.get("db.user");
     private static String dbPwd = Config.get("db.password");
+    private ArrayList<Employe> listeEmployeStatutActif;
 
     public DAOEmploye() throws SQLException {
         CictOracleDataSource.creerAcces(dbUser,dbPwd);
@@ -143,6 +145,28 @@ public class DAOEmploye {
         }
         return resultats;
     }
+    public void miseAJourEmpByCmpByDate(Date dateD, Date dateF) {
+        List<String> resultat = new ArrayList<>();
+        try {
+            PreparedStatement requete = cn.prepareStatement(new RequeteCollaborerEmpMis().requete());
+            ResultSet curseur = requete.executeQuery();
+            while (curseur.next()) {
+                if ((curseur.getDate("dateDebutMis").compareTo(dateD) < 0 && curseur.getDate("dateFinMis").compareTo(dateD) < 0) || (curseur.getDate("dateDebutMis").compareTo(dateD) == 0 && curseur.getDate("dateFinMis").compareTo(dateD) == 0)) {
+                    Employe instance = creerInstance(curseur);
+                    resultat.add(instance.getLogin());
+                }
+            }
+
+        }catch (SQLException e){
+            System.err.println(e.getMessage());
+        }
+        for (Employe emp: this.listeEmployeByCmp) {
+            if(resultat.contains(emp.getLogin())){
+                listeEmployeByCmp.remove(emp);
+            }
+        }
+    }
+
 
 }
 

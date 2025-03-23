@@ -14,10 +14,12 @@ public class Mission {
     private String loginEmp;
     private int idSta;
     private String nomSta;
-    static int compteurMis = 20;
+    static int compteurMis=0;
     //constructeur avec 7 dont login arguments si creation d'une mission
     public Mission(String titre, Date dateDebut, Date dateFin, String d, Date dateC, int nbEmp, String login,int idS) {
-        this.idMis = compteurMis++;
+
+        this.idMis = ++compteurMis;
+        System.out.println("id nvlle mission creer : "+this.idMis);
         this.titreMis = titre;
         this.dateDebutMis = dateDebut;
         this.dateFinMis = dateFin;
@@ -28,8 +30,8 @@ public class Mission {
         this.idSta = idS;
     }
     //constructeur avec 7 arguments si mission déjà existante dans la base de données
-    public Mission(String titre, Date dateDebut, Date dateFin, String d, Date dateC, int nbEmp, String nSta) {
-        this.idMis = compteurMis++;
+    public Mission(int id,String titre, Date dateDebut, Date dateFin, String d, Date dateC, int nbEmp, String nSta) {
+        this.idMis =id;
         this.titreMis = titre;
         this.dateDebutMis = dateDebut;
         this.dateFinMis = dateFin;
@@ -71,5 +73,9 @@ public class Mission {
 
     public String getLoginEmp() {
         return this.loginEmp;
+    }
+
+    public void setlastIdmis(int i){
+        this.compteurMis = i;
     }
 }

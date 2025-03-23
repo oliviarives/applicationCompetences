@@ -46,6 +46,8 @@ public class CreationMissionView extends JPanel {
     private List<Competence> listeCmpAffichees;
     private List<Employe> listeEmpAffiches;
     private List<String> listeLoginEmpAjout;
+    private JButton bouttonModifierDates;
+    private JButton bouttonConfirmerDates;
 
 
     public CreationMissionView() {
@@ -75,6 +77,7 @@ public class CreationMissionView extends JPanel {
         JPanel panelBouttons = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JPanel panellisteCompetences = new JPanel(new BorderLayout());
         JPanel panellisteEmployes = new JPanel(new BorderLayout());
+        JPanel modifDates = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
 
         this.titreMisField = new JTextField(20);
@@ -109,6 +112,14 @@ public class CreationMissionView extends JPanel {
         panelDate.add(new JLabel("Date de fin : "));
         panelDate.add(dateFinMisField);
         formulaire.add(panelDate);
+
+        //boutons modifier confirmer dates
+        this.bouttonModifierDates = new JButton("Modifier les dates");
+        this.bouttonConfirmerDates = new JButton("Confirmer");
+        modifDates.add(bouttonModifierDates);
+        modifDates.add(bouttonConfirmerDates);
+        setDatesModifiables(false);
+        formulaire.add(modifDates);
 
         //Nbr d'employé dans mission
         panelNbEmp.add(new JLabel("Nombre d'émployé necessaires : "));
@@ -250,6 +261,7 @@ public class CreationMissionView extends JPanel {
     }
 
     public void setEmploye(List<Employe> emp) {
+        HashSet<String> testUniciteEmp = new HashSet<>();
         String[] columnNames = {"login","Prenom","Nom","Poste"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0){
             public boolean isCellEditable(int row, int col) {
@@ -257,8 +269,10 @@ public class CreationMissionView extends JPanel {
             }
         };
         for (Employe e : emp) {
-            Object[] row = {e.getLogin(),e.getPrenom(),e.getNom(),e.getPoste()};
-            model.addRow(row);
+            if (testUniciteEmp.add(e.getLogin())) {
+                Object[] row = {e.getLogin(), e.getPrenom(), e.getNom(), e.getPoste()};
+                model.addRow(row);
+            }
         }
         this.employesTable.setModel(model);
         TableColumn column = this.employesTable.getColumnModel().getColumn(0);
@@ -337,6 +351,56 @@ public class CreationMissionView extends JPanel {
         return  resultSet;
     }
 
+    public JButton getBoutonModifierDates(){
+        return this.bouttonModifierDates;
+    }
 
-}
+    public JButton getBouttonConfirmerDates(){
+        return this.bouttonConfirmerDates;
+    }
 
+    public void setDatesModifiables(boolean b){
+        this.dateDebutMisField.setEnabled(b);
+        this.dateFinMisField.setEnabled(b);
+    }
+
+    public JSpinner getSpinnerEmp(){
+        return this.nbEmpField;
+    }
+    //fonction de remise à 0 des champ du formulaire de création mission
+    public void setBlanck(){
+        this.titreMisField.setText("");
+        this.descriptionMisField.setText("");
+        this.logEmpField.setText("");
+        this.dateDebutMisField.setValue(new Date(System.currentTimeMillis()));
+        this.dateFinMisField.setValue(new Date(System.currentTimeMillis()));
+
+        DefaultTableModel modelemp = (DefaultTableModel) this.listeEmployesAjoutee.getModel();
+        while (modelemp.getRowCount() > 0) {
+            modelemp.removeRow(0);
+        }
+        DefaultTableModel modelcmp = (DefaultTableModel) this.listeCompetenceAjoutee.getModel();
+        while (modelcmp.getRowCount() > 0) {
+            modelcmp.removeRow(0);
+        }
+        modelcmp.setRowCount(0);
+        this.nbEmpField.setValue(0);
+        showPage("tabCompetences");
+    }
+
+
+    public int verificationChampConfirmation(){
+        if(this.titreMisField.getText().equals("")){
+            return 1;
+        }else if(this.logEmpField.getText().equals("")){
+            return 2;
+        }else if(this.dateDebutMisField.getValue() == null){
+            return 3;
+        }else if(this.dateFinMisField.getValue() == null){
+            return 4;
+        } else if(this.nbEmpField.getValue().equals("0")){
+            return 5;
+        } else{
+            return 0;
+        }
+    }}

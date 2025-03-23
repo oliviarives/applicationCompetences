@@ -28,54 +28,12 @@ public class MissionControleur {
         this.creationMV = creationMV;
         this.modificationMV = modificationMV; 
 
-        /*vueM.getButtonModifierMission().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                    navControleur.ShowModifierMissionView();
-            }
-        });*/
-
-       /* creationMV.getButtonConfirmer().addActionListener(
-                new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e){
-                        Mission misInsert= new Mission(
-                                creationMV.getTitreMisFieldValue(),
-                                creationMV.getDateDebutMisField(),
-                                creationMV.getDateFinMisField(),
-                                //Date.valueOf("1970-01-01"),
-                                //Date.valueOf("1970-01-01"),
-                                creationMV.getDescriptionMisFieldValue(),
-                                new Date(System.currentTimeMillis()),
-                                //Date.valueOf("1970-01-01"),
-                                creationMV.getNbEmpField(),
-                                creationMV.getLogEmpField(),
-                                1
-
-                        );
-                        try {
-                            missionDAO.ajouterMission(misInsert);
-                            navControleur.getVueV().getButtonMissions().doClick();
-                        } catch (SQLException ex) {
-                            throw new RuntimeException(ex);
-                        }
-
-                    }
-                }
-        );*/
     }
 
     public void loadMissions() {
         List<Mission> missions = missionDAO.findAll();
         vueM.setMissions(missions);
     }
-
-    public void ajouterMission(Mission mission) {
-
-    }
-
-
-
 
 }
 

@@ -86,6 +86,7 @@ public class NavigationControleur {
             @Override
             public void actionPerformed(ActionEvent e) {
                 vueV.showPage("Creation");
+                creaMissionV.setBlanck();
             }
         });
 

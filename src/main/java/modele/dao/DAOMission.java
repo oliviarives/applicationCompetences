@@ -16,6 +16,7 @@ import modele.dao.requetes.Requete;
 public class DAOMission {
 
     private Connection cn;
+    private static int idMisLast;
 
     public DAOMission() throws SQLException {
         CictOracleDataSource.creerAcces("BSC3991A","2002Aralc.31");
@@ -25,6 +26,7 @@ public class DAOMission {
 
     public Mission creerInstance(ResultSet rset) throws SQLException{
         return new Mission(
+                rset.getInt("idMis"),
                 rset.getString("titreMis"),
                 rset.getDate("dateDebutMis"),
                 rset.getDate("dateFinMis"),
@@ -71,15 +73,21 @@ public class DAOMission {
                 System.err.println(e.getMessage());
             }
     }*/
-
+    //retourne une liste de toutes les missions de la BD
     public List<Mission> findAll() {
         List<Mission> resultats = new ArrayList<>();
+        boolean isNull=true;
         try {
             PreparedStatement req = cn.prepareStatement(new RequeteMissionSelectAll().requete());
             try (ResultSet curseur = req.executeQuery()) {
                 while (curseur.next()) {
                     Mission instance = creerInstance(curseur);
                     resultats.add(instance);
+                    isNull=false;
+                }
+                if( !isNull) {
+                    resultats.get(0).setlastIdmis(resultats.get(0).getIdMission());
+                    System.out.println("idcompteur recup : "+resultats.get(0).getIdMission());
                 }
             } catch (SQLException e) {
                 System.err.println(e.getMessage());

@@ -124,7 +124,7 @@ public class MissionView extends JPanel{
         String description = (String) tableMission.getValueAt(selectedRow, 4);
         String nomSta = (String) tableMission.getValueAt(selectedRow, 5);
 
-        return new Mission(titre, dateDebut, dateFin, description, new Date(System.currentTimeMillis()), 0, nomSta);
+        return new Mission(idMission,titre, dateDebut, dateFin, description, new Date(System.currentTimeMillis()), 0, nomSta);
     }
 
     public JTable getMissionTable(){

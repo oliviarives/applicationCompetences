@@ -9,6 +9,8 @@ import modele.dao.DAOMission;
 import vue.CreationMissionView;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -37,28 +39,46 @@ public class AjouterMissionControleur {
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e){
-                        Mission misInsert= new Mission(
-                                creationMV.getTitreMisFieldValue(),
-                                creationMV.getDateDebutMisField(),
-                                creationMV.getDateFinMisField(),
-                                //Date.valueOf("1970-01-01"),
-                                //Date.valueOf("1970-01-01"),
-                                creationMV.getDescriptionMisFieldValue(),
-                                new Date(System.currentTimeMillis()),
-                                //Date.valueOf("1970-01-01"),
-                                creationMV.getNbEmpField(),
-                                creationMV.getLogEmpField(),
-                                1
-                        );
-                        List<Competence> cmpAjoutees = creationMV.getCompetencesAjoutees();
-                        List<String> logEmpAjoutes = creationMV.getLogEmployeAjoutees();
-                        try {
-                            daoMission.ajouterMission(misInsert);
-                            daoMission.ajouterMissionCmp(misInsert, cmpAjoutees);
-                            daoMission.ajouterMissionEmp(misInsert, logEmpAjoutes);
-                            navC.getVueV().getButtonMissions().doClick();
-                        } catch (SQLException ex) {
-                            throw new RuntimeException(ex);
+                        String message;
+                        int codeErreurChamp= creationMV.verificationChampConfirmation();
+                        if (codeErreurChamp ==1){
+                            JOptionPane.showMessageDialog(null,"Champ Titre Mission Vide!","Erreur validation formulaire",JOptionPane.WARNING_MESSAGE);
+                        } else if (codeErreurChamp == 2) {
+                            JOptionPane.showMessageDialog(null,"Champ Login Employé  Vide!","Erreur validation formulaire",JOptionPane.WARNING_MESSAGE);
+                        } else if (codeErreurChamp == 3) {
+                            JOptionPane.showMessageDialog(null,"Champ Date Début Mission Vide!","Erreur validation formulaire",JOptionPane.WARNING_MESSAGE);
+                        } else if (codeErreurChamp == 4) {
+                            JOptionPane.showMessageDialog(null,"Champ Date Fin Mission Vide!","Erreur validation formulaire",JOptionPane.WARNING_MESSAGE);
+                        } else if (codeErreurChamp == 5) {
+                            JOptionPane.showMessageDialog(null,"Champ Nombre employé Mission Vide!","Erreur validation formulaire",JOptionPane.WARNING_MESSAGE);
+                        }else if (codeErreurChamp == 0) {
+                            Mission misInsert = new Mission(
+                                    creationMV.getTitreMisFieldValue(),
+                                    creationMV.getDateDebutMisField(),
+                                    creationMV.getDateFinMisField(),
+                                    //Date.valueOf("1970-01-01"),
+                                    //Date.valueOf("1970-01-01"),
+                                    creationMV.getDescriptionMisFieldValue(),
+                                    new Date(System.currentTimeMillis()),
+                                    //Date.valueOf("1970-01-01"),
+                                    creationMV.getNbEmpField(),
+                                    creationMV.getLogEmpField(),
+                                    1
+                            );
+                            List<Competence> cmpAjoutees = creationMV.getCompetencesAjoutees();
+                            List<String> logEmpAjoutes = creationMV.getLogEmployeAjoutees();
+                            try {
+                                System.out.println("ok0");
+                                daoMission.ajouterMission(misInsert);
+                                System.out.println("ok1");
+                                daoMission.ajouterMissionCmp(misInsert, cmpAjoutees);
+                                System.out.println("ok2");
+                                daoMission.ajouterMissionEmp(misInsert, logEmpAjoutes);
+                                System.out.println("ok3");
+                                navC.getVueV().getButtonMissions().doClick();
+                            } catch (SQLException ex) {
+                                throw new RuntimeException(ex);
+                            }
                         }
 
                     }
@@ -159,6 +179,38 @@ public class AjouterMissionControleur {
                 }
             }
         });
+
+        creationMV.getBoutonModifierDates().addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        creationMV.setDatesModifiables(true);
+                    }
+                }
+        );
+
+        creationMV.getBouttonConfirmerDates().addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        creationMV.setDatesModifiables(false);
+                        daoEmp.miseAJourEmpByCmpByDate(creationMV.getDateDebutMisField(), creationMV.getDateFinMisField());
+                    }
+                }
+        );
+
+        creationMV.getSpinnerEmp().addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                int nbEmpMax = creationMV.getNbEmpField(); // valeur du champ nbEmp
+                int nbEmpAjoutes = creationMV.getListeEmployesAjoutee().getRowCount();
+                if (nbEmpAjoutes > nbEmpMax) {
+                    JOptionPane.showMessageDialog(null, "Votre table d'employés ajoutés contient un nombre supérieur d'employés!",
+                            "Nombre d'employés ajoutés supérieur !", JOptionPane.WARNING_MESSAGE);
+                    creationMV.getSpinnerEmp().setValue(creationMV.getSpinnerEmp().getPreviousValue());
+                }
+            }
+        });
     }
 
     public void loadCompetences(){
@@ -170,4 +222,6 @@ public class AjouterMissionControleur {
         List<Employe> employeTable = daoEmploye.findAll();
         creationMV.setEmploye(employeTable);
     }
+
+
 }
