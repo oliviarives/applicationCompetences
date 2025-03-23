@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 public class NavigationControleur {
     private static NavigationView vueV;
@@ -69,6 +70,14 @@ public class NavigationControleur {
         vueV.addPage("Modification", modifMissionV);
         vueV.addPage("AjouterEmploye", ajoutPersonnelV);
 
+        int nbEnPreparation = missionDao.countMissionsByStatus(1);
+        int nbEnCours = missionDao.countMissionsByStatus(2);
+        int nbTerminees = missionDao.countMissionsByStatus(3);
+        Map<String, Integer> statsMois = missionDao.getMissionsStatsParMois();
+
+        accueilV.updateDashboard(nbEnPreparation, nbEnCours, nbTerminees, statsMois);
+        vueV.showPage("Accueil");
+
         vueV.getButtonMissions().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -119,9 +128,18 @@ public class NavigationControleur {
         vueV.getButtonAccueil().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // Récupérer les données réelles depuis le DAO/Service
+                int nbEnPreparation = missionDao.countMissionsByStatus(1);
+                int nbEnCours = missionDao.countMissionsByStatus(2);
+                int nbTerminees = missionDao.countMissionsByStatus(3);
+                Map<String, Integer> statsMois = missionDao.getMissionsStatsParMois();
+
+                // Mettre à jour le dashboard (AccueilVue)
+                accueilV.updateDashboard(nbEnPreparation, nbEnCours, nbTerminees, statsMois);
                 vueV.showPage("Accueil");
             }
         });
+
     }
 
     public void loadEmploye() {

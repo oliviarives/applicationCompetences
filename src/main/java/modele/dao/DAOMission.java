@@ -1,11 +1,10 @@
 package modele.dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import modele.Competence;
 import modele.Mission;
@@ -13,12 +12,15 @@ import modele.connexion.CictOracleDataSource;
 import modele.dao.requetes.Mission.*;
 import modele.dao.requetes.Requete;
 
+import static java.sql.DriverManager.getConnection;
+import static modele.connexion.CictOracleDataSource.getConnectionBD;
+
 public class DAOMission {
 
     private Connection cn;
 
     public DAOMission() throws SQLException {
-        this.cn = CictOracleDataSource.getConnectionBD();
+        this.cn = getConnectionBD();
 
     }
 
@@ -101,6 +103,80 @@ public class DAOMission {
             ps.executeUpdate();
         }
     }
+
+    public int countMissionsByStatus(int statusId) {
+        int count = 0;
+        String sql = "SELECT COUNT(*) FROM mission WHERE idsta = ?";
+        try (
+             PreparedStatement stmt = cn.prepareStatement(sql)) {
+            stmt.setInt(1, statusId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                count = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return count;
+    }
+
+
+    public Map<String, Integer> getMissionsStatsParMois() {
+        Map<String, Integer> stats = new HashMap<>();
+        String sql = "SELECT TO_CHAR(dateDebutMis, 'Month') AS mois, COUNT(*) FROM mission GROUP BY TO_CHAR(dateDebutMis, 'Month')";
+        try (
+             Statement stmt = cn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                String mois = rs.getString("mois").trim();
+                int count = rs.getInt(2);
+                stats.put(mois, count);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return stats;
+    }
+
+    public List<Mission> filterMissions(String nom, java.sql.Date date, Integer statutId) {
+        List<Mission> resultats = new ArrayList<>();
+        // Ajout du JOIN pour récupérer nomSta
+        StringBuilder sql = new StringBuilder("SELECT m.*, s.nomSta FROM mission m LEFT JOIN statut s ON m.idsta = s.idsta WHERE 1=1 ");
+
+        if (nom != null && !nom.isEmpty()) {
+            sql.append("AND LOWER(m.titreMis) LIKE ? ");
+        }
+        if (date != null) {
+            sql.append("AND m.dateDebutMis = ? ");
+        }
+        if (statutId != null) {
+            sql.append("AND m.idsta = ? ");
+        }
+
+        try (PreparedStatement stmt = cn.prepareStatement(sql.toString())) {
+            int index = 1;
+            if (nom != null && !nom.isEmpty()) {
+                stmt.setString(index++, "%" + nom.toLowerCase() + "%");
+            }
+            if (date != null) {
+                stmt.setDate(index++, date);
+            }
+            if (statutId != null) {
+                stmt.setInt(index++, statutId);
+            }
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Mission instance = creerInstance(rs);
+                    resultats.add(instance);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return resultats;
+    }
+
 
 
 

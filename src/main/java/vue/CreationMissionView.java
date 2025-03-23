@@ -1,5 +1,6 @@
 package vue;
 
+import com.toedter.calendar.JDateChooser;
 import modele.Competence;
 import modele.Employe;
 import utilitaires.StyleManager;
@@ -17,14 +18,12 @@ import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.List;
 
-// @TODO CB select calendar
-
 public class CreationMissionView extends JPanel {
     private JButton buttonConfirmer;
     private JTextField titreMisField;
     private JTextArea descriptionMisField;
-    private JFormattedTextField dateDebutMisField;
-    private JFormattedTextField dateFinMisField;
+    private JDateChooser dateDebutMisField;
+    private JDateChooser dateFinMisField;
     private JSpinner nbEmpField;
     private JTextField logEmpField;
     private JButton ajouterCompetences;
@@ -79,10 +78,16 @@ public class CreationMissionView extends JPanel {
 
         this.titreMisField = new JTextField(20);
         this.descriptionMisField = new JTextArea(3,30);
-        this.dateDebutMisField = new JFormattedTextField(dateFormatter);
-        this.dateDebutMisField.setValue(new Date(System.currentTimeMillis()));
-        this.dateFinMisField = new JFormattedTextField(dateFormatter);
-        this.dateFinMisField.setValue(new Date(System.currentTimeMillis()));
+        this.dateDebutMisField = new JDateChooser();
+        dateDebutMisField.setDateFormatString("yyyy-MM-dd");
+        dateDebutMisField.setDate(new java.util.Date());
+        dateDebutMisField.setPreferredSize(new Dimension(100, 25));
+
+        this.dateFinMisField = new JDateChooser();
+        dateFinMisField.setDateFormatString("yyyy-MM-dd");
+        dateFinMisField.setDate(new java.util.Date());
+        dateFinMisField.setPreferredSize(new Dimension(100, 25));
+
         SpinnerModel modelSpinner = new SpinnerNumberModel(0, 0, 30, 1);
         this.nbEmpField = new JSpinner(modelSpinner);
         this.logEmpField = new JTextField(15);
@@ -198,16 +203,20 @@ public class CreationMissionView extends JPanel {
     }
 
     public java.sql.Date getDateDebutMisField() {
-        return java.sql.Date.valueOf( this.dateDebutMisField.getText());
+        java.util.Date d = dateDebutMisField.getDate();
+        return (d != null) ? new java.sql.Date(d.getTime()) : null;
     }
+
 
     public String getLogEmpField() {
         return this.logEmpField.getText();
     }
 
     public java.sql.Date getDateFinMisField() {
-        return java.sql.Date.valueOf(this.dateFinMisField.getText());
+        java.util.Date d = dateFinMisField.getDate();
+        return (d != null) ? new java.sql.Date(d.getTime()) : null;
     }
+
 
     public int getNbEmpField() {
         return Integer.parseInt(this.nbEmpField.getValue().toString());
@@ -338,5 +347,27 @@ public class CreationMissionView extends JPanel {
     }
 
 
-}
+    public void resetFields() {
+        // Vider les champs de texte
+        titreMisField.setText("");
+        descriptionMisField.setText("");
+        logEmpField.setText("");
 
+        // Réinitialiser les JDateChooser
+        dateDebutMisField.setDate(null);
+        dateFinMisField.setDate(null);
+
+        // Réinitialiser le JSpinner
+        nbEmpField.setValue(0); // ou 1, selon votre valeur par défaut souhaitée
+
+        // Réinitialiser les tableaux d'ajouts
+        DefaultTableModel modelComp = (DefaultTableModel) listeCompetenceAjoutee.getModel();
+        modelComp.setRowCount(0);
+
+        DefaultTableModel modelEmp = (DefaultTableModel) listeEmployesAjoutee.getModel();
+        modelEmp.setRowCount(0);
+    }
+
+
+
+}
