@@ -13,8 +13,7 @@ public class RequeteEmployeAjouter extends RequeteEmploye {
 
 
     public void parametres(PreparedStatement prSt, String... id) throws SQLException {
-    	
-
+        throw new UnsupportedOperationException("Non utilisé pour cette requête.");
     }
 
 
