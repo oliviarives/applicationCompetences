@@ -14,20 +14,18 @@ import java.util.List;
 import java.util.Map;
 
 public class NavigationControleur {
+    private static final String MOT_ACCUEIL = "ACCUEIL";
     private static NavigationView vueV;
-    private CompetencesView competencesV = new CompetencesView();
-    private DAOCompetence competenceDao = new DAOCompetence();
-    private CompetenceControleur competenceC = new CompetenceControleur(competencesV, competenceDao);
+    private final DAOCompetence competenceDao = new DAOCompetence();
 
-    private EmployeView empView = new EmployeView();
-    private DAOEmploye employeDao = new DAOEmploye();
-    private EmployeControleur empC = new EmployeControleur(empView,employeDao, this);
+    private final EmployeView empView = new EmployeView();
+    private final DAOEmploye employeDao = new DAOEmploye();
 
-    private MissionView misssionV = new MissionView();
-    private ModificationMissionView modifMissionV = new ModificationMissionView();
-    private CreationMissionView creaMissionV = new CreationMissionView();
+    private final MissionView missionV = new MissionView();
+    private final ModificationMissionView modifMissionV = new ModificationMissionView();
+    private final CreationMissionView creaMissionV = new CreationMissionView();
     private DAOMission missionDao = new DAOMission();
-    private MissionControleur missionC = new MissionControleur(misssionV, missionDao, this, creaMissionV, modifMissionV);
+    private MissionControleur missionC = new MissionControleur(missionV, missionDao, this, creaMissionV, modifMissionV);
     private AjouterMissionControleur ajoutMC = new AjouterMissionControleur(creaMissionV,missionDao,this,competenceDao,employeDao);
 
     private AjoutPersonnelVue ajoutPersonnelV = new AjoutPersonnelVue();
@@ -39,10 +37,6 @@ public class NavigationControleur {
 
     public NavigationControleur( NavigationView navView) throws SQLException {
         this.vueV =navView;
-
-        //EmployeView empView = new EmployeView();
-        //DAOEmploye employeDao = new DAOEmploye();
-        //EmployeControleur empC = new EmployeControleur(empView, employeDao, this);
 
         MissionView missionV = new MissionView();
         ModificationMissionView modifMissionV = new ModificationMissionView();
@@ -56,14 +50,16 @@ public class NavigationControleur {
         AjouterPersonnelControleur ajoutPersonnelC = new AjouterPersonnelControleur(ajoutPersonnelV, employeDao, competenceDao, this);
 
         missionC.loadMissions();
+        CompetencesView competencesV = new CompetencesView();
+        CompetenceControleur competenceC = new CompetenceControleur(competencesV, competenceDao);
         competenceC.loadCompetences();
         ajoutMC.loadCompetences();
         ajoutMC.loadEmployes();
         ajoutPersonnelC.loadCompetences();
+        EmployeControleur empC = new EmployeControleur(empView, employeDao, this);
         empC.loadEmploye();
 
-
-        vueV.addPage("Accueil", accueilV);
+        vueV.addPage(MOT_ACCUEIL, accueilV);
         vueV.addPage("Missions", missionV);
         vueV.addPage("Competences", competencesV);
         vueV.addPage("Creation", creaMissionV);
@@ -77,7 +73,7 @@ public class NavigationControleur {
         Map<String, Integer> statsMois = missionDao.getMissionsStatsParMois();
 
         accueilV.updateDashboard(nbEnPreparation, nbEnCours, nbTerminees, statsMois);
-        vueV.showPage("Accueil");
+        vueV.showPage(MOT_ACCUEIL);
 
         vueV.getButtonMissions().addActionListener(new ActionListener() {
             @Override
@@ -146,7 +142,7 @@ public class NavigationControleur {
 
                 // Mettre à jour le dashboard (AccueilVue)
                 accueilV.updateDashboard(nbEnPreparation, nbEnCours, nbTerminees, statsMois);
-                vueV.showPage("Accueil");
+                vueV.showPage(MOT_ACCUEIL);
             }
         });
 

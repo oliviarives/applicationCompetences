@@ -24,6 +24,7 @@ public class AjouterMissionControleur {
     private DAOEmploye daoEmploye;
     private List<Competence> listeCompetencesSelectionnees;
     private List<Employe> listeEmployesSelectiones;
+    final String MESSAGE_ERREUR = "ERREUR";
 
     public AjouterMissionControleur(CreationMissionView creationMV, DAOMission daoMission, NavigationControleur navigationC,DAOCompetence daoComp,DAOEmploye daoEmp) {
         this.creationMV = creationMV;
@@ -46,7 +47,7 @@ public class AjouterMissionControleur {
                 if(titre.isEmpty() || login.isEmpty() || dateDebut == null || dateFin == null) {
                     JOptionPane.showMessageDialog(null,
                             "Les champs Titre, Login Employé, Date de début et Date de fin sont obligatoires.",
-                            "Erreur", JOptionPane.ERROR_MESSAGE);
+                            MESSAGE_ERREUR, JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
@@ -55,7 +56,7 @@ public class AjouterMissionControleur {
                 if(dateDebut.before(today) || dateFin.before(today)) {
                     JOptionPane.showMessageDialog(null,
                             "Les dates de début et de fin doivent être supérieures à la date d'aujourd'hui.",
-                            "Erreur", JOptionPane.ERROR_MESSAGE);
+                            MESSAGE_ERREUR, JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
@@ -63,7 +64,7 @@ public class AjouterMissionControleur {
                 if(dateFin.before(dateDebut)) {
                     JOptionPane.showMessageDialog(null,
                             "La date de fin ne peut pas être antérieure à la date de début.",
-                            "Erreur", JOptionPane.ERROR_MESSAGE);
+                            MESSAGE_ERREUR, JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
@@ -72,13 +73,13 @@ public class AjouterMissionControleur {
                     if(!daoEmploye.loginExist(login)) {
                         JOptionPane.showMessageDialog(null,
                                 "Le login employé saisi n'est pas valide. Veuillez entrer un login existant.",
-                                "Erreur", JOptionPane.ERROR_MESSAGE);
+                                MESSAGE_ERREUR, JOptionPane.ERROR_MESSAGE);
                         return;
                     }
                 } catch (SQLException ex) {
                     JOptionPane.showMessageDialog(null,
                             "Erreur lors de la vérification du login employé.",
-                            "Erreur", JOptionPane.ERROR_MESSAGE);
+                            MESSAGE_ERREUR, JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
@@ -86,7 +87,7 @@ public class AjouterMissionControleur {
                 if(daoMission.missionTitleExists(titre)) {
                     JOptionPane.showMessageDialog(null,
                             "Le titre de la mission existe déjà pour une mission non terminée. Veuillez choisir un autre titre.",
-                            "Erreur", JOptionPane.ERROR_MESSAGE);
+                            MESSAGE_ERREUR, JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
@@ -123,9 +124,6 @@ public class AjouterMissionControleur {
                 }
             }
         });
-
-
-
 
         //boutons pour afficher les compétences disponibles ds creation mission
         creationMV.getAjouterCompetences().addActionListener(
@@ -233,8 +231,6 @@ public class AjouterMissionControleur {
         );
     }
 
-
-
     public void loadCompetences(){
         List<Competence> competencesTable = daoCompetence.findAll();
         //System.out.println("Compétences chargées: " + competencesTable.size());
@@ -244,6 +240,4 @@ public class AjouterMissionControleur {
         List<Employe> employeTable = daoEmploye.findAll();
         creationMV.setEmploye(employeTable);
     }
-
-
 }
