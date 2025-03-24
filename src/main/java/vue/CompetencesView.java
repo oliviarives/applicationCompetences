@@ -1,7 +1,7 @@
 package vue;
 
 import modele.Competence;
-import modele.Mission;
+import utilitaires.StyleManager;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -14,9 +14,11 @@ public class CompetencesView extends JPanel{
 
 
     public CompetencesView() {
+        StyleManager.setupFlatLaf();
         setLayout(new BorderLayout());
         this.tableCompetences = new JTable();
         this.scrollCompetences = new JScrollPane(tableCompetences);
+        StyleManager.autoResizeTable(tableCompetences, scrollCompetences);
         this.scrollCompetences.setPreferredSize(new Dimension(800,300));
         add(scrollCompetences);
     }

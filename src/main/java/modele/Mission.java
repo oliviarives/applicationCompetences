@@ -1,4 +1,3 @@
-
 package modele;
 
 import java.sql.Date;
@@ -27,17 +26,18 @@ public class Mission {
         this.nbEmpMis = nbEmp;
         this.idSta = idS;
     }
-    //constructeur avec 7 arguments si mission déjà existante dans la base de données
-    public Mission(String titre, Date dateDebut, Date dateFin, String d, Date dateC, int nbEmp, String nSta) {
-        this.idMis = compteurMis++;
+
+    public Mission(int idMis, String titre, Date dateDebut, Date dateFin, String description, Date dateCreation, int nbEmp, String nomSta) {
+        this.idMis = idMis;
         this.titreMis = titre;
         this.dateDebutMis = dateDebut;
         this.dateFinMis = dateFin;
-        this.description = d;
-        this.dateCreation = dateC;
-        this.nomSta = nSta;
+        this.description = description;
+        this.dateCreation = dateCreation;
         this.nbEmpMis = nbEmp;
+        this.nomSta = nomSta;
     }
+
 
     public int getIdMission() {
         return this.idMis;
@@ -72,4 +72,15 @@ public class Mission {
     public String getLoginEmp() {
         return this.loginEmp;
     }
+
+    public int getIdSta(){
+        return this.idSta;
+    }
+
+    public void setIdMission(int id) {
+        this.idMis = id;
+    }
+
+
+
 }

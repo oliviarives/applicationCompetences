@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 public class NavigationControleur {
     private static NavigationView vueV;
@@ -28,7 +29,6 @@ public class NavigationControleur {
     private DAOMission missionDao = new DAOMission();
     private MissionControleur missionC = new MissionControleur(missionV, missionDao, this, creaMissionV, modifMissionV);
     private AjouterMissionControleur ajoutMC = new AjouterMissionControleur(creaMissionV,missionDao,this,competenceDao,employeDao);
-    private ModifierMissionControleur modifMC = new ModifierMissionControleur(modifMissionV, missionDao, this, competenceDao, employeDao);
 
     private AjoutPersonnelVue ajoutPersonnelV = new AjoutPersonnelVue();
     private AjouterPersonnelControleur ajoutPersonnelC= new AjouterPersonnelControleur(ajoutPersonnelV, employeDao, competenceDao, this);
@@ -36,6 +36,8 @@ public class NavigationControleur {
     private ModifierPersonnelControleur modifEmployeC = new ModifierPersonnelControleur(modifEmployeVue, employeDao, competenceDao, this);
 
     private AccueilVue accueilV = new AccueilVue();
+
+    private static DAOMission missionDaoInstance; // variable statique pour DAOMission
 
     public NavigationControleur( NavigationView navView) throws SQLException {
         this.vueV =navView;
@@ -47,8 +49,7 @@ public class NavigationControleur {
         ajoutPersonnelC.loadCompetences();
         modifEmployeC.loadCompetences();
         empC.loadEmploye();
-        modifMC.loadCompetences();
-        modifMC.loadEmployes();
+
 
         vueV.addPage("Accueil", accueilV);
         vueV.addPage("Missions", missionV);
@@ -58,6 +59,14 @@ public class NavigationControleur {
         vueV.addPage("Modification", modifMissionV);
         vueV.addPage("AjouterEmploye", ajoutPersonnelV);
         vueV.addPage("ModifierEmploye", modifEmployeVue);
+
+        int nbEnPreparation = missionDao.countMissionsByStatus(1);
+        int nbEnCours = missionDao.countMissionsByStatus(2);
+        int nbTerminees = missionDao.countMissionsByStatus(3);
+        Map<String, Integer> statsMois = missionDao.getMissionsStatsParMois();
+
+        accueilV.updateDashboard(nbEnPreparation, nbEnCours, nbTerminees, statsMois);
+        vueV.showPage("Accueil");
 
         vueV.getButtonMissions().addActionListener(new ActionListener() {
             @Override
@@ -112,7 +121,15 @@ public class NavigationControleur {
             public void actionPerformed(ActionEvent e) {
                 Mission missionSelectionnee = missionV.getMissionSelectionnee();
                 if (missionSelectionnee != null) {
-                    modifMissionV.setMission(missionSelectionnee);
+                    // Crée une instance de ModifierMissionControleur en passant la mission sélectionnée
+                    ModifierMissionControleur modifMC = new ModifierMissionControleur(modifMissionV, missionDao, NavigationControleur.this, competenceDao, employeDao, missionSelectionnee);
+
+                    try {
+                        modifMC.preRemplirFormulaire();
+                    } catch (SQLException ex) {
+                        throw new RuntimeException(ex);
+                    }
+
                     vueV.showPage("Modification");
                 }
             }
@@ -122,14 +139,27 @@ public class NavigationControleur {
         vueV.getButtonAccueil().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // Récupérer les données réelles depuis le DAO/Service
+                int nbEnPreparation = missionDao.countMissionsByStatus(1);
+                int nbEnCours = missionDao.countMissionsByStatus(2);
+                int nbTerminees = missionDao.countMissionsByStatus(3);
+                Map<String, Integer> statsMois = missionDao.getMissionsStatsParMois();
+
+                // Mettre à jour le dashboard (AccueilVue)
+                accueilV.updateDashboard(nbEnPreparation, nbEnCours, nbTerminees, statsMois);
                 vueV.showPage("Accueil");
             }
         });
+
     }
 
     public void loadEmploye() {
         List<Employe> emp = this.employeDao.findAll();
         empView.setEmploye(emp);
+    }
+
+    public static DAOMission getMissionDao() {
+        return missionDaoInstance;
     }
 
     public static NavigationView getVueV() {

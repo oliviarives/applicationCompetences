@@ -15,6 +15,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ModifierMissionControleur {
@@ -23,13 +24,17 @@ public class ModifierMissionControleur {
     private NavigationControleur navC;
     private DAOCompetence daoCompetence;
     private DAOEmploye daoEmploye;
+    private Mission mission;
+    private List<Competence> listeCompetencesSelectionnees;
+    private List<Employe> listeEmployesSelectiones;
 
-    public ModifierMissionControleur(ModificationMissionView modificationMV, DAOMission daoMission, NavigationControleur navigationC,DAOCompetence daoComp,DAOEmploye daoEmp) {
+    public ModifierMissionControleur(ModificationMissionView modificationMV, DAOMission daoMission, NavigationControleur navigationC,DAOCompetence daoComp,DAOEmploye daoEmp, Mission mission) {
         this.modificationMV = modificationMV;
         this.daoMission = daoMission;
         this.navC = navigationC;
         this.daoCompetence = daoComp;
         this.daoEmploye = daoEmp;
+        this.mission = mission;
 
 
         modificationMV.getButtonConfirmer().addActionListener(
@@ -37,12 +42,12 @@ public class ModifierMissionControleur {
                     @Override
                     public void actionPerformed(ActionEvent e){
                         Mission misInsert= new Mission(
-                                modificationMV.getTitreMisFieldValue(),
+                                modificationMV.getTitreMisField(),
                                 modificationMV.getDateDebutMisField(),
                                 modificationMV.getDateFinMisField(),
                                 //Date.valueOf("1970-01-01"),
                                 //Date.valueOf("1970-01-01"),
-                                modificationMV.getDescriptionMisFieldValue(),
+                                modificationMV.getDescriptionMisField(),
                                 new Date(System.currentTimeMillis()),
                                 //Date.valueOf("1970-01-01"),
                                 modificationMV.getNbEmpField(),
@@ -78,7 +83,6 @@ public class ModifierMissionControleur {
                 }
         );
         //ajout compétences à table des compétences ajoutées
-        //ajout compétences à table des compétences ajoutées
         modificationMV.getCompetenceTable().addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -93,18 +97,8 @@ public class ModifierMissionControleur {
                 }
             }
         });
-        //ajout employé à table des employé ajoutés
-        /*creationMV.getEmployesTable().addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                if (evt.getClickCount() == 2) {
-                    Employe emp = creationMV.getEmployeSelectionne();
-                    if (emp != null) {
-                        creationMV.ajouterEmployesAjoutee(emp);
-                    }
-                }
-            }
-        });*/
+
+
         // Ajout employé à table des employés ajoutés
         modificationMV.getEmployesTable().addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
@@ -126,6 +120,7 @@ public class ModifierMissionControleur {
             }
         });
 
+
         //retirer compétence des compétences ajoutées
         modificationMV.getListeCompetenceAjoutee().addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
@@ -136,6 +131,9 @@ public class ModifierMissionControleur {
                         DefaultTableModel model = (DefaultTableModel) modificationMV.getListeCompetenceAjoutee().getModel();
                         model.removeRow(selectedRow);
                     }
+                    listeCompetencesSelectionnees = modificationMV.getCompetencesAjoutees();
+                    listeEmployesSelectiones = daoEmploye.findEmpByCompetences(listeCompetencesSelectionnees);
+                    modificationMV.setEmploye(listeEmployesSelectiones);
                 }
             }
         });
@@ -158,12 +156,41 @@ public class ModifierMissionControleur {
 
     public void loadCompetences(){
         List<Competence> competencesTable = daoCompetence.findAll();
-        //System.out.println("Compétences chargées: " + competencesTable.size());
         modificationMV.setCompetencesAjout(competencesTable);
     }
     public void loadEmployes(){
         List<Employe> employeTable = daoEmploye.findAll();
         modificationMV.setEmploye(employeTable);
     }
+
+    public void preRemplirFormulaire() throws SQLException {
+        // Pré-remplissage du formulaire avec les données de la mission
+        modificationMV.setMissionData(mission);
+
+        // Récupération et affichage des compétences associées à la mission
+        List<Competence> competencesAssociees = daoMission.getCompetencesForMission(mission.getIdMission());
+        modificationMV.remplirTableauCompetences(competencesAssociees);
+
+        // Récupération et affichage des employés associés à la mission
+        List<String> logins = daoMission.getLogEmployesForMission(mission.getIdMission());
+        List<Employe> employesAssocies = new ArrayList<>();
+        for (String login : logins) {
+            Employe emp = daoEmploye.getEmployeByLogin(login);
+            if (emp != null) {
+                employesAssocies.add(emp);
+            }
+        }
+        modificationMV.setEmploye(employesAssocies);
+
+        // Chargement des listes disponibles pour la sélection
+        loadCompetences();
+        loadEmployes();
+
+        // Affiche par défaut la vue des compétences associées (ou selon ton choix)
+        modificationMV.showPage("tabCompetences");
+    }
+
+
+
 }
 

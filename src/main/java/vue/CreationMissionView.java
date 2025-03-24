@@ -1,11 +1,13 @@
 package vue;
 
+import com.toedter.calendar.JDateChooser;
 import modele.Competence;
 import modele.Employe;
 import utilitaires.StyleManager;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import javax.swing.text.DateFormatter;
 import java.awt.*;
 import java.text.DateFormat;
@@ -13,16 +15,15 @@ import java.text.SimpleDateFormat;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.HashSet;
 import java.util.List;
-
-// @TODO CB select calendar
 
 public class CreationMissionView extends JPanel {
     private JButton buttonConfirmer;
     private JTextField titreMisField;
     private JTextArea descriptionMisField;
-    private JFormattedTextField dateDebutMisField;
-    private JFormattedTextField dateFinMisField;
+    private JDateChooser dateDebutMisField;
+    private JDateChooser dateFinMisField;
     private JSpinner nbEmpField;
     private JTextField logEmpField;
     private JButton ajouterCompetences;
@@ -41,6 +42,11 @@ public class CreationMissionView extends JPanel {
     private JScrollPane listeCompetenceScrollPane;
     private JTable listeEmployesAjoutee;
     private JScrollPane listeEmployesScrollPane;
+    private List<Competence> listeCmpAffichees;
+    private List<Employe> listeEmpAffiches;
+    private List<String> listeLoginEmpAjout;
+    private JButton bouttonModifierDates;
+    private JButton bouttonConfirmerDates;
 
 
     public CreationMissionView() {
@@ -70,14 +76,21 @@ public class CreationMissionView extends JPanel {
         JPanel panelBouttons = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JPanel panellisteCompetences = new JPanel(new BorderLayout());
         JPanel panellisteEmployes = new JPanel(new BorderLayout());
+        JPanel modifDates = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
 
         this.titreMisField = new JTextField(20);
         this.descriptionMisField = new JTextArea(3,30);
-        this.dateDebutMisField = new JFormattedTextField(dateFormatter);
-        this.dateDebutMisField.setValue(new Date(System.currentTimeMillis()));
-        this.dateFinMisField = new JFormattedTextField(dateFormatter);
-        this.dateFinMisField.setValue(new Date(System.currentTimeMillis()));
+        this.dateDebutMisField = new JDateChooser();
+        dateDebutMisField.setDateFormatString("yyyy-MM-dd");
+        dateDebutMisField.setDate(new java.util.Date());
+        dateDebutMisField.setPreferredSize(new Dimension(100, 25));
+
+        this.dateFinMisField = new JDateChooser();
+        dateFinMisField.setDateFormatString("yyyy-MM-dd");
+        dateFinMisField.setDate(new java.util.Date());
+        dateFinMisField.setPreferredSize(new Dimension(100, 25));
+
         SpinnerModel modelSpinner = new SpinnerNumberModel(0, 0, 30, 1);
         this.nbEmpField = new JSpinner(modelSpinner);
         this.logEmpField = new JTextField(15);
@@ -86,7 +99,7 @@ public class CreationMissionView extends JPanel {
         this.ajouterEmployes = new JButton("Ajouter Employés");
         this.cardLayout = new CardLayout();
         this.cardLayoutPanel = new JPanel(cardLayout);
-        this.titreLabel = new JLabel("création d'une mission");
+        this.titreLabel = new JLabel("Création d'une mission");
 
         //Titre Mission
         panelTitre.add(new JLabel("Titre Mission : "));
@@ -105,11 +118,20 @@ public class CreationMissionView extends JPanel {
         panelDate.add(dateFinMisField);
         formulaire.add(panelDate);
 
+        //boutons modifier confirmer dates
+        this.bouttonModifierDates = new JButton("Modifier les dates");
+        this.bouttonConfirmerDates = new JButton("Confirmer");
+        modifDates.add(bouttonModifierDates);
+        modifDates.add(bouttonConfirmerDates);
+        setDatesModifiables(false);
+        formulaire.add(modifDates);
+
+
         //Nbr d'employé dans mission
-        panelNbEmp.add(new JLabel("Nombre d'émployé necessaires : "));
+        panelNbEmp.add(new JLabel("Nombre d'employé nécessaires : "));
         panelNbEmp.add(nbEmpField);
         //login employé créateur mission
-        loginEmp.add(new JLabel("login employé : "));
+        loginEmp.add(new JLabel("Login employé : "));
         loginEmp.add(logEmpField);
         formulaire.add(panelNbEmp);
         formulaire.add(loginEmp);
@@ -193,16 +215,20 @@ public class CreationMissionView extends JPanel {
     }
 
     public java.sql.Date getDateDebutMisField() {
-        return java.sql.Date.valueOf( this.dateDebutMisField.getText());
+        java.util.Date d = dateDebutMisField.getDate();
+        return (d != null) ? new java.sql.Date(d.getTime()) : null;
     }
+
 
     public String getLogEmpField() {
         return this.logEmpField.getText();
     }
 
     public java.sql.Date getDateFinMisField() {
-        return java.sql.Date.valueOf(this.dateFinMisField.getText());
+        java.util.Date d = dateFinMisField.getDate();
+        return (d != null) ? new java.sql.Date(d.getTime()) : null;
     }
+
 
     public int getNbEmpField() {
         return Integer.parseInt(this.nbEmpField.getValue().toString());
@@ -229,6 +255,14 @@ public class CreationMissionView extends JPanel {
         return this.employesTable;
     }
 
+    public JButton getBoutonModifierDates(){
+        return this.bouttonModifierDates;
+    }
+
+    public JButton getBouttonConfirmerDates(){
+        return this.bouttonConfirmerDates;
+    }
+
     public void setCompetencesAjout(List<Competence> competences) {
         //System.out.println("Mise à jour de la table des compétences avec " + competences.size() + " entrées."); // Debug
         String[] columnNames = {"Id", "Categorie","Nom (En)","Nom (FR)"};
@@ -245,17 +279,22 @@ public class CreationMissionView extends JPanel {
     }
 
     public void setEmploye(List<Employe> emp) {
-        String[] columnNames = {"Prenom","Nom","Poste"};
+        String[] columnNames = {"login","Prenom","Nom","Poste"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0){
             public boolean isCellEditable(int row, int col) {
                 return false;
             }
         };
         for (Employe e : emp) {
-            Object[] row = {e.getPrenom(),e.getNom(),e.getPoste()};
+            Object[] row = {e.getLogin(),e.getPrenom(),e.getNom(),e.getPoste()};
             model.addRow(row);
         }
         this.employesTable.setModel(model);
+        TableColumn column = this.employesTable.getColumnModel().getColumn(0);
+        column.setMinWidth(0);
+        column.setMaxWidth(0);
+        column.setPreferredWidth(0);
+        column.setResizable(false);
     }
 
 
@@ -312,9 +351,48 @@ public class CreationMissionView extends JPanel {
 
             competences.add(new Competence(idCmp, idCatCmp, nomEn, nomFr));
         }
-
         return competences;
     }
+    //retourne une liste d'employe ajoutés à la mission pour insertion BD à cretion mission
+    public List<String> getLogEmployeAjoutees() {
+        HashSet<String> empsALogin = new HashSet<>();
+        DefaultTableModel model = (DefaultTableModel) listeEmployesAjoutee.getModel();
+        //recuperation des login des emp ajoutés pour comparaison
+        for (int i = 0; i < model.getRowCount(); i++) {
+            String loginEmp = (String) model.getValueAt(i, 0);
+            empsALogin.add(loginEmp);
+        }
+        List<String> resultSet = new ArrayList<>(empsALogin);
+        return  resultSet;
+    }
+
+    public void setDatesModifiables(boolean b){
+        this.dateDebutMisField.setEnabled(b);
+        this.dateFinMisField.setEnabled(b);
+    }
+
+
+    public void resetFields() {
+        // Vider les champs de texte
+        titreMisField.setText("");
+        descriptionMisField.setText("");
+        logEmpField.setText("");
+
+        // Réinitialiser les JDateChooser
+        dateDebutMisField.setDate(null);
+        dateFinMisField.setDate(null);
+
+        // Réinitialiser le JSpinner
+        nbEmpField.setValue(0); // ou 1, selon votre valeur par défaut souhaitée
+
+        // Réinitialiser les tableaux d'ajouts
+        DefaultTableModel modelComp = (DefaultTableModel) listeCompetenceAjoutee.getModel();
+        modelComp.setRowCount(0);
+
+        DefaultTableModel modelEmp = (DefaultTableModel) listeEmployesAjoutee.getModel();
+        modelEmp.setRowCount(0);
+    }
+
+
 
 }
-

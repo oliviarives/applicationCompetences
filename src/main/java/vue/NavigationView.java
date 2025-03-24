@@ -16,7 +16,7 @@ public class NavigationView extends JFrame {
     public NavigationView() {
         StyleManager.setupFlatLaf();
         setTitle("Mission im-Possible");
-        setSize(900, 700);
+        setSize(1400, 700);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
