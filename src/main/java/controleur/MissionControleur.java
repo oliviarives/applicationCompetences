@@ -18,16 +18,16 @@ public class MissionControleur {
 
     private MissionView vueM;
     private DAOMission missionDAO;
-    private NavigationControleur navControleur;
-    private CreationMissionView creationMV;
-    private ModificationMissionView modificationMV;
+    private NavigationControleur navControleur; //unused
+    private CreationMissionView creationMV;//unused
+    private ModificationMissionView modificationMV;//unused
 
     public MissionControleur(MissionView vue, DAOMission daoM, NavigationControleur navC, CreationMissionView creationMV, ModificationMissionView modificationMV) {
         this.vueM = vue;
         this.missionDAO = daoM;
         this.navControleur = navC;
         this.creationMV = creationMV;
-        this.modificationMV = modificationMV; 
+        this.modificationMV = modificationMV;
 
 
     // Ajoute le listener sur le bouton "Filtrer"
@@ -70,7 +70,7 @@ public class MissionControleur {
     }
 
     public void ajouterMission(Mission mission) {
-
+        throw new UnsupportedOperationException("methode non utilisé");
     }
 
     public int getNbMissionsEnPreparation() {
