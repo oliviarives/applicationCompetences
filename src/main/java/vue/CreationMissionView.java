@@ -99,7 +99,7 @@ public class CreationMissionView extends JPanel {
         this.ajouterEmployes = new JButton("Ajouter Employés");
         this.cardLayout = new CardLayout();
         this.cardLayoutPanel = new JPanel(cardLayout);
-        this.titreLabel = new JLabel("création d'une mission");
+        this.titreLabel = new JLabel("Création d'une mission");
 
         //Titre Mission
         panelTitre.add(new JLabel("Titre Mission : "));
@@ -128,10 +128,10 @@ public class CreationMissionView extends JPanel {
 
 
         //Nbr d'employé dans mission
-        panelNbEmp.add(new JLabel("Nombre d'émployé necessaires : "));
+        panelNbEmp.add(new JLabel("Nombre d'employé nécessaires : "));
         panelNbEmp.add(nbEmpField);
         //login employé créateur mission
-        loginEmp.add(new JLabel("login employé : "));
+        loginEmp.add(new JLabel("Login employé : "));
         loginEmp.add(logEmpField);
         formulaire.add(panelNbEmp);
         formulaire.add(loginEmp);
