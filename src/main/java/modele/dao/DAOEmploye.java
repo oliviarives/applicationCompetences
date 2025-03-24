@@ -1,15 +1,14 @@
 package modele.dao;
 
-import modele.dao.requetes.Employe.*;
+import modele.dao.requetes.Mission.RequeteSelectCollaborer;
 import utilitaires.Config;
 import modele.Competence;
 import modele.Employe;
+import modele.dao.requetes.Employe.*;
 import modele.connexion.CictOracleDataSource;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -20,6 +19,7 @@ public class DAOEmploye {
     private ArrayList<Employe> listeEmployeByCmp;
     private static String dbUser = Config.get("db.user");
     private static String dbPwd = Config.get("db.password");
+    private ArrayList<Employe> listeEmployeStatutActif;
 
     public DAOEmploye() throws SQLException {
         this.cn = CictOracleDataSource.getConnectionBD();
@@ -49,14 +49,6 @@ public class DAOEmploye {
         ps.executeQuery();
     }
 
-    public boolean loginExist(String login) throws SQLException {
-        RequeteLoginExist req = new RequeteLoginExist();
-        PreparedStatement ps = cn.prepareStatement(req.requete());
-        req.parametres(ps, login);
-        ResultSet rs = ps.executeQuery();
-        return rs.next(); // Retourne vrai si un login existe déjà
-    }
-
     public void ajouterPossession(String loginEmp, Competence cmp) throws SQLException {
         RequeteEmployeAjouterCmp req = new RequeteEmployeAjouterCmp();
         PreparedStatement ps = cn.prepareStatement(req.requete());
@@ -64,6 +56,13 @@ public class DAOEmploye {
         ps.executeUpdate();
     }
 
+    public boolean loginExist(String login) throws SQLException {
+        RequeteLoginExist req = new RequeteLoginExist();
+        PreparedStatement ps = cn.prepareStatement(req.requete());
+        req.parametres(ps, login);
+        ResultSet rs = ps.executeQuery();
+        return rs.next(); // Retourne vrai si un login existe déjà
+    }
 
     protected Employe creerInstanceCmp(ResultSet rset) throws SQLException {
         return new Employe(
@@ -95,6 +94,10 @@ public class DAOEmploye {
     }
 
     public List<Employe> findEmpByCmp() {
+        return findAll();
+    }
+
+    /*public List<Employe> findEmpByCmp() {
         List<Employe> resultats = new ArrayList<>();
         try {
             PreparedStatement req = cn.prepareStatement(new RequeteEmployeSelectAll().requete());
@@ -108,7 +111,7 @@ public class DAOEmploye {
             System.err.println(e.getMessage());
         }
         return resultats;
-    }
+    }*/
 
     public List<Employe> findEmpByCompetences(List<Competence> competences) {
         Set<Employe> lemp = new HashSet<>();
@@ -136,43 +139,45 @@ public class DAOEmploye {
         return resultats;
     }
 
-    /* public List<Employe> findEmpByCompetences(List<Competence> competences) {
-        List<Employe> resultats = new ArrayList<>();
-
-        if (competences.isEmpty()) {
-            return resultats; // Retourne une liste vide si aucune compétence n'est sélectionnée
-        }
-
-        String query = new RequeteEmployeSelectByCmp().requete();
-
-        for (int i = 0; i < competences.size(); i++) {
-            if (i > 0) {
-                query += (" OR ");
-            }
-            query += ("(C.IDCMP = ?)");
-        }
-        System.out.println(query);
-
-        try (PreparedStatement req = cn.prepareStatement(query.toString())) {
-            int index = 1;
-            for (Competence cmp : competences) {
-                System.out.println("➡️ Paramètre " + index + " = " + cmp.getIdCmp()); // Vérifier la valeur insérée
-                req.setInt(index, cmp.getIdCmp());
-                index++;
-            }
-
-            try (ResultSet curseur = req.executeQuery()) {
-                while (curseur.next()) {
-                    System.out.println("✔️ Employé trouvé : " + curseur.getString("LOGINEMP"));
-                    System.out.println("ok");
-                    Employe instance = creerInstance(curseur);
-                    resultats.add(instance);
+    public void miseAJourEmpByCmpByDate(Date dateD, Date dateF) {
+        List<String> resultat = new ArrayList<>();
+        try {
+            PreparedStatement requete = cn.prepareStatement(new RequeteSelectCollaborer().requete());
+            ResultSet curseur = requete.executeQuery();
+            while (curseur.next()) {
+                if ((curseur.getDate("dateDebutMis").compareTo(dateD) >= 0 && curseur.getDate("dateDebutMis").compareTo(dateF) <= 0) ||
+                        (curseur.getDate("dateFinMis").compareTo(dateD) >= 0 && curseur.getDate("dateFinMis").compareTo(dateF) <= 0)) {
+                    resultat.add(curseur.getString("loginEmp"));
                 }
             }
         } catch (SQLException e) {
-            System.err.println("Erreur SQL : " + e.getMessage());
+            System.err.println(e.getMessage());
         }
 
-        return resultats;
-    } */
+        setListeEmpCmp();
+        listeEmployeByCmp.removeIf(emp -> resultat.contains(emp.getLogin()));
+    }
+
+    public void setListeEmpCmp() {
+        try {
+            PreparedStatement req = cn.prepareStatement(new RequeteEmployeSelectByCmp().requete());
+            this.listeEmployeByCmp = resultSetToArray(req.executeQuery());
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
+    public Employe getEmployeByLogin(String login) throws SQLException {
+        String sql = "SELECT * FROM employe WHERE loginEmp = ?";
+        try (PreparedStatement ps = cn.prepareStatement(sql)) {
+            ps.setString(1, login);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return creerInstance(rs);
+                }
+            }
+        }
+        return null;
+    }
+
 }

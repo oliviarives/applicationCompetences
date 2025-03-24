@@ -2,6 +2,7 @@ package vue;
 
 import com.toedter.calendar.JDateChooser;
 import com.toedter.calendar.JTextFieldDateEditor;
+import controleur.NavigationControleur;
 import modele.Mission;
 import modele.dao.DAOMission;
 import utilitaires.StyleManager;
@@ -234,13 +235,15 @@ public class MissionView extends JPanel {
             return null;
         }
         int idMission = (int) tableMission.getValueAt(selectedRow, 0);
-        String titre = (String) tableMission.getValueAt(selectedRow, 1);
-        Date dateDebut = (Date) tableMission.getValueAt(selectedRow, 2);
-        Date dateFin = (Date) tableMission.getValueAt(selectedRow, 3);
-        String description = (String) tableMission.getValueAt(selectedRow, 4);
-        String nomSta = (String) tableMission.getValueAt(selectedRow, 5);
-        return new Mission(titre, dateDebut, dateFin, description, new Date(System.currentTimeMillis()), 0, nomSta);
+        // Utiliser le DAO pour récupérer l'objet complet à partir de l'id
+        Mission mission = NavigationControleur.getMissionDao().getMissionById(idMission);
+        if(mission == null) {
+            JOptionPane.showMessageDialog(this, "Aucune mission trouvée pour l'id " + idMission);
+        }
+        return mission;
     }
+
+
 
     public JTable getMissionTable() {
         return this.tableMission;

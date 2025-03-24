@@ -9,11 +9,9 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.DateFormatter;
 import java.awt.*;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.EnumMap;
 import java.util.List;
 
 public class ModificationMissionView extends JPanel {
@@ -159,7 +157,7 @@ public class ModificationMissionView extends JPanel {
         this.competenceScrollPane = new JScrollPane(competenceTable);
         this.competenceScrollPane.setPreferredSize(new Dimension(150, 200));
         this.cardLayoutPanel.add(this.competenceScrollPane, "tabCompetences");
-
+        showPage("tabCompetences");
 
         //partie Ajout Employe
         this.employesTable = new JTable();
@@ -182,25 +180,26 @@ public class ModificationMissionView extends JPanel {
         return this.buttonConfirmer;
     }
 
-    public String getTitreMisFieldValue() {
+    public String getTitreMisField() {
         return this.titreMisField.getText();
     }
 
-    public String getDescriptionMisFieldValue() {
+    public String getDescriptionMisField() {
         return this.descriptionMisField.getText();
     }
 
-    public java.sql.Date getDateDebutMisField() {
+    public Date getDateDebutMisField() {
         return java.sql.Date.valueOf(this.dateDebutMisField.getText());
+    }
+
+    public Date getDateFinMisField() {
+        return java.sql.Date.valueOf(this.dateFinMisField.getText());
     }
 
     public String getLogEmpField() {
         return this.logEmpField.getText();
     }
 
-    public java.sql.Date getDateFinMisField() {
-        return java.sql.Date.valueOf(this.dateFinMisField.getText());
-    }
 
     public int getNbEmpField() {
         return Integer.parseInt(this.nbEmpField.getValue().toString());
@@ -245,18 +244,19 @@ public class ModificationMissionView extends JPanel {
         this.competenceTable.setModel(model);
     }
 
-    public void setEmploye(List<Employe> emp) {
-        String[] columnNames = {"Prenom", "Nom", "Poste"};
+    public void setEmploye(List<Employe> employes) {
+        String[] columnNames = {"login", "Prenom", "Nom", "Poste"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
-            public boolean isCellEditable(int row, int col) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
-        for (Employe e : emp) {
-            Object[] row = {e.getPrenom(), e.getNom(), e.getPoste()};
+        for (Employe e : employes) {
+            Object[] row = { e.getLogin(), e.getPrenom(), e.getNom(), e.getPoste() };
             model.addRow(row);
         }
-        this.employesTable.setModel(model);
+        this.listeEmployesAjoutee.setModel(model);
     }
 
 
@@ -329,4 +329,33 @@ public class ModificationMissionView extends JPanel {
 
         return competences;
     }
+
+    /**
+     * Remplit le tableau des compétences avec la liste fournie.
+     * @param competences la liste des compétences à afficher.
+     */
+    public void remplirTableauCompetences(List<Competence> competences) {
+        String[] columnNames = {"Id", "Catégorie", "Nom (En)", "Nom (FR)"};
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        for (Competence cmp : competences) {
+            Object[] row = {cmp.getIdCmp(), cmp.getIdCatCmp(), cmp.getNomCmpEn(), cmp.getNomCmpFr()};
+            model.addRow(row);
+        }
+        this.listeCompetenceAjoutee.setModel(model);
+    }
+
+    public void setMissionData(Mission mission) {
+        this.titreMisField.setText(mission.getTitreMis());
+        this.dateDebutMisField.setText(mission.getDateDebutMis().toString());
+        this.dateFinMisField.setText(mission.getDateFinMis().toString());
+        this.descriptionMisField.setText(mission.getDescription());
+    }
+
 }
+
+
