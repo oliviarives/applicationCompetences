@@ -10,7 +10,7 @@ public class RequeteMissionAjouter extends RequeteMission {
     //Ne retourne qu'un string contenant la requete avec valeurs vides
     @Override
     public String requete() {
-        return "INSERT INTO MISSION (IDMIS,TITREMIS,NBEMPMIS,DATEDEBUTMIS,DATEFINMIS,DESCRIPTION,DATECREATION,LOGINEMP,IDSTA) VALUES (?,?,?,?,?,?,?,?,?)";
+        return "INSERT INTO MISSION (IDMIS, TITREMIS, NBEMPMIS, DATEDEBUTMIS, DATEFINMIS, DESCRIPTION, DATECREATION, LOGINEMP, IDSTA) VALUES (SEQ_MISSION.NEXTVAL, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING idMis INTO ?";
     }
 
 
@@ -26,17 +26,21 @@ public class RequeteMissionAjouter extends RequeteMission {
         prSt.setInt(9, Integer.parseInt(id[8])); //idSta
     }
 
-
-    public void parametres(PreparedStatement prSt, Mission obj) throws SQLException {
-        prSt.setInt(1, obj.getIdMission()); //idMis
-        prSt.setString(2, obj.getTitreMis());//titreMis
-        prSt.setInt(3, obj.getNbEmpMis()); //nbEmpMis
-        prSt.setDate(4, obj.getDateDebutMis()); //DateDebutMis
-        prSt.setDate(5,obj.getDateFinMis()); //DateFinMis
-        prSt.setString(6, obj.getDescription());//description
-        prSt.setDate(7, obj.getDateCreation()); //DateCreation
-        prSt.setString(8, obj.getLoginEmp());//loginEmp
-        prSt.setInt(9, 1); //idSta
+    public void parametres(PreparedStatement ps, Mission mis) throws SQLException {
+        ps.setString(1, mis.getTitreMis());        // TITREMIS
+        ps.setInt(2, mis.getNbEmpMis());             // NBEMPMIS
+        ps.setDate(3, mis.getDateDebutMis());          // DATEDEBUTMIS
+        ps.setDate(4, mis.getDateFinMis());            // DATEFINMIS
+        ps.setString(5, mis.getDescription());       // DESCRIPTION
+        ps.setDate(6, mis.getDateCreation());          // DATECREATION
+        ps.setString(7, mis.getLoginEmp());          // LOGINEMP
+        ps.setInt(8, mis.getIdSta());                // IDSTA
     }
+
+
+
+
+
+
 
 }

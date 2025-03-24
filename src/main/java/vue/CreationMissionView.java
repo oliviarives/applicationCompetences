@@ -45,6 +45,8 @@ public class CreationMissionView extends JPanel {
     private List<Competence> listeCmpAffichees;
     private List<Employe> listeEmpAffiches;
     private List<String> listeLoginEmpAjout;
+    private JButton bouttonModifierDates;
+    private JButton bouttonConfirmerDates;
 
 
     public CreationMissionView() {
@@ -74,6 +76,7 @@ public class CreationMissionView extends JPanel {
         JPanel panelBouttons = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JPanel panellisteCompetences = new JPanel(new BorderLayout());
         JPanel panellisteEmployes = new JPanel(new BorderLayout());
+        JPanel modifDates = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
 
         this.titreMisField = new JTextField(20);
@@ -114,6 +117,15 @@ public class CreationMissionView extends JPanel {
         panelDate.add(new JLabel("Date de fin : "));
         panelDate.add(dateFinMisField);
         formulaire.add(panelDate);
+
+        //boutons modifier confirmer dates
+        this.bouttonModifierDates = new JButton("Modifier les dates");
+        this.bouttonConfirmerDates = new JButton("Confirmer");
+        modifDates.add(bouttonModifierDates);
+        modifDates.add(bouttonConfirmerDates);
+        setDatesModifiables(false);
+        formulaire.add(modifDates);
+
 
         //Nbr d'employé dans mission
         panelNbEmp.add(new JLabel("Nombre d'émployé necessaires : "));
@@ -243,6 +255,14 @@ public class CreationMissionView extends JPanel {
         return this.employesTable;
     }
 
+    public JButton getBoutonModifierDates(){
+        return this.bouttonModifierDates;
+    }
+
+    public JButton getBouttonConfirmerDates(){
+        return this.bouttonConfirmerDates;
+    }
+
     public void setCompetencesAjout(List<Competence> competences) {
         //System.out.println("Mise à jour de la table des compétences avec " + competences.size() + " entrées."); // Debug
         String[] columnNames = {"Id", "Categorie","Nom (En)","Nom (FR)"};
@@ -344,6 +364,11 @@ public class CreationMissionView extends JPanel {
         }
         List<String> resultSet = new ArrayList<>(empsALogin);
         return  resultSet;
+    }
+
+    public void setDatesModifiables(boolean b){
+        this.dateDebutMisField.setEnabled(b);
+        this.dateFinMisField.setEnabled(b);
     }
 
 

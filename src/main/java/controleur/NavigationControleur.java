@@ -29,12 +29,13 @@ public class NavigationControleur {
     private DAOMission missionDao = new DAOMission();
     private MissionControleur missionC = new MissionControleur(misssionV, missionDao, this, creaMissionV, modifMissionV);
     private AjouterMissionControleur ajoutMC = new AjouterMissionControleur(creaMissionV,missionDao,this,competenceDao,employeDao);
-    private ModifierMissionControleur modifMC = new ModifierMissionControleur(modifMissionV, missionDao, this, competenceDao, employeDao);
 
     private AjoutPersonnelVue ajoutPersonnelV = new AjoutPersonnelVue();
     private AjouterPersonnelControleur ajoutPersonnelC= new AjouterPersonnelControleur(ajoutPersonnelV, employeDao, competenceDao, this);
 
     private AccueilVue accueilV = new AccueilVue();
+
+    private static DAOMission missionDaoInstance; // variable statique pour DAOMission
 
     public NavigationControleur( NavigationView navView) throws SQLException {
         this.vueV =navView;
@@ -49,7 +50,7 @@ public class NavigationControleur {
         DAOMission missionDao = new DAOMission();
         MissionControleur missionC = new MissionControleur(missionV, missionDao, this, creaMissionV, modifMissionV);
         AjouterMissionControleur ajoutMC = new AjouterMissionControleur(creaMissionV, missionDao, this, competenceDao, employeDao);
-        ModifierMissionControleur modifMC = new ModifierMissionControleur(modifMissionV, missionDao, this, competenceDao, employeDao);
+        missionDaoInstance = missionDao;
 
         AjoutPersonnelVue ajoutPersonnelV = new AjoutPersonnelVue();
         AjouterPersonnelControleur ajoutPersonnelC = new AjouterPersonnelControleur(ajoutPersonnelV, employeDao, competenceDao, this);
@@ -60,8 +61,7 @@ public class NavigationControleur {
         ajoutMC.loadEmployes();
         ajoutPersonnelC.loadCompetences();
         empC.loadEmploye();
-        modifMC.loadCompetences();
-        modifMC.loadEmployes();
+
 
         vueV.addPage("Accueil", accueilV);
         vueV.addPage("Missions", missionV);
@@ -120,11 +120,20 @@ public class NavigationControleur {
             public void actionPerformed(ActionEvent e) {
                 Mission missionSelectionnee = missionV.getMissionSelectionnee();
                 if (missionSelectionnee != null) {
-                    modifMissionV.setMission(missionSelectionnee);
+                    // Crée une instance de ModifierMissionControleur en passant la mission sélectionnée
+                    ModifierMissionControleur modifMC = new ModifierMissionControleur(modifMissionV, missionDao, NavigationControleur.this, competenceDao, employeDao, missionSelectionnee);
+
+                    try {
+                        modifMC.preRemplirFormulaire();
+                    } catch (SQLException ex) {
+                        throw new RuntimeException(ex);
+                    }
+
                     vueV.showPage("Modification");
                 }
             }
         });
+
 
         vueV.getButtonAccueil().addActionListener(new ActionListener() {
             @Override
@@ -146,6 +155,10 @@ public class NavigationControleur {
     public void loadEmploye() {
         List<Employe> emp = this.employeDao.findAll();
         empView.setEmploye(emp);
+    }
+
+    public static DAOMission getMissionDao() {
+        return missionDaoInstance;
     }
 
     public static NavigationView getVueV() {
