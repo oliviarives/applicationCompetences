@@ -6,7 +6,6 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class RequeteCompetenceEmploye extends RequeteCompetence {
-
     @Override
     public String requete() {
         return "SELECT c.IDCMP, c.IDCATCMP, c.NOMCMPEN, c.NOMCMPFR FROM COMPETENCE c, POSSEDER p WHERE c.IDCMP = p.IDCMP AND c.IDCATCMP = p.IDCATCMP AND p.LOGINEMP = ?";
