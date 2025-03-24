@@ -31,7 +31,7 @@ public class AjouterMissionControleur {
         this.navC = navigationC;
         this.daoCompetence = daoComp;
         this.daoEmploye = daoEmp;
-       // this.listeEmployesSelectiones = daoEmploye.findEmpByCompetences(listeCompetencesSelectionnees);
+        // this.listeEmployesSelectiones = daoEmploye.findEmpByCompetences(listeCompetencesSelectionnees);
 
         creationMV.getButtonConfirmer().addActionListener(
                 new ActionListener() {
@@ -57,6 +57,8 @@ public class AjouterMissionControleur {
                             daoMission.ajouterMissionCmp(misInsert, cmpAjoutees);
                             daoMission.ajouterMissionEmp(misInsert, logEmpAjoutes);
                             navC.getVueV().getButtonMissions().doClick();
+                            creationMV.resetFields();
+
                         } catch (SQLException ex) {
                             throw new RuntimeException(ex);
                         }
