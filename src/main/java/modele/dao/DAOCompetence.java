@@ -1,13 +1,8 @@
 package modele.dao;
 
 import modele.Competence;
-import modele.Mission;
 import modele.connexion.CictOracleDataSource;
-import modele.dao.requetes.Competence.RequeteCompetence;
-import modele.dao.requetes.Competence.RequeteCompetenceAjouter;
-import modele.dao.requetes.Competence.RequeteCompetenceSelectAll;
-import modele.dao.requetes.Mission.RequeteMissionAjouter;
-import modele.dao.requetes.Mission.RequeteMissionSelectAll;
+import modele.dao.requetes.Competence.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -34,12 +29,29 @@ public class DAOCompetence {
     }
 
 
-
     public void ajouterCompetence(Competence cmp) throws SQLException{
         PreparedStatement ps = cn.prepareStatement(new RequeteCompetenceAjouter().requete());
         new RequeteCompetenceAjouter().parametres(ps,cmp);
         ps.executeUpdate();
     }
+
+    public List<Competence> findByCompetencesEmploye (String login) throws SQLException {
+        RequeteCompetenceEmploye req = new RequeteCompetenceEmploye();
+        List<Competence> liste = new ArrayList<>();
+            PreparedStatement ps = cn.prepareStatement(req.requete());
+            req.parametres(ps, login);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                liste.add(new Competence(
+                        rs.getInt("IDCMP"),
+                        rs.getString("IDCATCMP"),
+                        rs.getString("NOMCMPEN"),
+                        rs.getString("NOMCMPFR")
+                ));
+            }
+        return liste;
+    }
+
 
     public List<Competence> findAll() {
         List<Competence> resultats = new ArrayList<>();

@@ -22,42 +22,30 @@ public class NavigationControleur {
     private DAOEmploye employeDao = new DAOEmploye();
     private EmployeControleur empC = new EmployeControleur(empView,employeDao, this);
 
-    private MissionView misssionV = new MissionView();
+    private MissionView missionV = new MissionView();
     private ModificationMissionView modifMissionV = new ModificationMissionView();
     private CreationMissionView creaMissionV = new CreationMissionView();
     private DAOMission missionDao = new DAOMission();
-    private MissionControleur missionC = new MissionControleur(misssionV, missionDao, this, creaMissionV, modifMissionV);
+    private MissionControleur missionC = new MissionControleur(missionV, missionDao, this, creaMissionV, modifMissionV);
     private AjouterMissionControleur ajoutMC = new AjouterMissionControleur(creaMissionV,missionDao,this,competenceDao,employeDao);
     private ModifierMissionControleur modifMC = new ModifierMissionControleur(modifMissionV, missionDao, this, competenceDao, employeDao);
 
     private AjoutPersonnelVue ajoutPersonnelV = new AjoutPersonnelVue();
     private AjouterPersonnelControleur ajoutPersonnelC= new AjouterPersonnelControleur(ajoutPersonnelV, employeDao, competenceDao, this);
+    private ModificationPersonnelVue modifEmployeVue = new ModificationPersonnelVue();
+    private ModifierPersonnelControleur modifEmployeC = new ModifierPersonnelControleur(modifEmployeVue, employeDao, competenceDao, this);
 
     private AccueilVue accueilV = new AccueilVue();
 
     public NavigationControleur( NavigationView navView) throws SQLException {
         this.vueV =navView;
 
-        //EmployeView empView = new EmployeView();
-        //DAOEmploye employeDao = new DAOEmploye();
-        //EmployeControleur empC = new EmployeControleur(empView, employeDao, this);
-
-        MissionView missionV = new MissionView();
-        ModificationMissionView modifMissionV = new ModificationMissionView();
-        CreationMissionView creaMissionV = new CreationMissionView();
-        DAOMission missionDao = new DAOMission();
-        MissionControleur missionC = new MissionControleur(missionV, missionDao, this, creaMissionV, modifMissionV);
-        AjouterMissionControleur ajoutMC = new AjouterMissionControleur(creaMissionV, missionDao, this, competenceDao, employeDao);
-        ModifierMissionControleur modifMC = new ModifierMissionControleur(modifMissionV, missionDao, this, competenceDao, employeDao);
-
-        AjoutPersonnelVue ajoutPersonnelV = new AjoutPersonnelVue();
-        AjouterPersonnelControleur ajoutPersonnelC = new AjouterPersonnelControleur(ajoutPersonnelV, employeDao, competenceDao, this);
-
         missionC.loadMissions();
         competenceC.loadCompetences();
         ajoutMC.loadCompetences();
         ajoutMC.loadEmployes();
         ajoutPersonnelC.loadCompetences();
+        modifEmployeC.loadCompetences();
         empC.loadEmploye();
         modifMC.loadCompetences();
         modifMC.loadEmployes();
@@ -69,6 +57,7 @@ public class NavigationControleur {
         vueV.addPage("Employe", empView);
         vueV.addPage("Modification", modifMissionV);
         vueV.addPage("AjouterEmploye", ajoutPersonnelV);
+        vueV.addPage("ModifierEmploye", modifEmployeVue);
 
         vueV.getButtonMissions().addActionListener(new ActionListener() {
             @Override
@@ -92,10 +81,22 @@ public class NavigationControleur {
             }
         });
 
-        empView.getBouttonAjouterEmploye().addActionListener(new ActionListener() {
+        empView.getButtonAjouterEmploye().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 vueV.showPage("AjouterEmploye");
+            }
+        });
+
+        empView.getButtonModifierEmploye().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Employe employeSelectionnee = empView.getEmployeSelectionne();
+                if (employeSelectionnee != null) {
+                    modifEmployeVue.setEmploye(employeSelectionnee);
+                    vueV.showPage("ModifierEmploye");
+                    modifEmployeC.loadCompetencesEmploye();
+                }
             }
         });
 
@@ -116,6 +117,7 @@ public class NavigationControleur {
                 }
             }
         });
+
 
         vueV.getButtonAccueil().addActionListener(new ActionListener() {
             @Override

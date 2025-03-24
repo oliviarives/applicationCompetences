@@ -49,12 +49,47 @@ public class DAOEmploye {
         ps.executeQuery();
     }
 
+    public void modifierPersonnel(Employe employe) throws SQLException {
+        RequeteEmployeModifier req = new RequeteEmployeModifier();
+        PreparedStatement ps = cn.prepareStatement(req.requete());
+        req.parametres(ps, employe);
+        ps.executeUpdate();
+    }
+
+    public void retirerToutesCompetences(String loginEmp) throws SQLException {
+        RequeteEmployeRetirerCmp req = new RequeteEmployeRetirerCmp();
+        PreparedStatement ps = cn.prepareStatement(req.requete());
+        req.parametres(ps, loginEmp);
+        ps.executeUpdate();
+    }
+
+
+    public Employe findByLogin(String login) throws SQLException {
+        RequeteEmployeById req = new RequeteEmployeById();
+        PreparedStatement ps = cn.prepareStatement(req.requete());
+        req.parametres(ps, login);
+        ResultSet rs = ps.executeQuery();
+
+        if (rs.next()) {
+            return new Employe(
+                    rs.getString("PRENOMEMP"),
+                    rs.getString("NOMEMP"),
+                    rs.getString("LOGINEMP"),
+                    rs.getString("MDPEMP"),
+                    rs.getString("POSTEEMP"),
+                    rs.getDate("DATEENTREEEMP")
+            );
+        }
+        return null;
+    }
+
+
     public boolean loginExist(String login) throws SQLException {
         RequeteLoginExist req = new RequeteLoginExist();
         PreparedStatement ps = cn.prepareStatement(req.requete());
         req.parametres(ps, login);
         ResultSet rs = ps.executeQuery();
-        return rs.next(); // Retourne vrai si un login existe déjà
+        return rs.next(); // Retourne vrai si un login existe déjà dans la base
     }
 
     public void ajouterPossession(String loginEmp, Competence cmp) throws SQLException {
