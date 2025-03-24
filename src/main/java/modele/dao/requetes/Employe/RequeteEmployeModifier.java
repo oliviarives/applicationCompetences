@@ -11,11 +11,11 @@ public class RequeteEmployeModifier extends RequeteEmploye {
         return "UPDATE EMPLOYE SET PRENOMEMP = ?, NOMEMP = ?, DATEENTREEEMP = ?, MDPEMP = ?, ACTIF = ?, POSTEEMP = ? WHERE LOGINEMP = ?";
     }
 
-    @Override
+    //@Override
     public void parametres(PreparedStatement prSt, String... id) throws SQLException {
     }
 
-    @Override
+    //@Override
     public void parametres(PreparedStatement prSt, Employe obj) throws SQLException {
         prSt.setString(1, obj.getPrenom());
         prSt.setString(2, obj.getNom());
