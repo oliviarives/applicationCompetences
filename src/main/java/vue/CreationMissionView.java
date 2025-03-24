@@ -1,5 +1,6 @@
 package vue;
 
+import com.toedter.calendar.JDateChooser;
 import modele.Competence;
 import modele.Employe;
 import utilitaires.StyleManager;
@@ -17,14 +18,12 @@ import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.List;
 
-// @TODO CB select calendar
-
 public class CreationMissionView extends JPanel {
     private JButton buttonConfirmer;
     private JTextField titreMisField;
     private JTextArea descriptionMisField;
-    private JFormattedTextField dateDebutMisField;
-    private JFormattedTextField dateFinMisField;
+    private JDateChooser dateDebutMisField;
+    private JDateChooser dateFinMisField;
     private JSpinner nbEmpField;
     private JTextField logEmpField;
     private JButton ajouterCompetences;
@@ -82,10 +81,16 @@ public class CreationMissionView extends JPanel {
 
         this.titreMisField = new JTextField(20);
         this.descriptionMisField = new JTextArea(3,30);
-        this.dateDebutMisField = new JFormattedTextField(dateFormatter);
-        this.dateDebutMisField.setValue(new Date(System.currentTimeMillis()));
-        this.dateFinMisField = new JFormattedTextField(dateFormatter);
-        this.dateFinMisField.setValue(new Date(System.currentTimeMillis()));
+        this.dateDebutMisField = new JDateChooser();
+        dateDebutMisField.setDateFormatString("yyyy-MM-dd");
+        dateDebutMisField.setDate(new java.util.Date());
+        dateDebutMisField.setPreferredSize(new Dimension(100, 25));
+
+        this.dateFinMisField = new JDateChooser();
+        dateFinMisField.setDateFormatString("yyyy-MM-dd");
+        dateFinMisField.setDate(new java.util.Date());
+        dateFinMisField.setPreferredSize(new Dimension(100, 25));
+
         SpinnerModel modelSpinner = new SpinnerNumberModel(0, 0, 30, 1);
         this.nbEmpField = new JSpinner(modelSpinner);
         this.logEmpField = new JTextField(15);
@@ -94,7 +99,7 @@ public class CreationMissionView extends JPanel {
         this.ajouterEmployes = new JButton("Ajouter Employés");
         this.cardLayout = new CardLayout();
         this.cardLayoutPanel = new JPanel(cardLayout);
-        this.titreLabel = new JLabel("création d'une mission");
+        this.titreLabel = new JLabel("Création d'une mission");
 
         //Titre Mission
         panelTitre.add(new JLabel("Titre Mission : "));
@@ -121,11 +126,12 @@ public class CreationMissionView extends JPanel {
         setDatesModifiables(false);
         formulaire.add(modifDates);
 
+
         //Nbr d'employé dans mission
-        panelNbEmp.add(new JLabel("Nombre d'émployé necessaires : "));
+        panelNbEmp.add(new JLabel("Nombre d'employé nécessaires : "));
         panelNbEmp.add(nbEmpField);
         //login employé créateur mission
-        loginEmp.add(new JLabel("login employé : "));
+        loginEmp.add(new JLabel("Login employé : "));
         loginEmp.add(logEmpField);
         formulaire.add(panelNbEmp);
         formulaire.add(loginEmp);
@@ -209,16 +215,20 @@ public class CreationMissionView extends JPanel {
     }
 
     public java.sql.Date getDateDebutMisField() {
-        return java.sql.Date.valueOf( this.dateDebutMisField.getText());
+        java.util.Date d = dateDebutMisField.getDate();
+        return (d != null) ? new java.sql.Date(d.getTime()) : null;
     }
+
 
     public String getLogEmpField() {
         return this.logEmpField.getText();
     }
 
     public java.sql.Date getDateFinMisField() {
-        return java.sql.Date.valueOf(this.dateFinMisField.getText());
+        java.util.Date d = dateFinMisField.getDate();
+        return (d != null) ? new java.sql.Date(d.getTime()) : null;
     }
+
 
     public int getNbEmpField() {
         return Integer.parseInt(this.nbEmpField.getValue().toString());
@@ -245,6 +255,14 @@ public class CreationMissionView extends JPanel {
         return this.employesTable;
     }
 
+    public JButton getBoutonModifierDates(){
+        return this.bouttonModifierDates;
+    }
+
+    public JButton getBouttonConfirmerDates(){
+        return this.bouttonConfirmerDates;
+    }
+
     public void setCompetencesAjout(List<Competence> competences) {
         //System.out.println("Mise à jour de la table des compétences avec " + competences.size() + " entrées."); // Debug
         String[] columnNames = {"Id", "Categorie","Nom (En)","Nom (FR)"};
@@ -261,7 +279,6 @@ public class CreationMissionView extends JPanel {
     }
 
     public void setEmploye(List<Employe> emp) {
-        HashSet<String> testUniciteEmp = new HashSet<>();
         String[] columnNames = {"login","Prenom","Nom","Poste"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0){
             public boolean isCellEditable(int row, int col) {
@@ -269,10 +286,8 @@ public class CreationMissionView extends JPanel {
             }
         };
         for (Employe e : emp) {
-            if (testUniciteEmp.add(e.getLogin())) {
-                Object[] row = {e.getLogin(), e.getPrenom(), e.getNom(), e.getPoste()};
-                model.addRow(row);
-            }
+            Object[] row = {e.getLogin(),e.getPrenom(),e.getNom(),e.getPoste()};
+            model.addRow(row);
         }
         this.employesTable.setModel(model);
         TableColumn column = this.employesTable.getColumnModel().getColumn(0);
@@ -351,56 +366,33 @@ public class CreationMissionView extends JPanel {
         return  resultSet;
     }
 
-    public JButton getBoutonModifierDates(){
-        return this.bouttonModifierDates;
-    }
-
-    public JButton getBouttonConfirmerDates(){
-        return this.bouttonConfirmerDates;
-    }
-
     public void setDatesModifiables(boolean b){
         this.dateDebutMisField.setEnabled(b);
         this.dateFinMisField.setEnabled(b);
     }
 
-    public JSpinner getSpinnerEmp(){
-        return this.nbEmpField;
-    }
-    //fonction de remise à 0 des champ du formulaire de création mission
-    public void setBlanck(){
-        this.titreMisField.setText("");
-        this.descriptionMisField.setText("");
-        this.logEmpField.setText("");
-        this.dateDebutMisField.setValue(new Date(System.currentTimeMillis()));
-        this.dateFinMisField.setValue(new Date(System.currentTimeMillis()));
 
-        DefaultTableModel modelemp = (DefaultTableModel) this.listeEmployesAjoutee.getModel();
-        while (modelemp.getRowCount() > 0) {
-            modelemp.removeRow(0);
-        }
-        DefaultTableModel modelcmp = (DefaultTableModel) this.listeCompetenceAjoutee.getModel();
-        while (modelcmp.getRowCount() > 0) {
-            modelcmp.removeRow(0);
-        }
-        modelcmp.setRowCount(0);
-        this.nbEmpField.setValue(0);
-        showPage("tabCompetences");
+    public void resetFields() {
+        // Vider les champs de texte
+        titreMisField.setText("");
+        descriptionMisField.setText("");
+        logEmpField.setText("");
+
+        // Réinitialiser les JDateChooser
+        dateDebutMisField.setDate(null);
+        dateFinMisField.setDate(null);
+
+        // Réinitialiser le JSpinner
+        nbEmpField.setValue(0); // ou 1, selon votre valeur par défaut souhaitée
+
+        // Réinitialiser les tableaux d'ajouts
+        DefaultTableModel modelComp = (DefaultTableModel) listeCompetenceAjoutee.getModel();
+        modelComp.setRowCount(0);
+
+        DefaultTableModel modelEmp = (DefaultTableModel) listeEmployesAjoutee.getModel();
+        modelEmp.setRowCount(0);
     }
 
 
-    public int verificationChampConfirmation(){
-        if(this.titreMisField.getText().equals("")){
-            return 1;
-        }else if(this.logEmpField.getText().equals("")){
-            return 2;
-        }else if(this.dateDebutMisField.getValue() == null){
-            return 3;
-        }else if(this.dateFinMisField.getValue() == null){
-            return 4;
-        } else if(this.nbEmpField.getValue().equals("0")){
-            return 5;
-        } else{
-            return 0;
-        }
-    }}
+
+}

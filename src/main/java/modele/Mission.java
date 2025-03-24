@@ -1,4 +1,3 @@
-
 package modele;
 
 import java.sql.Date;
@@ -14,12 +13,10 @@ public class Mission {
     private String loginEmp;
     private int idSta;
     private String nomSta;
-    static int compteurMis=0;
+    static int compteurMis = 20;
     //constructeur avec 7 dont login arguments si creation d'une mission
     public Mission(String titre, Date dateDebut, Date dateFin, String d, Date dateC, int nbEmp, String login,int idS) {
-
-        this.idMis = ++compteurMis;
-        System.out.println("id nvlle mission creer : "+this.idMis);
+        this.idMis = compteurMis++;
         this.titreMis = titre;
         this.dateDebutMis = dateDebut;
         this.dateFinMis = dateFin;
@@ -29,17 +26,18 @@ public class Mission {
         this.nbEmpMis = nbEmp;
         this.idSta = idS;
     }
-    //constructeur avec 7 arguments si mission déjà existante dans la base de données
-    public Mission(int id,String titre, Date dateDebut, Date dateFin, String d, Date dateC, int nbEmp, String nSta) {
-        this.idMis =id;
+
+    public Mission(int idMis, String titre, Date dateDebut, Date dateFin, String description, Date dateCreation, int nbEmp, String nomSta) {
+        this.idMis = idMis;
         this.titreMis = titre;
         this.dateDebutMis = dateDebut;
         this.dateFinMis = dateFin;
-        this.description = d;
-        this.dateCreation = dateC;
-        this.nomSta = nSta;
+        this.description = description;
+        this.dateCreation = dateCreation;
         this.nbEmpMis = nbEmp;
+        this.nomSta = nomSta;
     }
+
 
     public int getIdMission() {
         return this.idMis;
@@ -75,7 +73,14 @@ public class Mission {
         return this.loginEmp;
     }
 
-    public void setlastIdmis(int i){
-        this.compteurMis = i;
+    public int getIdSta(){
+        return this.idSta;
     }
+
+    public void setIdMission(int id) {
+        this.idMis = id;
+    }
+
+
+
 }

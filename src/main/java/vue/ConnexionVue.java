@@ -1,14 +1,15 @@
 package vue;
 import controleur.NavigationControleur;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Logger;
 import javax.swing.*;
 import controleur.ConnexionControleur;
 import modele.connexion.CictOracleDataSource;
-import modele.dao.UtilisateurDAO;
-import utilitaires.Config;
+import modele.dao.DAOUtilisateur;
 
 public class ConnexionVue extends JDialog {
     private final ConnexionControleur controleur;
@@ -56,14 +57,12 @@ public class ConnexionVue extends JDialog {
      */
     public static void main(String[] args) {
         try {
-            // Création de l'accès à la bd
-            CictOracleDataSource.creerAcces(Config.get("db.user"), Config.get("db.password"));
             Connection connection = CictOracleDataSource.getConnectionBD();
             if (connection == null || connection.isClosed()) {
                 throw new SQLException("Impossible d'obtenir une connexion valide à la base de données.");
             }
 
-            ConnexionControleur controleur = new ConnexionControleur(new UtilisateurDAO(connection));
+            ConnexionControleur controleur = new ConnexionControleur(new DAOUtilisateur());
 
             // Passer le contrôleur à la vue
             new ConnexionVue(controleur);
@@ -74,7 +73,7 @@ public class ConnexionVue extends JDialog {
     }
 
     /**
-     * Vérifie la connexion (appel au contrôleur).
+     * Vérifie la connexion
      */
     private void verifierConnexion() {
         String identifiant = IdentifiantJTextField.getText();
@@ -84,19 +83,31 @@ public class ConnexionVue extends JDialog {
         boolean connexionReussie = this.controleur.tenterConnexion(identifiant, motDePasse);
 
         if (connexionReussie) {
-            // Ouvrir la fenêtre d'accueil
             try {
                 new NavigationControleur(navigationView);
+                navigationView.setVisible(true);
+                setVisible(false);
+                dispose();
+
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
-
-            navigationView.setVisible(true);
-            setVisible(false); // Masque la fenêtre
-            dispose(); // Ferme la fenêtre
         } else {
+            // Affichage du message d'erreur
             messageLabel.setText("Identifiant ou mot de passe incorrect !");
             messageLabel.setForeground(Color.RED);
+
+            // Démarrer un Timer pour effacer le message après 3 secondes
+            Timer timer = new Timer(3000, new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    messageLabel.setText(""); // Effacer le message
+                }
+            });
+
+            timer.setRepeats(false); // Exécuter une seule fois
+            timer.start();
         }
     }
 }
+
