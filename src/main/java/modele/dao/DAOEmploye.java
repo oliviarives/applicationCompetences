@@ -1,13 +1,10 @@
 package modele.dao;
 
+import modele.dao.requetes.Employe.*;
 import utilitaires.Config;
 import modele.Competence;
 import modele.Employe;
 import modele.connexion.CictOracleDataSource;
-import modele.dao.requetes.Employe.RequeteEmployeAjouter;
-import modele.dao.requetes.Employe.RequeteEmployeSelectAll;
-import modele.dao.requetes.Employe.RequeteLoginExist;
-import modele.dao.requetes.Employe.RequeteEmployeSelectByCmp;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -59,6 +56,14 @@ public class DAOEmploye {
         ResultSet rs = ps.executeQuery();
         return rs.next(); // Retourne vrai si un login existe déjà
     }
+
+    public void ajouterPossession(String loginEmp, Competence cmp) throws SQLException {
+        RequeteEmployeAjouterCmp req = new RequeteEmployeAjouterCmp();
+        PreparedStatement ps = cn.prepareStatement(req.requete());
+        req.parametres(ps, loginEmp, cmp);
+        ps.executeUpdate();
+    }
+
 
     protected Employe creerInstanceCmp(ResultSet rset) throws SQLException {
         return new Employe(

@@ -4,14 +4,14 @@ import java.sql.*;
 import modele.MdpUtils;
 import modele.connexion.CictOracleDataSource;
 
-public class UtilisateurDAO {
+public class DAOUtilisateur {
 
     private Connection connexion;
 
     /**
      * Constructeur avec injection de connexion à la base de données.
      */
-    public UtilisateurDAO() {
+    public DAOUtilisateur() {
         this.connexion = CictOracleDataSource.getConnectionBD();
     }
 

@@ -9,8 +9,7 @@ import java.util.logging.Logger;
 import javax.swing.*;
 import controleur.ConnexionControleur;
 import modele.connexion.CictOracleDataSource;
-import modele.dao.UtilisateurDAO;
-import utilitaires.Config;
+import modele.dao.DAOUtilisateur;
 
 public class ConnexionVue extends JDialog {
     private final ConnexionControleur controleur;
@@ -63,7 +62,7 @@ public class ConnexionVue extends JDialog {
                 throw new SQLException("Impossible d'obtenir une connexion valide à la base de données.");
             }
 
-            ConnexionControleur controleur = new ConnexionControleur(new UtilisateurDAO());
+            ConnexionControleur controleur = new ConnexionControleur(new DAOUtilisateur());
 
             // Passer le contrôleur à la vue
             new ConnexionVue(controleur);

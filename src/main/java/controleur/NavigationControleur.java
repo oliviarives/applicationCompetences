@@ -32,16 +32,16 @@ public class NavigationControleur {
     private ModifierMissionControleur modifMC = new ModifierMissionControleur(modifMissionV, missionDao, this, competenceDao, employeDao);
 
     private AjoutPersonnelVue ajoutPersonnelV = new AjoutPersonnelVue();
-    private AjouterPersonnelControleur ajoutPersonnelC= new AjouterPersonnelControleur(ajoutPersonnelV, employeDao, this);
+    private AjouterPersonnelControleur ajoutPersonnelC= new AjouterPersonnelControleur(ajoutPersonnelV, employeDao, competenceDao, this);
 
     private AccueilVue accueilV = new AccueilVue();
 
     public NavigationControleur( NavigationView navView) throws SQLException {
         this.vueV =navView;
 
-        EmployeView empView = new EmployeView();
-        DAOEmploye employeDao = new DAOEmploye();
-        EmployeControleur empC = new EmployeControleur(empView, employeDao, this);
+        //EmployeView empView = new EmployeView();
+        //DAOEmploye employeDao = new DAOEmploye();
+        //EmployeControleur empC = new EmployeControleur(empView, employeDao, this);
 
         MissionView missionV = new MissionView();
         ModificationMissionView modifMissionV = new ModificationMissionView();
@@ -52,12 +52,13 @@ public class NavigationControleur {
         ModifierMissionControleur modifMC = new ModifierMissionControleur(modifMissionV, missionDao, this, competenceDao, employeDao);
 
         AjoutPersonnelVue ajoutPersonnelV = new AjoutPersonnelVue();
-        AjouterPersonnelControleur ajoutPersonnelC = new AjouterPersonnelControleur(ajoutPersonnelV, employeDao, this);
+        AjouterPersonnelControleur ajoutPersonnelC = new AjouterPersonnelControleur(ajoutPersonnelV, employeDao, competenceDao, this);
 
         missionC.loadMissions();
         competenceC.loadCompetences();
         ajoutMC.loadCompetences();
         ajoutMC.loadEmployes();
+        ajoutPersonnelC.loadCompetences();
         empC.loadEmploye();
         modifMC.loadCompetences();
         modifMC.loadEmployes();
