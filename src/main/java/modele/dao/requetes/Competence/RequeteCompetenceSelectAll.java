@@ -19,7 +19,7 @@ public class RequeteCompetenceSelectAll extends RequeteCompetence {
      * @throws SQLException Si une erreur SQL survient.
      */
     public void parametres(PreparedStatement prSt, String... id) throws SQLException {
-
+        throw new UnsupportedOperationException("Non utilisé pour cette requête.");
     }
 
     /**
@@ -30,6 +30,6 @@ public class RequeteCompetenceSelectAll extends RequeteCompetence {
      * @throws SQLException Si une erreur SQL survient.
      */
     public void parametres(PreparedStatement prSt, Competence obj) throws SQLException {
-
+        throw new UnsupportedOperationException("Non utilisé pour cette requête.");
     }
 }
