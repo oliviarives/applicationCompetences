@@ -1,19 +1,18 @@
 package modele.dao.requetes.Competence;
 
 import modele.Competence;
-import modele.Mission;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class RequeteCompetenceAjouter extends RequeteCompetence{
+public class RequeteCompetenceEmploye extends RequeteCompetence {
     @Override
     public String requete() {
-        return "INSERT INTO COMPETENCE () VALUES (?,?,?,…)";
+        return "SELECT c.IDCMP, c.IDCATCMP, c.NOMCMPEN, c.NOMCMPFR FROM COMPETENCE c, POSSEDER p WHERE c.IDCMP = p.IDCMP AND c.IDCATCMP = p.IDCATCMP AND p.LOGINEMP = ?";
     }
 
     public void parametres(PreparedStatement prSt, String... id) throws SQLException {
-        throw new UnsupportedOperationException("Non utilisé pour cette requête.");
+        prSt.setString(1, id[0]);
     }
 
     public void parametres(PreparedStatement prSt, Competence obj) throws SQLException {

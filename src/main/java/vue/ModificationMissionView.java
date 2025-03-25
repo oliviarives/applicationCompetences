@@ -41,6 +41,8 @@ public class ModificationMissionView extends JPanel {
     private JScrollPane listeEmployesScrollPane;
     private JTextField nomStaField;
 
+    private static final String NOM_EN = "Nom (En)";
+    private static final String NOM_FR = "Nom (Fr)";
 
     public ModificationMissionView() {
         StyleManager.setupFlatLaf();
@@ -117,7 +119,7 @@ public class ModificationMissionView extends JPanel {
         JLabel competenceLabel = new JLabel("Compétences ajoutées :");
         panellisteCompetences.add(competenceLabel, BorderLayout.NORTH); // Place le label en haut
         this.listeCompetenceAjoutee = new JTable();
-        String[] columnNames = {"Id", "Categorie", "Nom (En)", "Nom (FR)"};
+        String[] columnNames = {"Id", "Categorie", NOM_EN, NOM_FR };
         DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
             public boolean isCellEditable(int row, int col) {  //cellules de la table ne sont plus editables
                 return false;
@@ -231,7 +233,7 @@ public class ModificationMissionView extends JPanel {
 
     public void setCompetencesAjout(List<Competence> competences) {
         //System.out.println("Mise à jour de la table des compétences avec " + competences.size() + " entrées."); // Debug
-        String[] columnNames = {"Id", "Categorie", "Nom (En)", "Nom (FR)"};
+        String[] columnNames = {"Id", "Categorie", NOM_EN, NOM_FR};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
             public boolean isCellEditable(int row, int col) {
                 return false;
@@ -335,7 +337,7 @@ public class ModificationMissionView extends JPanel {
      * @param competences la liste des compétences à afficher.
      */
     public void remplirTableauCompetences(List<Competence> competences) {
-        String[] columnNames = {"Id", "Catégorie", "Nom (En)", "Nom (FR)"};
+        String[] columnNames = {"Id", "Catégorie", NOM_EN, NOM_FR};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {

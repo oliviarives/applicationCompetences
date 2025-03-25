@@ -49,6 +49,40 @@ public class DAOEmploye {
         ps.executeQuery();
     }
 
+    public void modifierPersonnel(Employe employe) throws SQLException {
+        RequeteEmployeModifier req = new RequeteEmployeModifier();
+        PreparedStatement ps = cn.prepareStatement(req.requete());
+        req.parametres(ps, employe);
+        ps.executeUpdate();
+    }
+
+    public void retirerToutesCompetences(String loginEmp) throws SQLException {
+        RequeteEmployeRetirerCmp req = new RequeteEmployeRetirerCmp();
+        PreparedStatement ps = cn.prepareStatement(req.requete());
+        req.parametres(ps, loginEmp);
+        ps.executeUpdate();
+    }
+
+
+    public Employe findByLogin(String login) throws SQLException {
+        RequeteEmployeById req = new RequeteEmployeById();
+        PreparedStatement ps = cn.prepareStatement(req.requete());
+        req.parametres(ps, login);
+        ResultSet rs = ps.executeQuery();
+
+        if (rs.next()) {
+            return new Employe(
+                    rs.getString("PRENOMEMP"),
+                    rs.getString("NOMEMP"),
+                    rs.getString("LOGINEMP"),
+                    rs.getString("MDPEMP"),
+                    rs.getString("POSTEEMP"),
+                    rs.getDate("DATEENTREEEMP")
+            );
+        }
+        return null;
+    }
+
     public void ajouterPossession(String loginEmp, Competence cmp) throws SQLException {
         RequeteEmployeAjouterCmp req = new RequeteEmployeAjouterCmp();
         PreparedStatement ps = cn.prepareStatement(req.requete());
@@ -96,22 +130,6 @@ public class DAOEmploye {
     public List<Employe> findEmpByCmp() {
         return findAll();
     }
-
-    /*public List<Employe> findEmpByCmp() {
-        List<Employe> resultats = new ArrayList<>();
-        try {
-            PreparedStatement req = cn.prepareStatement(new RequeteEmployeSelectAll().requete());
-            try (ResultSet curseur = req.executeQuery()) {
-                while (curseur.next()) {
-                    Employe instance = creerInstance(curseur);
-                    resultats.add(instance);
-                }
-            }
-        } catch (SQLException e) {
-            System.err.println(e.getMessage());
-        }
-        return resultats;
-    }*/
 
     public List<Employe> findEmpByCompetences(List<Competence> competences) {
         Set<Employe> lemp = new HashSet<>();

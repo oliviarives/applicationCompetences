@@ -18,6 +18,6 @@ public class RequeteLoginExist extends RequeteEmploye {
 
     
     public void parametres(PreparedStatement prSt, Employe obj) throws SQLException {
-
+        throw new UnsupportedOperationException("Non utilisé pour cette requête.");
     }
 }

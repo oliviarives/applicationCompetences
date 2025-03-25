@@ -5,18 +5,18 @@ import modele.Employe;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class RequeteEmployeSelectAll extends RequeteEmploye{
+public class RequeteEmployeRetirerCmp extends RequeteEmploye {
+
     @Override
     public String requete() {
-        return "SELECT * FROM EMPLOYE";
-        //return "SELECT * FROM EMPLOYE";
+        return "DELETE FROM POSSEDER WHERE LOGINEMP = ?";
     }
 
     public void parametres(PreparedStatement prSt, String... id) throws SQLException {
-        throw new UnsupportedOperationException("Non utilisé pour cette requête.");
+        prSt.setString(1, id[0]); // id[0] correspond au login de l'employé
     }
 
     public void parametres(PreparedStatement prSt, Employe obj) throws SQLException {
-        throw new UnsupportedOperationException("Non utilisé pour cette requête.");
+        prSt.setString(1, obj.getLogin());
     }
 }
