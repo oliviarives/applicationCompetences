@@ -111,8 +111,8 @@ public class AjouterMissionControleur {
                     daoMission.ajouterMissionCmp(misInsert, cmpAjoutees);
                     daoMission.ajouterMissionEmp(misInsert, logEmpAjoutes);
 
-                    // Si on a affecté au moins une compétence et un employé, on met à jour le statut à "Planifiée" (idSta = 2)
-                    if(!cmpAjoutees.isEmpty() && !logEmpAjoutes.isEmpty()) {
+                    // Si on a affecté au moins un employé, on met à jour le statut à "Planifiée" (idSta = 2)
+                    if(!logEmpAjoutes.isEmpty()) {
                         daoMission.updateMissionStatus(misInsert, 2);
                     }
 
@@ -225,7 +225,8 @@ public class AjouterMissionControleur {
                     public void actionPerformed(ActionEvent e) {
                         creationMV.setDatesModifiables(false);
                         //daoEmp.setListeEmpCmp();
-                        daoEmp.miseAJourEmpByCmpByDate(creationMV.getDateDebutMisField(), creationMV.getDateFinMisField());
+                        //daoEmp.miseAJourEmpByCmpByDate(creationMV.getDateDebutMisField(), creationMV.getDateFinMisField());
+                        creationMV.setEmploye(daoEmp.miseAJourEmpByCmpByDate(creationMV.getDateDebutMisField(), creationMV.getDateFinMisField()));
                     }
                 }
         );

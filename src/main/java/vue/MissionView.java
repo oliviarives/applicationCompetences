@@ -32,6 +32,7 @@ public class MissionView extends JPanel {
     private JButton ajouterMission;
     private JButton modifierMission;
     private DAOMission missionDAO;
+    private int idMissionSelect;
 
     private static final String FORMAT_DATE = "yyyy-MM-dd";
 
@@ -243,6 +244,7 @@ public class MissionView extends JPanel {
         if(mission == null) {
             JOptionPane.showMessageDialog(this, "Aucune mission trouvée pour l'id " + idMission);
         }
+        this.idMissionSelect = idMission;
         return mission;
     }
 
@@ -250,6 +252,10 @@ public class MissionView extends JPanel {
 
     public JTable getMissionTable() {
         return this.tableMission;
+    }
+
+    public int getIdMissionSelect(){
+        return this.idMissionSelect;
     }
 }
 
