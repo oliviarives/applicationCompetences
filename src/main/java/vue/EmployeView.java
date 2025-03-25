@@ -6,9 +6,12 @@ import utilitaires.StyleManager;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.io.Serial;
 import java.util.List;
 
 public class EmployeView extends JPanel {
+    @Serial
+    private static final long serialVersionUID = 1L;
     private final JTable tableEmploye;
     private final JScrollPane scrollEmploye;
     private final JPanel panelBouttons;
@@ -42,6 +45,7 @@ public class EmployeView extends JPanel {
 
         String[] columnNames = {"Prenom","Nom","Poste"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0){
+            @Override
             public boolean isCellEditable(int row, int col) {
                 return false;
             }
@@ -51,7 +55,6 @@ public class EmployeView extends JPanel {
             Object[] row = {e.getPrenom(), e.getNom(), e.getPoste()};
             model.addRow(row);
         }
-
         this.tableEmploye.setModel(model);
     }
 

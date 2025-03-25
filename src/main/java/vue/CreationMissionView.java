@@ -8,65 +8,45 @@ import utilitaires.StyleManager;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
-import javax.swing.text.DateFormatter;
 import java.awt.*;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.sql.Date;
 import java.util.ArrayList;
-import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.List;
 
 public class CreationMissionView extends JPanel {
-    private JButton buttonConfirmer;
-    private JTextField titreMisField;
-    private JTextArea descriptionMisField;
-    private JDateChooser dateDebutMisField;
-    private JDateChooser dateFinMisField;
-    private JSpinner nbEmpField;
-    private JTextField logEmpField;
-    private JButton ajouterCompetences;
-    private JButton ajouterEmployes;
-    private JSplitPane splitPane;
-    private JPanel formulaire;
-    private JPanel affichage;
-    private JTable competenceTable;
-    private JScrollPane competenceScrollPane;
-    private JTable employesTable;
-    private JScrollPane employeScrollPane;
-    private CardLayout cardLayout;
-    private JPanel cardLayoutPanel;
-    private JLabel titreLabel;
-    private JTable listeCompetenceAjoutee;
-    private JScrollPane listeCompetenceScrollPane;
-    private JTable listeEmployesAjoutee;
-    private JScrollPane listeEmployesScrollPane;
-    private List<Competence> listeCmpAffichees;
-    private List<Employe> listeEmpAffiches;
-    private List<String> listeLoginEmpAjout;
-    private JButton bouttonModifierDates;
-    private JButton bouttonConfirmerDates;
+    private final JButton buttonConfirmer;
+    private final JTextField titreMisField;
+    private final JTextArea descriptionMisField;
+    private final JDateChooser dateDebutMisField;
+    private final JDateChooser dateFinMisField;
+    private final JSpinner nbEmpField;
+    private final JTextField logEmpField;
+    private final JButton ajouterCompetences;
+    private final JButton ajouterEmployes;
+    private final JTable competenceTable;
+    private final JTable employesTable;
+    private final CardLayout cardLayout;
+    private final JPanel cardLayoutPanel;
+    private final JTable listeCompetenceAjoutee;
+    private final JTable listeEmployesAjoutee;
+    private final JButton bouttonModifierDates;
+    private final JButton bouttonConfirmerDates;
+
+    private static final String FORMAT_DATE = "yyyy-MM-dd";
 
 
     public CreationMissionView() {
         StyleManager.setupFlatLaf();
         setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
 
-        //Partie Formulaire Mission
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        DateFormatter dateFormatter = new DateFormatter(formatter);
+        //Partie formulaire
+        JSplitPane splitPane = new JSplitPane();
+        splitPane.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
+        splitPane.setDividerLocation(600);
 
-        this.splitPane = new JSplitPane();
-        this.splitPane.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
-        this.splitPane.setDividerLocation(600);
+        JPanel formulaire = new JPanel();
 
-        //this.formulaire.setLayout(new BoxLayout(formulaire, BoxLayout.Y_AXIS));
-        this.formulaire = new JPanel();
-        //this.affichage = new JPanel();
-
-        this.formulaire.setLayout(new BoxLayout(formulaire, BoxLayout.Y_AXIS));
-        //this.affichage.setLayout(new BorderLayout());
+        formulaire.setLayout(new BoxLayout(formulaire, BoxLayout.Y_AXIS));
 
         JPanel panelTitre = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JPanel panelDescription = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -82,12 +62,12 @@ public class CreationMissionView extends JPanel {
         this.titreMisField = new JTextField(20);
         this.descriptionMisField = new JTextArea(3,30);
         this.dateDebutMisField = new JDateChooser();
-        dateDebutMisField.setDateFormatString("yyyy-MM-dd");
+        dateDebutMisField.setDateFormatString(FORMAT_DATE);
         dateDebutMisField.setDate(new java.util.Date());
         dateDebutMisField.setPreferredSize(new Dimension(100, 25));
 
         this.dateFinMisField = new JDateChooser();
-        dateFinMisField.setDateFormatString("yyyy-MM-dd");
+        dateFinMisField.setDateFormatString(FORMAT_DATE);
         dateFinMisField.setDate(new java.util.Date());
         dateFinMisField.setPreferredSize(new Dimension(100, 25));
 
@@ -99,7 +79,7 @@ public class CreationMissionView extends JPanel {
         this.ajouterEmployes = new JButton("Ajouter Employés");
         this.cardLayout = new CardLayout();
         this.cardLayoutPanel = new JPanel(cardLayout);
-        this.titreLabel = new JLabel("Création d'une mission");
+        JLabel titreLabel = new JLabel("Création d'une mission");
 
         //Titre Mission
         panelTitre.add(new JLabel("Titre Mission : "));
@@ -127,7 +107,7 @@ public class CreationMissionView extends JPanel {
         formulaire.add(modifDates);
 
 
-        //Nbr d'employé dans mission
+        //Nbr d'employé dans la mission
         panelNbEmp.add(new JLabel("Nombre d'employé nécessaires : "));
         panelNbEmp.add(nbEmpField);
         //login employé créateur mission
@@ -142,29 +122,31 @@ public class CreationMissionView extends JPanel {
         this.listeCompetenceAjoutee = new JTable();
         String[] columnNames = {"Id", "Categorie", "Nom (En)", "Nom (FR)"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
+            @Override
             public boolean isCellEditable(int row, int col) {  //cellules de la table ne sont plus editables
                 return false;
             }
         };
         listeCompetenceAjoutee.setModel(model);
-        this.listeCompetenceScrollPane = new JScrollPane(listeCompetenceAjoutee);
+        JScrollPane listeCompetenceScrollPane = new JScrollPane(listeCompetenceAjoutee);
         listeCompetenceScrollPane.setPreferredSize(new Dimension(200, 100));
         panellisteCompetences.add(listeCompetenceScrollPane, BorderLayout.CENTER); // Place la table sous le label
         formulaire.add(panellisteCompetences);
 
 
-        //Tableau des employés ajoutées à la mission
+        //Tableau des employés ajoutés à la mission
         JLabel employesLabel = new JLabel("Employés ajoutés :");
         panellisteEmployes.add(employesLabel, BorderLayout.NORTH); // Place le label en haut
         this.listeEmployesAjoutee = new JTable();
         String[] employesColumnNames = {"Prenom", "Nom", "Poste"};
         DefaultTableModel employesModel = new DefaultTableModel(employesColumnNames, 0) {
+            @Override
             public boolean isCellEditable(int row, int col) { //cellules de la table ne sont plus editables
                 return false;
             }
         };
         listeEmployesAjoutee.setModel(employesModel);
-        this.listeEmployesScrollPane = new JScrollPane(listeEmployesAjoutee);
+        JScrollPane listeEmployesScrollPane = new JScrollPane(listeEmployesAjoutee);
         listeEmployesScrollPane.setPreferredSize(new Dimension(150, 200));
         panellisteEmployes.add(listeEmployesScrollPane, BorderLayout.CENTER); // Place la table sous le label
         formulaire.add(panellisteEmployes);
@@ -177,16 +159,16 @@ public class CreationMissionView extends JPanel {
 
         //partie Ajout compétence
         this.competenceTable = new JTable();
-        this.competenceScrollPane = new JScrollPane(competenceTable);
-        this.competenceScrollPane.setPreferredSize(new Dimension(150,200));
-        this.cardLayoutPanel.add(this.competenceScrollPane,"tabCompetences");
+        JScrollPane competenceScrollPane = new JScrollPane(competenceTable);
+        competenceScrollPane.setPreferredSize(new Dimension(150,200));
+        this.cardLayoutPanel.add(competenceScrollPane,"tabCompetences");
 
 
 
         //partie Ajout Employe
         this.employesTable = new JTable();
-        this.employeScrollPane = new JScrollPane(employesTable);
-        this.cardLayoutPanel.add(this.employeScrollPane,"tabEmployes");
+        JScrollPane employeScrollPane = new JScrollPane(employesTable);
+        this.cardLayoutPanel.add(employeScrollPane,"tabEmployes");
 
         //Construction visuel final
         JPanel panelForm = new JPanel(new BorderLayout());
@@ -267,6 +249,7 @@ public class CreationMissionView extends JPanel {
         //System.out.println("Mise à jour de la table des compétences avec " + competences.size() + " entrées."); // Debug
         String[] columnNames = {"Id", "Categorie","Nom (En)","Nom (FR)"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0){
+            @Override
             public boolean isCellEditable(int row, int col) {
                 return false;
             }
@@ -282,6 +265,7 @@ public class CreationMissionView extends JPanel {
         String[] columnNames = {"login","Prenom","Nom","Poste"};
         HashSet<String> listeLoginUnicite = new HashSet<>();
         DefaultTableModel model = new DefaultTableModel(columnNames, 0){
+            @Override
             public boolean isCellEditable(int row, int col) {
                 return false;
             }
@@ -302,12 +286,12 @@ public class CreationMissionView extends JPanel {
     }
 
 
-    //Affiche soit liste des employés ou liste compétences ajoutables à mission
+    //Affiche soit la liste des employés ou liste compétences ajoutables à mission
     public void showPage(String pageName) {
         cardLayout.show(cardLayoutPanel, pageName);
     }
 
-    //renvoi compétence selectionner avce double click dans liste compétence disponible
+    //renvoi la compétence sélectionnée avec un double click dans la liste compétence disponible
     public Competence getCompetenceSelectionnee() {
         int selectedRow = competenceTable.getSelectedRow();
         if (selectedRow != -1) { //  si une ligne est sélectionnée
@@ -320,7 +304,7 @@ public class CreationMissionView extends JPanel {
         return null; // Aucune ligne sélectionnée
     }
 
-    //renvoi employé selectionner avec double click dans liste employés disponible
+    //renvoi employé sélectionné avec double click dans la liste des employés disponible
     public Employe getEmployeSelectionne() {
         int selectedRow = employesTable.getSelectedRow();
         if (selectedRow != -1) { //  si une ligne est sélectionnée
@@ -357,17 +341,16 @@ public class CreationMissionView extends JPanel {
         }
         return competences;
     }
-    //retourne une liste d'employe ajoutés à la mission pour insertion BD à cretion mission
+    //retourne une liste d'employé ajouté à la mission pour insertion BD à création mission
     public List<String> getLogEmployeAjoutees() {
         HashSet<String> empsALogin = new HashSet<>();
         DefaultTableModel model = (DefaultTableModel) listeEmployesAjoutee.getModel();
-        //recuperation des login des emp ajoutés pour comparaison
+        //recuperation des logins des emp ajoutés pour comparaison
         for (int i = 0; i < model.getRowCount(); i++) {
             String loginEmp = (String) model.getValueAt(i, 0);
             empsALogin.add(loginEmp);
         }
-        List<String> resultSet = new ArrayList<>(empsALogin);
-        return  resultSet;
+        return new ArrayList<>(empsALogin);
     }
 
     public void setDatesModifiables(boolean b){
