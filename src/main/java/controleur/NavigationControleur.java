@@ -21,15 +21,19 @@ public class NavigationControleur {
     private final EmployeView empView = new EmployeView();
     private final DAOEmploye employeDao = new DAOEmploye();
 
+
     private final MissionView missionV = new MissionView();
     private final ModificationMissionView modifMissionV = new ModificationMissionView();
     private final CreationMissionView creaMissionV = new CreationMissionView();
+
     private DAOMission missionDao = new DAOMission();
     private MissionControleur missionC = new MissionControleur(missionV, missionDao, this, creaMissionV, modifMissionV);
     private AjouterMissionControleur ajoutMC = new AjouterMissionControleur(creaMissionV,missionDao,this,competenceDao,employeDao);
 
     private AjoutPersonnelVue ajoutPersonnelV = new AjoutPersonnelVue();
     private AjouterPersonnelControleur ajoutPersonnelC= new AjouterPersonnelControleur(ajoutPersonnelV, employeDao, competenceDao, this);
+    private ModificationPersonnelVue modifEmployeVue = new ModificationPersonnelVue();
+    private ModifierPersonnelControleur modifEmployeC = new ModifierPersonnelControleur(modifEmployeVue, employeDao, competenceDao, this);
 
     private AccueilVue accueilV = new AccueilVue();
 
@@ -56,7 +60,11 @@ public class NavigationControleur {
         ajoutMC.loadCompetences();
         ajoutMC.loadEmployes();
         ajoutPersonnelC.loadCompetences();
+
         EmployeControleur empC = new EmployeControleur(empView, employeDao, this);
+
+        modifEmployeC.loadCompetences();
+
         empC.loadEmploye();
 
         vueV.addPage(MOT_ACCUEIL, accueilV);
@@ -66,6 +74,7 @@ public class NavigationControleur {
         vueV.addPage("Employe", empView);
         vueV.addPage("Modification", modifMissionV);
         vueV.addPage("AjouterEmploye", ajoutPersonnelV);
+        vueV.addPage("ModifierEmploye", modifEmployeVue);
 
         int nbEnPreparation = missionDao.countMissionsByStatus(1);
         int nbEnCours = missionDao.countMissionsByStatus(2);
@@ -97,10 +106,22 @@ public class NavigationControleur {
             }
         });
 
-        empView.getBouttonAjouterEmploye().addActionListener(new ActionListener() {
+        empView.getButtonAjouterEmploye().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 vueV.showPage("AjouterEmploye");
+            }
+        });
+
+        empView.getButtonModifierEmploye().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Employe employeSelectionnee = empView.getEmployeSelectionne();
+                if (employeSelectionnee != null) {
+                    modifEmployeVue.setEmploye(employeSelectionnee);
+                    vueV.showPage("ModifierEmploye");
+                    modifEmployeC.loadCompetencesEmploye();
+                }
             }
         });
 
