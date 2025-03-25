@@ -11,11 +11,9 @@ public class RequeteEmployeAjouter extends RequeteEmploye {
         return "INSERT INTO EMPLOYE (LOGINEMP,PRENOMEMP,NOMEMP,DATEENTREEEMP,MDPEMP,ACTIF,POSTEEMP) VALUES (?,?,?,?,?,?,?)";
     }
 
-
     public void parametres(PreparedStatement prSt, String... id) throws SQLException {
         throw new UnsupportedOperationException("Non utilisé pour cette requête.");
     }
-
 
     public void parametres(PreparedStatement prSt, Employe obj) throws SQLException {
         prSt.setString(1, obj.getLogin());
