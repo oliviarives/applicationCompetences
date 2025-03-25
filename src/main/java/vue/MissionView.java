@@ -20,8 +20,9 @@ import java.util.HashSet;
 import java.util.List;
 
 public class MissionView extends JPanel {
+    private static final long serialVersionUID = 1L;
     private JTextField txtFiltreNom;
-    private JDateChooser dateChooser;
+    private final JDateChooser dateChooser;
     private JComboBox<String> comboStatut;
     private JButton btnFiltrer;
     private JTable tableMission;
@@ -31,6 +32,8 @@ public class MissionView extends JPanel {
     private JButton ajouterMission;
     private JButton modifierMission;
     private DAOMission missionDAO;
+
+    private static final String FORMAT_DATE = "yyyy-MM-dd";
 
     public MissionView() {
         StyleManager.setupFlatLaf();
@@ -46,7 +49,7 @@ public class MissionView extends JPanel {
 
         // Filtre sur la date (utilise JDateChooser)
         dateChooser = new JDateChooser();
-        dateChooser.setDateFormatString("yyyy-MM-dd");
+        dateChooser.setDateFormatString(FORMAT_DATE);
         panelFiltreMission.add(new JLabel("Date :"));
         panelFiltreMission.add(dateChooser);
 
@@ -76,7 +79,7 @@ public class MissionView extends JPanel {
 
                 // Filtre sur la date (colonne 2 : Date de début)
                 if (dateChooser.getDate() != null) {
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    SimpleDateFormat sdf = new SimpleDateFormat(FORMAT_DATE);
                     String dateStr = sdf.format(dateChooser.getDate());
                     filters.add(RowFilter.regexFilter(dateStr, 2));
                 }
@@ -150,7 +153,7 @@ public class MissionView extends JPanel {
                 // Filtre sur la date (colonne 2 : Date de début)
                 if (dateChooser.getDate() != null) {
                     // On formate la date pour correspondre au format de la table
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    SimpleDateFormat sdf = new SimpleDateFormat(FORMAT_DATE);
                     String dateStr = sdf.format(dateChooser.getDate());
                     // On applique le filtre sur la colonne 2 (date de début)
                     filters.add(RowFilter.regexFilter(dateStr, 2));
