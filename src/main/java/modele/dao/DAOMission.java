@@ -7,16 +7,23 @@ import java.util.List;
 import java.util.Map;
 
 import modele.Competence;
+import modele.Employe;
 import modele.Mission;
+import modele.connexion.CictOracleDataSource;
 import modele.dao.requetes.Mission.*;
+import modele.dao.requetes.Requete;
 import oracle.jdbc.OraclePreparedStatement;
+
+import static java.sql.DriverManager.getConnection;
 import static modele.connexion.CictOracleDataSource.getConnectionBD;
 
 public class DAOMission {
+
     private Connection cn;
 
     public DAOMission() throws SQLException {
         this.cn = getConnectionBD();
+
     }
 
     public Mission creerInstance(ResultSet rset) throws SQLException {
@@ -28,9 +35,12 @@ public class DAOMission {
                 rset.getString("description"),
                 rset.getDate("dateCreation"),
                 rset.getInt("nbEmpMis"),
-                rset.getString("nomSta")
+                rset.getString("nomSta"),
+                rset.getInt("idSta"),
+                rset.getString("loginEmp")
         );
     }
+
 
     public void ajouterMission(Mission mis) throws SQLException {
         RequeteMissionAjouter req = new RequeteMissionAjouter();
@@ -61,6 +71,10 @@ public class DAOMission {
     }
 
     public void ajouterMissionCmp(Mission mis, List<Competence> lcmpA) throws SQLException{
+        RequeteDeleteCmpMis reqDC = new RequeteDeleteCmpMis();
+        PreparedStatement psDel = cn.prepareStatement(reqDC.requete());
+        reqDC.parametres(psDel, mis);
+        ResultSet rs = psDel.executeQuery();
         for (Competence cmp : lcmpA) {
             RequeteMissionNecesiiterCmp req = new RequeteMissionNecesiiterCmp();
             PreparedStatement ps = cn.prepareStatement(req.requete());
@@ -70,6 +84,10 @@ public class DAOMission {
     }
 
     public void ajouterMissionEmp(Mission mis,List<String> lEmpA) throws SQLException{
+        RequeteDeleteEmpMis reqDE = new RequeteDeleteEmpMis();
+        PreparedStatement psDel = cn.prepareStatement(reqDE.requete());
+        reqDE.parametres(psDel, mis);
+        ResultSet rs = psDel.executeQuery();
         for (String l: lEmpA) {
             RequeteCollaborerEmpMis req = new RequeteCollaborerEmpMis();
             PreparedStatement ps = cn.prepareStatement(req.requete());
@@ -167,6 +185,7 @@ public class DAOMission {
         return count;
     }
 
+
     public Map<String, Integer> getMissionsStatsParMois() {
         Map<String, Integer> stats = new HashMap<>();
         String sql = "SELECT TO_CHAR(dateDebutMis, 'Month') AS mois, COUNT(*) FROM mission GROUP BY TO_CHAR(dateDebutMis, 'Month')";
@@ -259,4 +278,19 @@ public class DAOMission {
         }
         return null;
     }
+
+    public void updateMissionModifier(Mission mis) throws SQLException {
+        RequeteUpdateMissionModification req = new RequeteUpdateMissionModification();
+        PreparedStatement ps = cn.prepareStatement(req.requete());
+        req.parametres(ps, mis);
+        try {
+            ps.executeUpdate();
+        }catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+
+
+
 }

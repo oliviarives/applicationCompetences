@@ -7,6 +7,7 @@ import modele.dao.DAOEmploye;
 import modele.dao.DAOMission;
 import vue.*;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
@@ -129,6 +130,7 @@ public class NavigationControleur {
             @Override
             public void actionPerformed(ActionEvent e) {
                 vueV.showPage("Creation");
+                creaMissionV.resetFields();
             }
         });
 
@@ -136,7 +138,12 @@ public class NavigationControleur {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Mission missionSelectionnee = missionV.getMissionSelectionnee();
-                if (missionSelectionnee != null) {
+                System.out.println("idsta mis select :"+missionSelectionnee.getIdSta());
+                if(missionSelectionnee.getIdSta()!=1){
+
+                    JOptionPane.showMessageDialog(null, "Vous ne pouvez plus modifier cette mission, elle n'est plus en préparation.",
+                            "WARNING!" , JOptionPane.WARNING_MESSAGE);
+                } else if  (missionSelectionnee != null) {
                     // Crée une instance de ModifierMissionControleur en passant la mission sélectionnée
                     ModifierMissionControleur modifMC = new ModifierMissionControleur(modifMissionV, missionDao, NavigationControleur.this, competenceDao, employeDao, missionSelectionnee);
 
@@ -145,7 +152,8 @@ public class NavigationControleur {
                     } catch (SQLException ex) {
                         throw new RuntimeException(ex);
                     }
-
+                    int is = missionV.getIdMissionSelect();
+                    modifMC.setIdMissionSelect(is);
                     vueV.showPage("Modification");
                 }
             }

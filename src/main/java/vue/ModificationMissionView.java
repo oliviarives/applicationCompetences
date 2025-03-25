@@ -7,11 +7,13 @@ import utilitaires.StyleManager;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import javax.swing.text.DateFormatter;
 import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 public class ModificationMissionView extends JPanel {
@@ -88,6 +90,7 @@ public class ModificationMissionView extends JPanel {
         this.cardLayout = new CardLayout();
         this.cardLayoutPanel = new JPanel(cardLayout);
         this.titreLabel = new JLabel("Modification d'une mission");
+        this.logEmpField = new JTextField(15);
 
         //Titre Mission
         panelTitre.add(new JLabel("Titre Mission : "));
@@ -111,7 +114,7 @@ public class ModificationMissionView extends JPanel {
         panelNbEmp.add(nbEmpField);
         //login employé créateur mission
         loginEmp.add(new JLabel("login employé : "));
-        //loginEmp.add(logEmpField);
+        loginEmp.add(logEmpField);
         formulaire.add(panelNbEmp);
         formulaire.add(loginEmp);
 
@@ -165,6 +168,7 @@ public class ModificationMissionView extends JPanel {
         this.employesTable = new JTable();
         this.employeScrollPane = new JScrollPane(employesTable);
         this.cardLayoutPanel.add(this.employeScrollPane, "tabEmployes");
+       // showPage("tabEmployes");
 
         //Construction visuel final
         JPanel panelForm = new JPanel(new BorderLayout());
@@ -248,6 +252,7 @@ public class ModificationMissionView extends JPanel {
 
     public void setEmploye(List<Employe> employes) {
         String[] columnNames = {"login", "Prenom", "Nom", "Poste"};
+        HashSet<String> listeLoginUnicite = new HashSet<>();
         DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -256,9 +261,16 @@ public class ModificationMissionView extends JPanel {
         };
         for (Employe e : employes) {
             Object[] row = { e.getLogin(), e.getPrenom(), e.getNom(), e.getPoste() };
-            model.addRow(row);
+            if (listeLoginUnicite.add(e.getLogin())) {
+                model.addRow(row);
+            }
         }
-        this.listeEmployesAjoutee.setModel(model);
+        this.employesTable.setModel(model);
+        TableColumn column = this.employesTable.getColumnModel().getColumn(0);
+        column.setMinWidth(0);
+        column.setMaxWidth(0);
+        column.setPreferredWidth(0);
+        column.setResizable(false);
     }
 
 
@@ -284,9 +296,9 @@ public class ModificationMissionView extends JPanel {
     public Employe getEmployeSelectionne() {
         int selectedRow = employesTable.getSelectedRow();
         if (selectedRow != -1) { //  si une ligne est sélectionnée
-            String prenom = (String) employesTable.getValueAt(selectedRow, 0);
-            String nom = (String) employesTable.getValueAt(selectedRow, 1);
-            String poste = (String) employesTable.getValueAt(selectedRow, 2);
+            String prenom = (String) employesTable.getValueAt(selectedRow, 1);
+            String nom = (String) employesTable.getValueAt(selectedRow, 2);
+            String poste = (String) employesTable.getValueAt(selectedRow, 3);
             return new Employe(prenom, nom, poste);
         }
         return null; // Aucune ligne sélectionnée
@@ -314,6 +326,7 @@ public class ModificationMissionView extends JPanel {
         descriptionMisField.setText(missionSelectionnee.getDescription());
         nbEmpField.setValue(missionSelectionnee.getNbEmpMis());
         nomStaField.setText(missionSelectionnee.getNomSta());
+        logEmpField.setText(missionSelectionnee.getLoginEmp());
     }
 
     //retourne une liste des compétences ajoutées à la mission
@@ -356,6 +369,20 @@ public class ModificationMissionView extends JPanel {
         this.dateDebutMisField.setText(mission.getDateDebutMis().toString());
         this.dateFinMisField.setText(mission.getDateFinMis().toString());
         this.descriptionMisField.setText(mission.getDescription());
+        this.logEmpField.setText(mission.getLoginEmp());
+    }
+
+    //retourne une liste d'employe ajoutés à la mission pour insertion BD à cretion mission
+    public List<String> getLogEmployeAjoutees() {
+        HashSet<String> empsALogin = new HashSet<>();
+        DefaultTableModel model = (DefaultTableModel) listeEmployesAjoutee.getModel();
+        //recuperation des login des emp ajoutés pour comparaison
+        for (int i = 0; i < model.getRowCount(); i++) {
+            String loginEmp = (String) model.getValueAt(i, 0);
+            empsALogin.add(loginEmp);
+        }
+        List<String> resultSet = new ArrayList<>(empsALogin);
+        return  resultSet;
     }
 
 }

@@ -280,6 +280,7 @@ public class CreationMissionView extends JPanel {
 
     public void setEmploye(List<Employe> emp) {
         String[] columnNames = {"login","Prenom","Nom","Poste"};
+        HashSet<String> listeLoginUnicite = new HashSet<>();
         DefaultTableModel model = new DefaultTableModel(columnNames, 0){
             public boolean isCellEditable(int row, int col) {
                 return false;
@@ -287,7 +288,10 @@ public class CreationMissionView extends JPanel {
         };
         for (Employe e : emp) {
             Object[] row = {e.getLogin(),e.getPrenom(),e.getNom(),e.getPoste()};
-            model.addRow(row);
+            if (listeLoginUnicite.add(e.getLogin())) {
+                model.addRow(row);
+            }
+
         }
         this.employesTable.setModel(model);
         TableColumn column = this.employesTable.getColumnModel().getColumn(0);
@@ -320,9 +324,9 @@ public class CreationMissionView extends JPanel {
     public Employe getEmployeSelectionne() {
         int selectedRow = employesTable.getSelectedRow();
         if (selectedRow != -1) { //  si une ligne est sélectionnée
-            String prenom = (String) employesTable.getValueAt(selectedRow, 0);
-            String nom = (String) employesTable.getValueAt(selectedRow, 1);
-            String poste = (String) employesTable.getValueAt(selectedRow, 2);
+            String prenom = (String) employesTable.getValueAt(selectedRow, 1);
+            String nom = (String) employesTable.getValueAt(selectedRow, 2);
+            String poste = (String) employesTable.getValueAt(selectedRow, 3);
             return new Employe(prenom, nom, poste);
         }
         return null; // Aucune ligne sélectionnée

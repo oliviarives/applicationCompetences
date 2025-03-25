@@ -157,7 +157,7 @@ public class DAOEmploye {
         return resultats;
     }
 
-    public void miseAJourEmpByCmpByDate(Date dateD, Date dateF) {
+    public List<Employe> miseAJourEmpByCmpByDate(Date dateD, Date dateF) {
         List<String> resultat = new ArrayList<>();
         try {
             PreparedStatement requete = cn.prepareStatement(new RequeteSelectCollaborer().requete());
@@ -171,9 +171,9 @@ public class DAOEmploye {
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
-
         setListeEmpCmp();
         listeEmployeByCmp.removeIf(emp -> resultat.contains(emp.getLogin()));
+        return listeEmployeByCmp;
     }
 
     public void setListeEmpCmp() {

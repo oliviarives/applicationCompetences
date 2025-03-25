@@ -27,7 +27,7 @@ public class Mission {
         this.idSta = idS;
     }
 
-    public Mission(int idMis, String titre, Date dateDebut, Date dateFin, String description, Date dateCreation, int nbEmp, String nomSta) {
+    public Mission(int idMis, String titre, Date dateDebut, Date dateFin, String description, Date dateCreation, int nbEmp, String nomSta, int idS, String logEmp) {
         this.idMis = idMis;
         this.titreMis = titre;
         this.dateDebutMis = dateDebut;
@@ -36,8 +36,19 @@ public class Mission {
         this.dateCreation = dateCreation;
         this.nbEmpMis = nbEmp;
         this.nomSta = nomSta;
+        this.idSta = idS;
+        this.loginEmp=logEmp;
     }
 
+    public Mission(String titreMis, String description, Date dateDebutMis, Date dateFinMis, String loginEmp, int nbEmp,int idm) {
+        this.titreMis = titreMis;
+        this.dateDebutMis = dateDebutMis;
+        this.dateFinMis = dateFinMis;
+        this.description = description;
+        this.loginEmp = loginEmp;
+        this.idMis = idm;
+
+    }
 
     public int getIdMission() {
         return this.idMis;
