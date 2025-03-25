@@ -24,9 +24,7 @@ public class MissionView extends JPanel {
     private final JComboBox<String> comboStatut;
     private final JButton btnFiltrer;
     private final JTable tableMission;
-    private final JScrollPane scrollMission;
-    private final JPanel panelFiltreMission;
-    private TableRowSorter<DefaultTableModel> sorter;
+    private static TableRowSorter<DefaultTableModel> sorter;
     private final JButton ajouterMission;
     private final JButton modifierMission;
     private DAOMission missionDAO;
@@ -39,7 +37,7 @@ public class MissionView extends JPanel {
         setLayout(new BorderLayout());
 
         // Création du panel de filtres multi-critères
-        panelFiltreMission = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JPanel panelFiltreMission = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
         // Filtre sur le nom
         txtFiltreNom = new JTextField(15);
@@ -118,7 +116,7 @@ public class MissionView extends JPanel {
 
         // Création de la table des missions
         tableMission = new JTable();
-        scrollMission = new JScrollPane(tableMission);
+        JScrollPane scrollMission = new JScrollPane(tableMission);
         scrollMission.setPreferredSize(new Dimension(1100, 600));
         add(scrollMission, BorderLayout.CENTER);
 

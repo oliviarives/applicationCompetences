@@ -9,23 +9,23 @@ import java.awt.*;
 import java.util.List;
 
 public class CompetencesView extends JPanel{
-    private JTable tableCompetences;
-    private JScrollPane scrollCompetences;
+    private final JTable tableCompetences;
 
 
     public CompetencesView() {
         StyleManager.setupFlatLaf();
         setLayout(new BorderLayout());
         this.tableCompetences = new JTable();
-        this.scrollCompetences = new JScrollPane(tableCompetences);
+        JScrollPane scrollCompetences = new JScrollPane(tableCompetences);
         StyleManager.autoResizeTable(tableCompetences, scrollCompetences);
-        this.scrollCompetences.setPreferredSize(new Dimension(800,300));
+        scrollCompetences.setPreferredSize(new Dimension(800,300));
         add(scrollCompetences);
     }
 
     public void setCompetences(List<Competence> competences) {
         String[] columnNames = {"Id Competence", "Id Categorie","Nom (En)","Nom (FR)"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0){
+            @Override
             public boolean isCellEditable(int row, int col) {
                 return false;
             }
