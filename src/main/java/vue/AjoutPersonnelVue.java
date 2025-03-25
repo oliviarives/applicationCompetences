@@ -63,7 +63,6 @@ public class AjoutPersonnelVue extends JPanel {
         formulaire.add(new JLabel("Login "), gbc);
         gbc.gridx = 1;
         loginField = new JTextField(20);
-        loginField.setEditable(false);
         formulaire.add(loginField, gbc);
 
         gbc.gridx = 0; gbc.gridy = 3;

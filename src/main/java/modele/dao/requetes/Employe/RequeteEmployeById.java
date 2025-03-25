@@ -11,7 +11,7 @@ public class RequeteEmployeById extends RequeteEmploye {
     public String requete() {
         return "SELECT * FROM EMPLOYE WHERE LOGINEMP = ?";
     }
-    
+
     public void parametres(PreparedStatement prSt, String... id) throws SQLException {
         prSt.setString(1, id[0]);
     }
