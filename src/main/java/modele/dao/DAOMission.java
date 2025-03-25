@@ -7,23 +7,16 @@ import java.util.List;
 import java.util.Map;
 
 import modele.Competence;
-import modele.Employe;
 import modele.Mission;
-import modele.connexion.CictOracleDataSource;
 import modele.dao.requetes.Mission.*;
-import modele.dao.requetes.Requete;
 import oracle.jdbc.OraclePreparedStatement;
-
-import static java.sql.DriverManager.getConnection;
 import static modele.connexion.CictOracleDataSource.getConnectionBD;
 
 public class DAOMission {
-
     private Connection cn;
 
     public DAOMission() throws SQLException {
         this.cn = getConnectionBD();
-
     }
 
     public Mission creerInstance(ResultSet rset) throws SQLException {
@@ -39,35 +32,33 @@ public class DAOMission {
         );
     }
 
-
     public void ajouterMission(Mission mis) throws SQLException {
         RequeteMissionAjouter req = new RequeteMissionAjouter();
         String sql = req.requete();
         // Prépare la requête
-        PreparedStatement ps = cn.prepareStatement(sql);
-        // Pour Oracle, cast en OraclePreparedStatement afin d'enregistrer le paramètre de retour
-        OraclePreparedStatement ops = (OraclePreparedStatement) ps;
-        // Enregistrer le paramètre de retour pour la clause RETURNING (ici le 9ème paramètre)
-        ops.registerReturnParameter(9, java.sql.Types.INTEGER);
-        // Paramétrer les 8 valeurs de l'insertion
-        req.parametres(ps, mis);
-        int affectedRows = ps.executeUpdate();
-        if (affectedRows == 0) {
-            throw new SQLException("L'ajout de la mission a échoué, aucune ligne affectée.");
-        }
-        // Récupérer l'ID généré
-        try (ResultSet rs = ops.getReturnResultSet()) {
-            if (rs.next()) {
-                int generatedId = rs.getInt(1);
-                mis.setIdMission(generatedId);
-            } else {
-                throw new SQLException("L'ajout de la mission a échoué, aucun id obtenu.");
+        try(PreparedStatement ps = cn.prepareStatement(sql)) {
+            // Pour Oracle, cast en OraclePreparedStatement afin d'enregistrer le paramètre de retour
+            OraclePreparedStatement ops = (OraclePreparedStatement) ps;
+            // Enregistrer le paramètre de retour pour la clause RETURNING (ici le 9ème paramètre)
+            ops.registerReturnParameter(9, java.sql.Types.INTEGER);
+            // Paramétrer les 8 valeurs de l'insertion
+            req.parametres(ps, mis);
+            int affectedRows = ps.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("L'ajout de la mission a échoué, aucune ligne affectée.");
+            }
+
+            // Récupérer l'ID généré
+            try (ResultSet rs = ops.getReturnResultSet()) {
+                if (rs.next()) {
+                    int generatedId = rs.getInt(1);
+                    mis.setIdMission(generatedId);
+                } else {
+                    throw new SQLException("L'ajout de la mission a échoué, aucun id obtenu.");
+                }
             }
         }
     }
-
-
-
 
     public void ajouterMissionCmp(Mission mis, List<Competence> lcmpA) throws SQLException{
         for (Competence cmp : lcmpA) {
@@ -176,7 +167,6 @@ public class DAOMission {
         return count;
     }
 
-
     public Map<String, Integer> getMissionsStatsParMois() {
         Map<String, Integer> stats = new HashMap<>();
         String sql = "SELECT TO_CHAR(dateDebutMis, 'Month') AS mois, COUNT(*) FROM mission GROUP BY TO_CHAR(dateDebutMis, 'Month')";
@@ -269,8 +259,4 @@ public class DAOMission {
         }
         return null;
     }
-
-
-
-
 }

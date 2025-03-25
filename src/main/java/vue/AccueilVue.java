@@ -21,6 +21,7 @@ public class AccueilVue extends JPanel {
     private JPanel cardEnCours;
     private JPanel cardTermine;
     final String ZERO_MISSIONS = "0 MISSIONS";
+    final String MOT_MISSION = "MISSIONS";
 
     public AccueilVue() {
         setLayout(new BorderLayout());
@@ -104,9 +105,9 @@ public class AccueilVue extends JPanel {
     public void updateDashboard(int nbEnPreparation, int nbEnCours, int nbTermine, Map<String, Integer> statsMois) {
         // Recrée les cartes avec les nouvelles valeurs
         cardPanel.removeAll();
-        cardPrep = createCard("A VENIR", nbEnPreparation + " MISSIONS", new Color(174, 172, 228));
-        cardEnCours = createCard("EN COURS", nbEnCours + " MISSIONS", new Color(120, 164, 207));
-        cardTermine = createCard("TERMINÉES", nbTermine + " MISSIONS", new Color(139, 173, 179));
+        cardPrep = createCard("A VENIR", nbEnPreparation + MOT_MISSION, new Color(174, 172, 228));
+        cardEnCours = createCard("EN COURS", nbEnCours + MOT_MISSION, new Color(120, 164, 207));
+        cardTermine = createCard("TERMINÉES", nbTermine + MOT_MISSION, new Color(139, 173, 179));
         cardPanel.add(cardPrep);
         cardPanel.add(cardEnCours);
         cardPanel.add(cardTermine);
