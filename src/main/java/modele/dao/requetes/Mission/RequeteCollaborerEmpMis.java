@@ -17,8 +17,8 @@ public class RequeteCollaborerEmpMis extends RequeteMission{
     }
 
 
-    public void parametres(PreparedStatement prSt, Mission mis, String l) throws SQLException {
-        prSt.setString(1, l);
+    public void parametres(PreparedStatement prSt, Mission mis, String logemp) throws SQLException {
+        prSt.setString(1, logemp);
         prSt.setInt(2, mis.getIdMission());
     }
 }

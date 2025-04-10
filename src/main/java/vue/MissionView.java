@@ -34,7 +34,7 @@ public class MissionView extends JPanel {
     private DAOMission missionDAO;
     private int idMissionSelect;
 
-    private static final String FORMAT_DATE = "yyyy-MM-dd";
+    private static final String FORMAT_DATE = "yyyy-MM-dd";//format utile pour l'insertion SQL
 
     public MissionView() {
         StyleManager.setupFlatLaf();
@@ -133,10 +133,10 @@ public class MissionView extends JPanel {
         // Boutons d'ajout et de modification
         ajouterMission = new JButton("Créer une nouvelle mission");
         modifierMission = new JButton("Modifier une mission");
-        JPanel panelBtnModif = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JPanel panelBtnModif = new JPanel(new FlowLayout(FlowLayout.CENTER));//panel recevant les boutons pour modifier et ajouter une mission
         panelBtnModif.add(ajouterMission);
         panelBtnModif.add(modifierMission);
-        add(panelBtnModif, BorderLayout.SOUTH);
+        add(panelBtnModif, BorderLayout.SOUTH);//ajout du conteneur des boutons au conteneur de la vue
 
         // Action sur le bouton "Filtrer"
         btnFiltrer.addActionListener(new ActionListener() {
@@ -174,7 +174,7 @@ public class MissionView extends JPanel {
             }
         });
     }
-
+    //rempli le tableau de la liste de mission fournie
     public void setMissions(List<Mission> missions) {
         String[] columnNames = {"Id Mission", "Nom Mission", "Date de début", "Date de fin", "Description", "Statut"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
@@ -232,6 +232,7 @@ public class MissionView extends JPanel {
         return this.modifierMission;
     }
 
+    //permet de recupererer la mission selectionne dans le tableau
     public Mission getMissionSelectionnee() {
         int selectedRow = tableMission.getSelectedRow();
         if (selectedRow == -1) {
@@ -254,6 +255,7 @@ public class MissionView extends JPanel {
         return this.tableMission;
     }
 
+    //retourne seulement l'id de la mission selectionnée
     public int getIdMissionSelect(){
         return this.idMissionSelect;
     }

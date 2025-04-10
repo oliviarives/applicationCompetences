@@ -108,8 +108,11 @@ public class AjouterMissionControleur {
 
                 try {
                     daoMission.ajouterMission(misInsert);
+                    System.out.println("ok1");
                     daoMission.ajouterMissionCmp(misInsert, cmpAjoutees);
+                    System.out.println("ok2");
                     daoMission.ajouterMissionEmp(misInsert, logEmpAjoutes);
+                    System.out.println("ok3");
 
                     // Si on a affecté au moins un employé, on met à jour le statut à "Planifiée" (idSta = 2)
                     if(!logEmpAjoutes.isEmpty()) {

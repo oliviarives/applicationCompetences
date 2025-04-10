@@ -16,37 +16,44 @@ public class NavigationView extends JFrame {
     public NavigationView() {
         StyleManager.setupFlatLaf();
         setTitle("Mission im-Possible");
-        setSize(1400, 700);
+        setSize(1400, 700);//taille de l'application
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
         // Définir la couleur de fond du contentPane
         getContentPane().setBackground(new Color(237, 227, 228)); // Couleur de fond personnalisée
 
+        //definition du panel de navigation contenant l'ensemble de l'application
         JPanel panelNavigation = new JPanel();
         panelNavigation.setLayout(new BorderLayout());
         panelNavigation.setBackground(new Color(237, 227, 228)); // Couleur de fond pour le panelNavigation
 
+        //definition du panel accueillant les boutons de navigation
         JPanel navigationPanel = new JPanel();
         navigationPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
         navigationPanel.setBackground(new Color(237, 227, 228)); // Couleur de fond pour le navigationPanel
 
+        //definition des boutons servant à la navigation entres les vues
         this.buttonAccueil = new JButton("ACCUEIL");
         this.buttonMissions = new JButton("MISSIONS");
         this.buttonCompetences = new JButton("COMPETENCES");
         this.buttonEmploye = new JButton("EMPLOYES");
 
+        //ajout des boutons de navigations au panel de boutons
         navigationPanel.add(buttonAccueil);
         navigationPanel.add(buttonMissions);
         navigationPanel.add(buttonCompetences);
         navigationPanel.add(buttonEmploye);
 
+
+        //panel permettant le changement de vue
         this.cardLayout = new CardLayout(40, 40);
         panelCards = new JPanel(cardLayout);
         panelCards.setBackground(new Color(237, 227, 228)); // Couleur de fond pour le panelCards
         panelCards.setSize(new Dimension(1100, 600));
 
-        panelNavigation.add(navigationPanel, BorderLayout.NORTH);
+        //ajout des elements de navigation, boutons et panels de vues
+        panelNavigation.add(navigationPanel, BorderLayout.NORTH);//border layout place les boutons en haut
         panelNavigation.add(panelCards, BorderLayout.CENTER);
 
         add(panelNavigation);

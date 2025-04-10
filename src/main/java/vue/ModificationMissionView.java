@@ -139,13 +139,18 @@ public class ModificationMissionView extends JPanel {
         JLabel employesLabel = new JLabel("Employés ajoutés :");
         panellisteEmployes.add(employesLabel, BorderLayout.NORTH); // Place le label en haut
         this.listeEmployesAjoutee = new JTable();
-        String[] employesColumnNames = {"Prenom", "Nom", "Poste"};
+        String[] employesColumnNames = {"login","Prenom", "Nom", "Poste"};
         DefaultTableModel employesModel = new DefaultTableModel(employesColumnNames, 0) {
             public boolean isCellEditable(int row, int col) { //cellules de la table ne sont plus editables
                 return false;
             }
         };
         listeEmployesAjoutee.setModel(employesModel);
+        TableColumn column = this.listeEmployesAjoutee.getColumnModel().getColumn(0);
+        column.setMinWidth(0);
+        column.setMaxWidth(0);
+        column.setPreferredWidth(0);
+        column.setResizable(false);
         this.listeEmployesScrollPane = new JScrollPane(listeEmployesAjoutee);
         listeEmployesScrollPane.setPreferredSize(new Dimension(150, 200));
         panellisteEmployes.add(listeEmployesScrollPane, BorderLayout.CENTER); // Place la table sous le label
@@ -296,10 +301,11 @@ public class ModificationMissionView extends JPanel {
     public Employe getEmployeSelectionne() {
         int selectedRow = employesTable.getSelectedRow();
         if (selectedRow != -1) { //  si une ligne est sélectionnée
+            String login = (String) employesTable.getValueAt(selectedRow, 0);
             String prenom = (String) employesTable.getValueAt(selectedRow, 1);
             String nom = (String) employesTable.getValueAt(selectedRow, 2);
             String poste = (String) employesTable.getValueAt(selectedRow, 3);
-            return new Employe(prenom, nom, poste);
+            return new Employe(login,prenom, nom, poste);
         }
         return null; // Aucune ligne sélectionnée
     }
@@ -314,7 +320,7 @@ public class ModificationMissionView extends JPanel {
     //ajout employé selectionner a tables des employés ajoutés à la mission
     public void ajouterEmployesAjoutee(Employe emp) {
         DefaultTableModel model = (DefaultTableModel) listeEmployesAjoutee.getModel();
-        Object[] row = {emp.getPrenom(), emp.getNom(), emp.getPoste()};
+        Object[] row = {emp.getLogin(),emp.getPrenom(), emp.getNom(), emp.getPoste()};
         model.addRow(row);
     }
 

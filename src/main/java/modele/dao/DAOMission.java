@@ -75,6 +75,7 @@ public class DAOMission {
         PreparedStatement psDel = cn.prepareStatement(reqDC.requete());
         reqDC.parametres(psDel, mis);
         ResultSet rs = psDel.executeQuery();
+        System.out.println("okAjouterMissionCmp");
         for (Competence cmp : lcmpA) {
             RequeteMissionNecesiiterCmp req = new RequeteMissionNecesiiterCmp();
             PreparedStatement ps = cn.prepareStatement(req.requete());
@@ -88,6 +89,7 @@ public class DAOMission {
         PreparedStatement psDel = cn.prepareStatement(reqDE.requete());
         reqDE.parametres(psDel, mis);
         ResultSet rs = psDel.executeQuery();
+        System.out.println("okAjouterMissionEmp");
         for (String l: lEmpA) {
             RequeteCollaborerEmpMis req = new RequeteCollaborerEmpMis();
             PreparedStatement ps = cn.prepareStatement(req.requete());
