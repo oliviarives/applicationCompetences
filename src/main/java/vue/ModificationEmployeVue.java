@@ -10,7 +10,7 @@ import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ModificationPersonnelVue extends JPanel {
+public class ModificationEmployeVue extends JPanel {
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -31,7 +31,7 @@ public class ModificationPersonnelVue extends JPanel {
     private static final String COMPETENCE = "Compétence";
     private static final String TITRE = "Titre";
 
-    public ModificationPersonnelVue() {
+    public ModificationEmployeVue() {
         setLayout(new BorderLayout());
 
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);

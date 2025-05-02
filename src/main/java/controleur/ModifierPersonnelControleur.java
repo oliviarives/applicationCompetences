@@ -5,7 +5,7 @@ import modele.Employe;
 import modele.MdpUtils;
 import modele.dao.DAOCompetence;
 import modele.dao.DAOEmploye;
-import vue.ModificationPersonnelVue;
+import vue.ModificationEmployeVue;
 
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
@@ -16,12 +16,12 @@ import java.util.List;
 
 public class ModifierPersonnelControleur {
 
-    private final ModificationPersonnelVue modifPersonnelVue;
+    private final ModificationEmployeVue modifPersonnelVue;
     private final DAOEmploye daoEmploye;
     private final DAOCompetence daoCompetence;
     private final NavigationControleur navC;
 
-    public ModifierPersonnelControleur (ModificationPersonnelVue modifPersonnelVue, DAOEmploye daoEmp, DAOCompetence daoCmp, NavigationControleur navigationC) {
+    public ModifierPersonnelControleur (ModificationEmployeVue modifPersonnelVue, DAOEmploye daoEmp, DAOCompetence daoCmp, NavigationControleur navigationC) {
         this.modifPersonnelVue = modifPersonnelVue;
         this.daoEmploye = daoEmp;
         this.navC = navigationC;
@@ -68,11 +68,11 @@ public class ModifierPersonnelControleur {
             // Hashage du mot de passe
             String mdpHashed = MdpUtils.hashPassword(mdp);
             // Recherche de l'employé à mettre à jour
-            Employe employe = daoEmploye.findByLogin(login);
-            daoEmploye.retirerToutesCompetences(login);
-            daoEmploye.modifierPersonnel(employe);
+            Employe employe = daoEmploye.findEmpByLogin(login);
+            daoEmploye.retirerAllCmpFromEmp(login);
+            daoEmploye.modifierEmploye(employe);
             for (Competence cmp : modifPersonnelVue.getCompetencesAjoutees()) {
-                daoEmploye.ajouterPossession(employe.getLogin(), cmp);
+                daoEmploye.ajouterCmpToEmp(employe.getLogin(), cmp);
             }
         } catch (SQLException ex) {
             modifPersonnelVue.afficherMessage("Erreur lors de la modification de l'employé.");
@@ -89,7 +89,7 @@ public class ModifierPersonnelControleur {
         List<Competence> competences = null;
         System.out.println(modifPersonnelVue.getLoginField().getText());
         try {
-            competences = daoCompetence.findByCompetencesEmploye(modifPersonnelVue.getLoginField().getText());
+            competences = daoCompetence.findCmpByLoginEmp(modifPersonnelVue.getLoginField().getText());
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

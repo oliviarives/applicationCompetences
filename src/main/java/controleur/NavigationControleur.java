@@ -16,46 +16,48 @@ import java.util.Map;
 
 public class NavigationControleur {
     private static final String MOT_ACCUEIL = "ACCUEIL";
-    private static NavigationView vueV;
+    private static NavigationVue vueV;
     private final DAOCompetence competenceDao = new DAOCompetence();
 
-    private final EmployeView empView = new EmployeView();
+    private final EmployeVue empView = new EmployeVue();
     private final DAOEmploye employeDao = new DAOEmploye();
 
 
-    private final MissionView missionV = new MissionView();
-    private final ModificationMissionView modifMissionV = new ModificationMissionView();
-    private final CreationMissionView creaMissionV = new CreationMissionView();
+    private final MissionVue missionV = new MissionVue();
+    private final ModificationMissionVue modifMissionV = new ModificationMissionVue();
+    private final CreationMissionVue creaMissionV = new CreationMissionVue();
 
     private DAOMission missionDao = new DAOMission();
+    private InformationEmpVue infosEmpView = new InformationEmpVue(employeDao);
     private MissionControleur missionC = new MissionControleur(missionV, missionDao, this, creaMissionV, modifMissionV);
-    private AjouterMissionControleur ajoutMC = new AjouterMissionControleur(creaMissionV,missionDao,this,competenceDao,employeDao);
+    private AjouterMissionControleur ajoutMC = new AjouterMissionControleur(creaMissionV,missionDao,this,competenceDao,employeDao,infosEmpView);
 
-    private AjoutPersonnelVue ajoutPersonnelV = new AjoutPersonnelVue();
+    private AjoutEmployeVue ajoutPersonnelV = new AjoutEmployeVue();
     private AjouterPersonnelControleur ajoutPersonnelC= new AjouterPersonnelControleur(ajoutPersonnelV, employeDao, competenceDao, this);
-    private ModificationPersonnelVue modifEmployeVue = new ModificationPersonnelVue();
+    private ModificationEmployeVue modifEmployeVue = new ModificationEmployeVue();
     private ModifierPersonnelControleur modifEmployeC = new ModifierPersonnelControleur(modifEmployeVue, employeDao, competenceDao, this);
 
     private AccueilVue accueilV = new AccueilVue();
 
     private static DAOMission missionDaoInstance; // variable statique pour DAOMission
 
-    public NavigationControleur( NavigationView navView) throws SQLException {
+    public NavigationControleur( NavigationVue navView) throws SQLException {
         this.vueV =navView;
 
-        MissionView missionV = new MissionView();
-        ModificationMissionView modifMissionV = new ModificationMissionView();
-        CreationMissionView creaMissionV = new CreationMissionView();
+        MissionVue missionV = new MissionVue();
+        InformationEmpVue infosEmpView = new InformationEmpVue(employeDao);
+        ModificationMissionVue modifMissionV = new ModificationMissionVue();
+        CreationMissionVue creaMissionV = new CreationMissionVue();
         DAOMission missionDao = new DAOMission();
         MissionControleur missionC = new MissionControleur(missionV, missionDao, this, creaMissionV, modifMissionV);
-        AjouterMissionControleur ajoutMC = new AjouterMissionControleur(creaMissionV, missionDao, this, competenceDao, employeDao);
+        AjouterMissionControleur ajoutMC = new AjouterMissionControleur(creaMissionV, missionDao, this, competenceDao, employeDao, infosEmpView);
         missionDaoInstance = missionDao;
 
-        AjoutPersonnelVue ajoutPersonnelV = new AjoutPersonnelVue();
+        AjoutEmployeVue ajoutPersonnelV = new AjoutEmployeVue();
         AjouterPersonnelControleur ajoutPersonnelC = new AjouterPersonnelControleur(ajoutPersonnelV, employeDao, competenceDao, this);
 
         missionC.loadMissions();
-        CompetencesView competencesV = new CompetencesView();
+        CompetencesVue competencesV = new CompetencesVue();
         CompetenceControleur competenceC = new CompetenceControleur(competencesV, competenceDao);
         competenceC.loadCompetences();
         ajoutMC.loadCompetences();
@@ -76,6 +78,7 @@ public class NavigationControleur {
         vueV.addPage("Modification", modifMissionV);
         vueV.addPage("AjouterEmploye", ajoutPersonnelV);
         vueV.addPage("ModifierEmploye", modifEmployeVue);
+        vueV.addPage("InfosEmp", infosEmpView);
 
         int nbEnPreparation = missionDao.countMissionsByStatus(1);
         int nbEnCours = missionDao.countMissionsByStatus(2);
@@ -131,6 +134,7 @@ public class NavigationControleur {
             public void actionPerformed(ActionEvent e) {
                 vueV.showPage("Creation");
                 creaMissionV.resetFields();
+                //employeDao.miseAJourEmpByCmpByDate();
             }
         });
 
@@ -175,6 +179,27 @@ public class NavigationControleur {
             }
         });
 
+        creaMissionV.getInfoButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                infosEmpView.setEmpSelectionne(creaMissionV.getEmployeSelectionne());
+                vueV.showPage("InfosEmp");
+            }
+        });
+
+        infosEmpView.getCroixRetour().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                vueV.showPage("Creation");
+            }
+        });
+        /*creaMissionV.getInfoButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                vueV.showPage("Infos");
+            }
+        })*/
+
     }
 
     public void loadEmploye() {
@@ -186,7 +211,7 @@ public class NavigationControleur {
         return missionDaoInstance;
     }
 
-    public static NavigationView getVueV() {
+    public static NavigationVue getVueV() {
         return vueV;
     }
 }

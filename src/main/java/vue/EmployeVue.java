@@ -8,7 +8,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
 
-public class EmployeView extends JPanel {
+public class EmployeVue extends JPanel {
     private final JTable tableEmploye;
     private final JScrollPane scrollEmploye;
     private final JPanel panelBouttons;
@@ -16,7 +16,7 @@ public class EmployeView extends JPanel {
     private final JButton bouttonAjouterEmploye;
     private List<Employe> employes;
 
-    public EmployeView() {
+    public EmployeVue() {
         StyleManager.setupFlatLaf();
         setLayout(new BorderLayout());
 

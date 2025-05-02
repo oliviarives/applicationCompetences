@@ -9,7 +9,7 @@ import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AjoutPersonnelVue extends JPanel {
+public class AjoutEmployeVue extends JPanel {
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -27,7 +27,7 @@ public class AjoutPersonnelVue extends JPanel {
     private final JTable tableCompetencesEmploye;
     private final JTable tableToutesCompetences;
 
-    public AjoutPersonnelVue() {
+    public AjoutEmployeVue() {
         setLayout(new BorderLayout());
 
         // Panel Principal avec JSplitPane

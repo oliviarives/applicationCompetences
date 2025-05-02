@@ -5,7 +5,7 @@ import utilitaires.StyleManager;
 import javax.swing.*;
 import java.awt.*;
 
-public class NavigationView extends JFrame {
+public class NavigationVue extends JFrame {
     private final JButton buttonMissions;
     private final JButton buttonCompetences;
     private final JButton buttonAccueil;
@@ -13,7 +13,7 @@ public class NavigationView extends JFrame {
     private final CardLayout cardLayout;
     private final JPanel panelCards;
 
-    public NavigationView() {
+    public NavigationVue() {
         StyleManager.setupFlatLaf();
         setTitle("Mission im-Possible");
         setSize(1400, 700);//taille de l'application

@@ -1,14 +1,14 @@
 package modele.dao.requetes.Employe;
 
 import modele.Employe;
+
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class RequeteEmployeCmp extends RequeteEmploye{
-
+public class RequeteEmployeSelectMis extends RequeteEmploye{
     @Override
-    public String requete(){
-        return "SELECT c.NOMCMPFR, e.loginemp FROM competence, posseder p, employe e WHERE c.idcatcmp = p.idcatcmp AND p.loginemp = e.loginemp";
+    public String requete() {
+        return "SELECT * FROM EMPLOYE E, COLLABORER C, MISSION M WHERE C.IDMIS=M.IDMIS AND E.LOGINEMP=C.LOGINEMP";
     }
 
     @Override
@@ -17,7 +17,9 @@ public class RequeteEmployeCmp extends RequeteEmploye{
     }
 
     @Override
-    public void parametres(PreparedStatement prSt, Employe obj) throws SQLException {
+    public void parametres(PreparedStatement prSt, Employe employe) throws SQLException {
         throw new UnsupportedOperationException("Non utilisé pour cette requête.");
     }
+
+
 }

@@ -6,32 +6,35 @@ import modele.Mission;
 import modele.dao.DAOCompetence;
 import modele.dao.DAOEmploye;
 import modele.dao.DAOMission;
-import vue.CreationMissionView;
+import vue.CreationMissionVue;
+import vue.InformationEmpVue;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
 
 public class AjouterMissionControleur {
-    private CreationMissionView creationMV;
+    private CreationMissionVue creationMV;
     private DAOMission daoMission;
     private NavigationControleur navC;
     private DAOCompetence daoCompetence;
     private DAOEmploye daoEmploye;
+    private InformationEmpVue informationEmpView;
     private List<Competence> listeCompetencesSelectionnees;
     private List<Employe> listeEmployesSelectiones;
     final String MESSAGE_ERREUR = "ERREUR";
 
-    public AjouterMissionControleur(CreationMissionView creationMV, DAOMission daoMission, NavigationControleur navigationC,DAOCompetence daoComp,DAOEmploye daoEmp) {
+    public AjouterMissionControleur(CreationMissionVue creationMV, DAOMission daoMission, NavigationControleur navigationC, DAOCompetence daoComp, DAOEmploye daoEmp, InformationEmpVue infoEmpV) {
         this.creationMV = creationMV;
         this.daoMission = daoMission;
         this.navC = navigationC;
         this.daoCompetence = daoComp;
         this.daoEmploye = daoEmp;
+        this.informationEmpView = infoEmpV;
+
 
         creationMV.getButtonConfirmer().addActionListener(new ActionListener() {
             @Override
@@ -70,7 +73,7 @@ public class AjouterMissionControleur {
 
                 // Vérification de la validité du login employé via la méthode loginExist()
                 try {
-                    if(!daoEmploye.loginExist(login)) {
+                    if(!daoEmploye.isLoginExists(login)) {
                         JOptionPane.showMessageDialog(null,
                                 "Le login employé saisi n'est pas valide. Veuillez entrer un login existant.",
                                 MESSAGE_ERREUR, JOptionPane.ERROR_MESSAGE);
@@ -108,19 +111,21 @@ public class AjouterMissionControleur {
 
                 try {
                     daoMission.ajouterMission(misInsert);
-                    System.out.println("ok1");
-                    daoMission.ajouterMissionCmp(misInsert, cmpAjoutees);
-                    System.out.println("ok2");
-                    daoMission.ajouterMissionEmp(misInsert, logEmpAjoutes);
-                    System.out.println("ok3");
+                    daoMission.ajouterCmpToMission(misInsert, cmpAjoutees);
+                    daoMission.ajouterEmpToMission(misInsert, logEmpAjoutes);
 
                     // Si on a affecté au moins un employé, on met à jour le statut à "Planifiée" (idSta = 2)
-                    if(!logEmpAjoutes.isEmpty()) {
+                    if (!logEmpAjoutes.isEmpty()) {
                         daoMission.updateMissionStatus(misInsert, 2);
                     }
 
                     navC.getVueV().getButtonMissions().doClick();
                     creationMV.resetFields();
+                    //daoEmp.updateDataSetCollaborer();
+                    for (String logEmp : logEmpAjoutes) {
+                        daoEmp.addEmpCollaborerToMap(logEmp,dateDebut,dateFin);
+                    }
+                    //daoEmp.updateListeEmployeCollaborer();
 
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
@@ -155,9 +160,17 @@ public class AjouterMissionControleur {
                     if (cmp != null) {
                         creationMV.ajouterCompetenceAjoutee(cmp);
                     }
-                    List<Competence>  lcmpAjout= creationMV.getCompetencesAjoutees();
-                    List<Employe> listeEmployesSelectiones2 = daoEmploye.findEmpByCompetences(lcmpAjout);
-                    creationMV.setEmploye(listeEmployesSelectiones2); // Mise à jour de la table des employés
+                    if (creationMV.getDateDebutMisField()==null){
+                        JOptionPane.showMessageDialog(null, "Veuillez saisir des dates des début et de fin de la mission !",
+                                "Erreur de saisie!", JOptionPane.WARNING_MESSAGE);
+                    }else {
+                        List<Competence> lcmpAjout = creationMV.getCompetencesAjoutees();
+                        List<Employe> listeEmployesSelectiones2 = daoEmploye.findEmpByCmp(lcmpAjout);
+                        for(Employe emp : listeEmployesSelectiones2) {
+                            System.out.println("empdslistecontroleur apres ajout cmp"+emp.getLogin());
+                        }
+                        creationMV.setEmploye(listeEmployesSelectiones2); // Mise à jour de la table des employés
+                    }
                 }
             }
         });
@@ -168,7 +181,7 @@ public class AjouterMissionControleur {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 if (evt.getClickCount() == 2) { //déclenchement au double click
                     int nbEmpMax = creationMV.getNbEmpField(); // valeur du champ nbEmp
-                    int nbEmpAjoutes = creationMV.getListeEmployesAjoutee().getRowCount(); // nbr d'employé ajouté à mision
+                    int nbEmpAjoutes = creationMV.getTableEmployesAjoutee().getRowCount(); // nbr d'employé ajouté à mision
 
                     if (nbEmpAjoutes < nbEmpMax) { //si nbEmp nécessaire pas encore atteind
                         Employe emp = creationMV.getEmployeSelectionne();
@@ -194,19 +207,23 @@ public class AjouterMissionControleur {
                         model.removeRow(selectedRow);
                     }
                     listeCompetencesSelectionnees = creationMV.getCompetencesAjoutees();
-                    listeEmployesSelectiones = daoEmploye.findEmpByCompetences(listeCompetencesSelectionnees);
+                    //daoEmploye.finalListeEmp();
+                    listeEmployesSelectiones = daoEmploye.findEmpByCmp(listeCompetencesSelectionnees);
+                    for(Employe emp : listeEmployesSelectiones) {
+                        System.out.println("empdslistecontroleur apres ajout cmp"+emp.getLogin());
+                    }
                     creationMV.setEmploye(listeEmployesSelectiones);
                 }
             }
         });
         //retirer employé des employés ajoutés
-        creationMV.getListeEmployesAjoutee().addMouseListener(new java.awt.event.MouseAdapter() {
+        creationMV.getTableEmployesAjoutee().addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 if (evt.getClickCount() == 2) { //déclenchement au double click
-                    int selectedRow = creationMV.getListeEmployesAjoutee().getSelectedRow();
+                    int selectedRow = creationMV.getTableEmployesAjoutee().getSelectedRow();
                     if (selectedRow != -1) {
-                        DefaultTableModel model = (DefaultTableModel) creationMV.getListeEmployesAjoutee().getModel();
+                        DefaultTableModel model = (DefaultTableModel) creationMV.getTableEmployesAjoutee().getModel();
                         model.removeRow(selectedRow);
                     }
                 }
@@ -229,10 +246,23 @@ public class AjouterMissionControleur {
                         creationMV.setDatesModifiables(false);
                         //daoEmp.setListeEmpCmp();
                         //daoEmp.miseAJourEmpByCmpByDate(creationMV.getDateDebutMisField(), creationMV.getDateFinMisField());
-                        creationMV.setEmploye(daoEmp.miseAJourEmpByCmpByDate(creationMV.getDateDebutMisField(), creationMV.getDateFinMisField()));
+                        try {
+                            creationMV.setEmploye(daoEmp.miseAJourEmpByCmpByDate(creationMV.getDateDebutMisField(), creationMV.getDateFinMisField()));
+                        } catch (SQLException ex) {
+                            throw new RuntimeException(ex);
+                        }
                     }
                 }
         );
+
+        /*creationMV.getInfoButton().addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        creationMV.setDatesModifiables(true);
+                    }
+                }
+        );*/
     }
 
     public void loadCompetences(){

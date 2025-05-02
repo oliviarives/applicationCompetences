@@ -7,14 +7,10 @@ import java.util.List;
 import java.util.Map;
 
 import modele.Competence;
-import modele.Employe;
 import modele.Mission;
-import modele.connexion.CictOracleDataSource;
 import modele.dao.requetes.Mission.*;
-import modele.dao.requetes.Requete;
 import oracle.jdbc.OraclePreparedStatement;
 
-import static java.sql.DriverManager.getConnection;
 import static modele.connexion.CictOracleDataSource.getConnectionBD;
 
 public class DAOMission {
@@ -45,20 +41,14 @@ public class DAOMission {
     public void ajouterMission(Mission mis) throws SQLException {
         RequeteMissionAjouter req = new RequeteMissionAjouter();
         String sql = req.requete();
-        // Prépare la requête
         try(PreparedStatement ps = cn.prepareStatement(sql)) {
-            // Pour Oracle, cast en OraclePreparedStatement afin d'enregistrer le paramètre de retour
             OraclePreparedStatement ops = (OraclePreparedStatement) ps;
-            // Enregistrer le paramètre de retour pour la clause RETURNING (ici le 9ème paramètre)
             ops.registerReturnParameter(9, java.sql.Types.INTEGER);
-            // Paramétrer les 8 valeurs de l'insertion
             req.parametres(ps, mis);
             int affectedRows = ps.executeUpdate();
             if (affectedRows == 0) {
                 throw new SQLException("L'ajout de la mission a échoué, aucune ligne affectée.");
             }
-
-            // Récupérer l'ID généré
             try (ResultSet rs = ops.getReturnResultSet()) {
                 if (rs.next()) {
                     int generatedId = rs.getInt(1);
@@ -70,28 +60,24 @@ public class DAOMission {
         }
     }
 
-    public void ajouterMissionCmp(Mission mis, List<Competence> lcmpA) throws SQLException{
-        RequeteDeleteCmpMis reqDC = new RequeteDeleteCmpMis();
+    public void ajouterCmpToMission(Mission mis, List<Competence> lcmpA) throws SQLException{
+        RequeteMissionDeleteCmp reqDC = new RequeteMissionDeleteCmp();
         PreparedStatement psDel = cn.prepareStatement(reqDC.requete());
         reqDC.parametres(psDel, mis);
-        ResultSet rs = psDel.executeQuery();
-        System.out.println("okAjouterMissionCmp");
         for (Competence cmp : lcmpA) {
-            RequeteMissionNecesiiterCmp req = new RequeteMissionNecesiiterCmp();
+            RequeteMissionNecessiterCmp req = new RequeteMissionNecessiterCmp();
             PreparedStatement ps = cn.prepareStatement(req.requete());
-            req.parametres(ps, mis,cmp);
+            req.parametresRequeteMissionNecessiterCmp(ps, mis,cmp);
             ps.executeQuery();
         }
     }
 
-    public void ajouterMissionEmp(Mission mis,List<String> lEmpA) throws SQLException{
-        RequeteDeleteEmpMis reqDE = new RequeteDeleteEmpMis();
+    public void ajouterEmpToMission(Mission mis, List<String> lEmpA) throws SQLException{
+        RequeteMissionDeleteEmp reqDE = new RequeteMissionDeleteEmp();
         PreparedStatement psDel = cn.prepareStatement(reqDE.requete());
         reqDE.parametres(psDel, mis);
-        ResultSet rs = psDel.executeQuery();
-        System.out.println("okAjouterMissionEmp");
         for (String l: lEmpA) {
-            RequeteCollaborerEmpMis req = new RequeteCollaborerEmpMis();
+            RequeteMissionAjouterEmp req = new RequeteMissionAjouterEmp();
             PreparedStatement ps = cn.prepareStatement(req.requete());
             req.parametres(ps, mis, l);
             ps.executeQuery();
@@ -120,7 +106,7 @@ public class DAOMission {
         return competences;
     }
 
-    public List<String> getLogEmployesForMission(int idMis) {
+    /*public List<String> getLogEmployesForMission(int idMis) {
         List<String> logins = new ArrayList<>();
         String sql = "SELECT loginEmp FROM COLLABORER WHERE idMis = ?";
         try (PreparedStatement ps = cn.prepareStatement(sql)) {
@@ -134,7 +120,7 @@ public class DAOMission {
             ex.printStackTrace();
         }
         return logins;
-    }
+    }*/
 
 
 
@@ -158,7 +144,7 @@ public class DAOMission {
         return resultats;
     }
 
-    public void modifierMission(Mission mis) throws SQLException {
+   /* public void modifierMission(Mission mis) throws SQLException {
         String sql = "UPDATE MISSION SET titreMis=?, dateDebutMis=?, dateFinMis=?, description=?, nbEmpMis=? WHERE idMis=?";
         try (PreparedStatement ps = cn.prepareStatement(sql)) {
             ps.setString(1, mis.getTitreMis());
@@ -169,7 +155,7 @@ public class DAOMission {
             ps.setInt(6, mis.getIdMission());
             ps.executeUpdate();
         }
-    }
+    }*/
 
     public int countMissionsByStatus(int statusId) {
         int count = 0;
@@ -207,7 +193,6 @@ public class DAOMission {
 
     public List<Mission> filterMissions(String nom, java.sql.Date date, Integer statutId) {
         List<Mission> resultats = new ArrayList<>();
-        // Ajout du JOIN pour récupérer nomSta
         StringBuilder sql = new StringBuilder("SELECT m.*, s.nomSta FROM mission m LEFT JOIN statut s ON m.idsta = s.idsta WHERE 1=1 ");
 
         if (nom != null && !nom.isEmpty()) {
@@ -282,7 +267,7 @@ public class DAOMission {
     }
 
     public void updateMissionModifier(Mission mis) throws SQLException {
-        RequeteUpdateMissionModification req = new RequeteUpdateMissionModification();
+        RequeteMissionModifier req = new RequeteMissionModifier();
         PreparedStatement ps = cn.prepareStatement(req.requete());
         req.parametres(ps, mis);
         try {

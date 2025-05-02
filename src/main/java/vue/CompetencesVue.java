@@ -8,12 +8,12 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
 
-public class CompetencesView extends JPanel{
+public class CompetencesVue extends JPanel{
     private JTable tableCompetences;
     private JScrollPane scrollCompetences;
 
 
-    public CompetencesView() {
+    public CompetencesVue() {
         StyleManager.setupFlatLaf();
         setLayout(new BorderLayout());
         this.tableCompetences = new JTable();

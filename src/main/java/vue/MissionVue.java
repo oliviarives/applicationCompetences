@@ -1,7 +1,6 @@
 package vue;
 
 import com.toedter.calendar.JDateChooser;
-import com.toedter.calendar.JTextFieldDateEditor;
 import controleur.NavigationControleur;
 import modele.Mission;
 import modele.dao.DAOMission;
@@ -13,13 +12,12 @@ import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-public class MissionView extends JPanel {
+public class MissionVue extends JPanel {
     private static final long serialVersionUID = 1L;
     private JTextField txtFiltreNom;
     private final JDateChooser dateChooser;
@@ -36,7 +34,7 @@ public class MissionView extends JPanel {
 
     private static final String FORMAT_DATE = "yyyy-MM-dd";//format utile pour l'insertion SQL
 
-    public MissionView() {
+    public MissionVue() {
         StyleManager.setupFlatLaf();
         setLayout(new BorderLayout());
 
