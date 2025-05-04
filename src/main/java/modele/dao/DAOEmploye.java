@@ -15,7 +15,7 @@ public class DAOEmploye {
     private ArrayList<Employe> dataAllEmploye;
     private ResultSet dataEmployeByCmp;
     private ResultSet dataEmployeCollaborer;
-    private HashMap<Employe,String[]> mapEmpCmp;
+    private HashMap<Employe,Competence> mapEmpCmp;
     private HashMap<Employe,Date[]> mapEmpCollaborer;
     private ArrayList<Employe> listeEmployeCollaborer;
     private ArrayList<Employe> listeEmployeByCmp;
@@ -48,7 +48,9 @@ public class DAOEmploye {
         this.mapEmpCmp = new HashMap<>();
         ResultSet curseur = this.dataEmployeByCmp;
         while (curseur.next()) {
-            this.mapEmpCmp.put(creerInstance(curseur), new String[]{curseur.getString("idcatcmp"),curseur.getString("idcmp"),curseur.getString("nomCmpEn"),curseur.getString("nomCmpFr")});
+            Competence cmp = new Competence(curseur.getInt("idcmp"),curseur.getString("idcatcmp"),curseur.getString("nomCmpEn"),curseur.getString("nomCmpFr"));
+           // this.mapEmpCmp.put(creerInstance(curseur), new String[]{curseur.getString("idcatcmp"),curseur.getString("idcmp"),curseur.getString("nomCmpEn"),curseur.getString("nomCmpFr")});
+            this.mapEmpCmp.put(creerInstance(curseur),cmp);
         }
         for (Employe e : this.mapEmpCmp.keySet()) {
             this.listeEmployeByCmp.add(e);
@@ -78,7 +80,7 @@ public class DAOEmploye {
 
     public void addEmpCmpToMap(Employe emp, List<Competence> listeCmp) throws SQLException {
         for (Competence c : listeCmp) {
-            this.mapEmpCmp.put(emp,new String[]{c.getIdCatCmp(),c.getIdCmp()+"",c.getNomCmpEn(),c.getNomCmpFr()});
+            this.mapEmpCmp.put(emp,c);
         }
 
     }
@@ -185,10 +187,10 @@ public class DAOEmploye {
             stringCmpAjoutes.add(cmp.getIdCatCmp() + "." + cmp.getIdCmp());
         }
         this.listeEmployeByCmp = new ArrayList<>();
-        for (Map.Entry<Employe, String[]> entry: this.mapEmpCmp.entrySet()) {
+        for (Map.Entry<Employe, Competence> entry: this.mapEmpCmp.entrySet()) {
             Employe emp = entry.getKey();
-            String[] cmp = entry.getValue();
-            if (stringCmpAjoutes.contains(cmp[0]+ "." +cmp[1])) {
+            Competence cmp = entry.getValue();
+            if (stringCmpAjoutes.contains(cmp.getIdCatCmp() + "." + cmp.getIdCmp())) {
                 this.listeEmployeByCmp.add(emp);
             }
         }
@@ -251,7 +253,7 @@ public class DAOEmploye {
 
 
 
-    public HashMap<Employe,String[]> getHashMapEmpCmp(){
+    public HashMap<Employe,Competence> getHashMapEmpCmp(){
         return this.mapEmpCmp;
     }
 

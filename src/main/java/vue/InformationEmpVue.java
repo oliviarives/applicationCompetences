@@ -1,5 +1,6 @@
 package vue;
 
+import modele.Competence;
 import modele.Employe;
 import modele.dao.DAOEmploye;
 
@@ -108,11 +109,11 @@ public class InformationEmpVue extends JPanel {
             }
         };
 
-        for (Map.Entry<Employe, String[]> entry: daoEmp.getHashMapEmpCmp().entrySet()) {
+        for (Map.Entry<Employe, Competence> entry: daoEmp.getHashMapEmpCmp().entrySet()) {
             Employe empl = entry.getKey();
             if(empl.getLogin().equals(emp.getLogin())) {
-                String[] cmp = entry.getValue();
-                Object[] row = {cmp[0], cmp[1], cmp[2], cmp[3]};
+                Competence cmp = entry.getValue();
+                Object[] row = {cmp.getIdCmp(), cmp.getIdCatCmp(), cmp.getNomCmpEn(), cmp.getNomCmpFr()};
                 model.addRow(row);
             }
         }

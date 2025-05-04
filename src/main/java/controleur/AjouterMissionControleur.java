@@ -118,7 +118,7 @@ public class AjouterMissionControleur {
                     if (!logEmpAjoutes.isEmpty()) {
                         daoMission.updateMissionStatus(misInsert, 2);
                     }
-
+                    creationMV.showPage("tabCompetences");
                     navC.getVueV().getButtonMissions().doClick();
                     creationMV.resetFields();
                     //daoEmp.updateDataSetCollaborer();
@@ -147,7 +147,12 @@ public class AjouterMissionControleur {
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e){
-                        creationMV.showPage("tabEmployes");
+                        if(creationMV.getCompetencesAjoutees().isEmpty()) {
+                            JOptionPane.showMessageDialog(null, "Veuillez d'abord saisir des compétences à la mission!",
+                                    "Erreur de saisie!", JOptionPane.WARNING_MESSAGE);}
+                        else{
+                            creationMV.showPage("tabEmployes");
+                        }
                     }
                 }
         );
@@ -160,17 +165,9 @@ public class AjouterMissionControleur {
                     if (cmp != null) {
                         creationMV.ajouterCompetenceAjoutee(cmp);
                     }
-                    if (creationMV.getDateDebutMisField()==null){
-                        JOptionPane.showMessageDialog(null, "Veuillez saisir des dates des début et de fin de la mission !",
-                                "Erreur de saisie!", JOptionPane.WARNING_MESSAGE);
-                    }else {
-                        List<Competence> lcmpAjout = creationMV.getCompetencesAjoutees();
-                        List<Employe> listeEmployesSelectiones2 = daoEmploye.findEmpByCmp(lcmpAjout);
-                        for(Employe emp : listeEmployesSelectiones2) {
-                            System.out.println("empdslistecontroleur apres ajout cmp"+emp.getLogin());
-                        }
-                        creationMV.setEmploye(listeEmployesSelectiones2); // Mise à jour de la table des employés
-                    }
+                    List<Competence> lcmpAjout = creationMV.getCompetencesAjoutees();
+                    List<Employe> listeEmployesSelectiones2 = daoEmploye.findEmpByCmp(lcmpAjout);
+                    creationMV.setEmploye(listeEmployesSelectiones2); // Mise à jour de la table des employés
                 }
             }
         });

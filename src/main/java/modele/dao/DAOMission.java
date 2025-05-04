@@ -106,21 +106,7 @@ public class DAOMission {
         return competences;
     }
 
-    /*public List<String> getLogEmployesForMission(int idMis) {
-        List<String> logins = new ArrayList<>();
-        String sql = "SELECT loginEmp FROM COLLABORER WHERE idMis = ?";
-        try (PreparedStatement ps = cn.prepareStatement(sql)) {
-            ps.setInt(1, idMis);
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    logins.add(rs.getString("loginEmp"));
-                }
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-        return logins;
-    }*/
+
 
 
 
@@ -144,18 +130,7 @@ public class DAOMission {
         return resultats;
     }
 
-   /* public void modifierMission(Mission mis) throws SQLException {
-        String sql = "UPDATE MISSION SET titreMis=?, dateDebutMis=?, dateFinMis=?, description=?, nbEmpMis=? WHERE idMis=?";
-        try (PreparedStatement ps = cn.prepareStatement(sql)) {
-            ps.setString(1, mis.getTitreMis());
-            ps.setDate(2, mis.getDateDebutMis());
-            ps.setDate(3, mis.getDateFinMis());
-            ps.setString(4, mis.getDescription());
-            ps.setInt(5, mis.getNbEmpMis());
-            ps.setInt(6, mis.getIdMission());
-            ps.executeUpdate();
-        }
-    }*/
+
 
     public int countMissionsByStatus(int statusId) {
         int count = 0;
