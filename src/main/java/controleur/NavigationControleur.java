@@ -143,11 +143,13 @@ public class NavigationControleur {
             public void actionPerformed(ActionEvent e) {
                 Mission missionSelectionnee = missionV.getMissionSelectionnee();
                 System.out.println("idsta mis select :"+missionSelectionnee.getIdSta());
-                if(missionSelectionnee.getIdSta()!=1){
+                /*if(missionSelectionnee.getIdSta()!=1){
 
                     JOptionPane.showMessageDialog(null, "Vous ne pouvez plus modifier cette mission, elle n'est plus en préparation.",
                             "WARNING!" , JOptionPane.WARNING_MESSAGE);
-                } else if  (missionSelectionnee != null) {
+                } else if  (missionSelectionnee != null) {*/
+                //faire if avec : loginField.setEditable(false);
+                if(missionSelectionnee != null) {
                     // Crée une instance de ModifierMissionControleur en passant la mission sélectionnée
                     ModifierMissionControleur modifMC = new ModifierMissionControleur(modifMissionV, missionDao, NavigationControleur.this, competenceDao, employeDao, missionSelectionnee);
 
@@ -159,6 +161,18 @@ public class NavigationControleur {
                     int is = missionV.getIdMissionSelect();
                     modifMC.setIdMissionSelect(is);
                     vueV.showPage("Modification");
+                }
+
+                if(missionSelectionnee.getIdSta()!=1 || missionSelectionnee == null ){
+                    modifMissionV.getTitreMisField2().setEditable(false);
+                    modifMissionV.getDescriptionMisField2().setEditable(false);
+                    modifMissionV.getLogEmpField2().setEditable(false);
+                    modifMissionV.getButtonConfirmer().setEnabled(false);
+                    modifMissionV.getAjouterCompetences().setEnabled(false);
+                    modifMissionV.getAjouterEmployes().setEnabled(false);
+                    modifMissionV.getDateDebutMisFieldComponent().setEnabled(false);
+                    modifMissionV.getDateFinMisFieldComponent().setEnabled(false);
+                    modifMissionV.getNbEmpFieldComponent().setEnabled(false);
                 }
             }
         });
