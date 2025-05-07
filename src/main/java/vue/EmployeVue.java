@@ -6,18 +6,17 @@ import utilitaires.StyleManager;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.io.Serial;
 import java.util.List;
 
-public class EmployeView extends JPanel {
-    @Serial
-    private static final long serialVersionUID = 1L;
+public class EmployeVue extends JPanel {
+    private final JTable tableEmploye;
+    private final JScrollPane scrollEmploye;
+    private final JPanel panelBouttons;
     private final JButton bouttonModifierEmploye;
     private final JButton bouttonAjouterEmploye;
-    private static List<Employe> employes;
-    private final JTable tableEmploye;
+    private List<Employe> employes;
 
-    public EmployeView() {
+    public EmployeVue() {
         StyleManager.setupFlatLaf();
         setLayout(new BorderLayout());
 
@@ -27,28 +26,22 @@ public class EmployeView extends JPanel {
 
         // Table et scroll
         this.tableEmploye = new JTable();
-        JScrollPane scrollEmploye = new JScrollPane(tableEmploye);
-        scrollEmploye.setPreferredSize(new Dimension(800, 300));
+        this.scrollEmploye = new JScrollPane(tableEmploye);
+        this.scrollEmploye.setPreferredSize(new Dimension(800, 300));
         add(scrollEmploye, BorderLayout.CENTER);
 
         // Panel des boutons
-        JPanel panelBouttons = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        panelBouttons.add(this.bouttonAjouterEmploye);
-        panelBouttons.add(this.bouttonModifierEmploye);
-        add(panelBouttons, BorderLayout.SOUTH);
-    }
-
-    //Correctifs SonarQube
-    public static synchronized void updateEmployes(List<Employe> emp) {
-        employes = emp;
+        this.panelBouttons = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        this.panelBouttons.add(this.bouttonAjouterEmploye);
+        this.panelBouttons.add(this.bouttonModifierEmploye);
+        add(this.panelBouttons, BorderLayout.SOUTH);
     }
 
     public void setEmploye(List<Employe> emp) {
-        updateEmployes(emp); // pour permettre la récupération exacte via getEmployeSelectionne()
+        this.employes = emp; // pour permettre la récupération exacte via getEmployeSelectionne()
 
         String[] columnNames = {"Prenom","Nom","Poste"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0){
-            @Override
             public boolean isCellEditable(int row, int col) {
                 return false;
             }
@@ -58,6 +51,7 @@ public class EmployeView extends JPanel {
             Object[] row = {e.getPrenom(), e.getNom(), e.getPoste()};
             model.addRow(row);
         }
+
         this.tableEmploye.setModel(model);
     }
 

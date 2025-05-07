@@ -4,6 +4,7 @@ import modele.Competence;
 import modele.connexion.CictOracleDataSource;
 import modele.dao.requetes.Competence.*;
 
+import javax.swing.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -29,13 +30,13 @@ public class DAOCompetence {
     }
 
 
-    public void ajouterCompetence(Competence cmp) throws SQLException{
+    /*public void ajouterCompetence(Competence cmp) throws SQLException{
         PreparedStatement ps = cn.prepareStatement(new RequeteCompetenceAjouter().requete());
         new RequeteCompetenceAjouter().parametres(ps,cmp);
         ps.executeUpdate();
-    }
+    }*/
 
-    public List<Competence> findByCompetencesEmploye (String login) throws SQLException {
+    public List<Competence> findCmpByLoginEmp(String login) throws SQLException {
         RequeteCompetenceEmploye req = new RequeteCompetenceEmploye();
         List<Competence> liste = new ArrayList<>();
             PreparedStatement ps = cn.prepareStatement(req.requete());
@@ -61,7 +62,6 @@ public class DAOCompetence {
                 while (curseur.next()) {
                     Competence instance = creerInstance(curseur);
                     resultats.add(instance);
-                    //System.out.println("Compétence récupérée: " + instance.getNomCmpFr()); // Debug
                 }
             } catch (SQLException e) {
                 System.err.println(e.getMessage());
@@ -71,4 +71,6 @@ public class DAOCompetence {
         }
         return resultats;
     }
+
+
 }

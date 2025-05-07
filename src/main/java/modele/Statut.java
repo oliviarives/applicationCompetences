@@ -2,20 +2,37 @@ package modele;
 
 public enum Statut {
 
-	EN_PREPARATION("En préparation"),
-	PLANIFIEE("Planifiée"),
-	EN_COURS("En cours"),
-	TERMINEE("Terminée");
+	EN_PREPARATION(1,"En préparation"),
+	PLANIFIEE(2,"Planifiée"),
+	EN_COURS(3,"En cours"),
+	TERMINEE(4,"Terminée"),
+	VACANCES(5,"Vacances");
+
+	private final int idStatut;
+	private final String nomStatut;
 	
-	private final String nom; 
-	
-	private Statut(String nom) {
-		this.nom = nom;
+	private Statut(int id,String nom) {
+		this.idStatut = id;
+		this.nomStatut = nom;
 	}
 	
 	@Override
 	public String toString () {
-		return this.nom;
+		return this.nomStatut;
 	}
-	
+
+	public int getIdStatut() {
+		return idStatut;
+	}
+
+	public static Statut fromId(int id) {
+		for (Statut s : Statut.values()) {
+			if (s.getIdStatut() == id) {
+				return s;
+			}
+		}
+		throw new IllegalArgumentException("Statut inconnu avec id: " + id);
+	}
+
+
 }

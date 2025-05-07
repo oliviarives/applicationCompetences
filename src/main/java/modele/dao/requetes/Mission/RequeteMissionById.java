@@ -5,9 +5,9 @@ import modele.Mission;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class RequeteMissionById extends RequeteMission{
+/*public class RequeteMissionById extends RequeteMission{
 
-    @Override
+   /* @Override
     public String requete(){
         return "SELECT * FROM mission WHERE titreMis = ?";
     }
@@ -21,4 +21,4 @@ public class RequeteMissionById extends RequeteMission{
     public void parametres(PreparedStatement prSt, Mission obj) throws SQLException {
         prSt.setInt(1,Integer.valueOf(((modele.Mission) obj).getIdMission()));
     }
-}
+}*/

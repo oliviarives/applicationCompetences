@@ -5,10 +5,10 @@ import modele.Mission;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class RequeteMissionSelectAll extends RequeteMission {
+public class RequeteMissionAjouterEmp extends RequeteMission{
     @Override
     public String requete() {
-        return "SELECT * FROM MISSION, STATUT WHERE MISSION.idSta=STATUT.idSta ORDER BY IDMIS DESC";
+        return "INSERT INTO COLLABORER (LOGINEMP,IDMIS) VALUES (?,?)";
     }
 
     @Override
@@ -19,5 +19,16 @@ public class RequeteMissionSelectAll extends RequeteMission {
     @Override
     public void parametres(PreparedStatement prSt, Mission mission) throws SQLException {
         throw new UnsupportedOperationException("Non utilisé pour cette requête.");
+    }
+
+    public void parametres(PreparedStatement prSt,String logemp, int idm) throws SQLException {
+        prSt.setString(1, logemp);
+        prSt.setInt(2, idm);
+    }
+
+
+    public void parametres(PreparedStatement prSt, Mission mis, String logemp) throws SQLException {
+        prSt.setString(1, logemp);
+        prSt.setInt(2, mis.getIdMission());
     }
 }

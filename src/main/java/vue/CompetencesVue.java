@@ -8,24 +8,24 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
 
-public class CompetencesView extends JPanel{
-    private final JTable tableCompetences;
+public class CompetencesVue extends JPanel{
+    private JTable tableCompetences;
+    private JScrollPane scrollCompetences;
 
 
-    public CompetencesView() {
+    public CompetencesVue() {
         StyleManager.setupFlatLaf();
         setLayout(new BorderLayout());
         this.tableCompetences = new JTable();
-        JScrollPane scrollCompetences = new JScrollPane(tableCompetences);
+        this.scrollCompetences = new JScrollPane(tableCompetences);
         StyleManager.autoResizeTable(tableCompetences, scrollCompetences);
-        scrollCompetences.setPreferredSize(new Dimension(800,300));
+        this.scrollCompetences.setPreferredSize(new Dimension(800,300));
         add(scrollCompetences);
     }
 
     public void setCompetences(List<Competence> competences) {
         String[] columnNames = {"Id Competence", "Id Categorie","Nom (En)","Nom (FR)"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0){
-            @Override
             public boolean isCellEditable(int row, int col) {
                 return false;
             }

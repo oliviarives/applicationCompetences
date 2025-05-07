@@ -2,27 +2,25 @@ package controleur;
 
 import modele.Mission;
 import modele.dao.DAOMission;
-import vue.CreationMissionView;
-import vue.MissionView;
-import vue.ModificationMissionView;
+import vue.CreationMissionVue;
+import vue.MissionVue;
+import vue.ModificationMissionVue;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Date;
-import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
 public class MissionControleur {
 
-    private MissionView vueM;
+    private MissionVue vueM;
     private DAOMission missionDAO;
     private NavigationControleur navControleur; //unused
-    private CreationMissionView creationMV;//unused
-    private ModificationMissionView modificationMV;//unused
+    private CreationMissionVue creationMV;//unused
+    private ModificationMissionVue modificationMV;//unused
 
-    public MissionControleur(MissionView vue, DAOMission daoM, NavigationControleur navC, CreationMissionView creationMV, ModificationMissionView modificationMV) {
+    public MissionControleur(MissionVue vue, DAOMission daoM, NavigationControleur navC, CreationMissionVue creationMV, ModificationMissionVue modificationMV) {
         this.vueM = vue;
         this.missionDAO = daoM;
         this.navControleur = navC;

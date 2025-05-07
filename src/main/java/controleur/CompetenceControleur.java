@@ -2,16 +2,16 @@ package controleur;
 
 import modele.Competence;
 import modele.dao.DAOCompetence;
-import vue.CompetencesView;
+import vue.CompetencesVue;
 
 import java.util.List;
 
 public class CompetenceControleur {
 
-    private CompetencesView vueC;
+    private CompetencesVue vueC;
     private DAOCompetence competenceDAO;
 
-    public CompetenceControleur(CompetencesView vue, DAOCompetence daoC) {
+    public CompetenceControleur(CompetencesVue vue, DAOCompetence daoC) {
         this.vueC = vue;
         this.competenceDAO = daoC;
 

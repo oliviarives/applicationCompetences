@@ -6,20 +6,17 @@ import modele.Mission;
 import modele.dao.DAOCompetence;
 import modele.dao.DAOEmploye;
 import modele.dao.DAOMission;
-import vue.CreationMissionView;
-import vue.ModificationMissionView;
+import vue.ModificationMissionVue;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Date;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class ModifierMissionControleur {
-    private ModificationMissionView modificationMV;
+    private ModificationMissionVue modificationMV;
     private DAOMission daoMission;
     private NavigationControleur navC;
     private DAOCompetence daoCompetence;
@@ -29,7 +26,7 @@ public class ModifierMissionControleur {
     private List<Employe> listeEmployesSelectiones;
     private int idMissionSelectMissionView;
 
-    public ModifierMissionControleur(ModificationMissionView modificationMV, DAOMission daoMission, NavigationControleur navigationC,DAOCompetence daoComp,DAOEmploye daoEmp, Mission mission) {
+    public ModifierMissionControleur(ModificationMissionVue modificationMV, DAOMission daoMission, NavigationControleur navigationC, DAOCompetence daoComp, DAOEmploye daoEmp, Mission mission) {
         this.modificationMV = modificationMV;
         this.daoMission = daoMission;
         this.navC = navigationC;
@@ -102,7 +99,7 @@ public class ModifierMissionControleur {
 
                 // Vérification de la validité du login employé via la méthode loginExist()
                 try {
-                    if(!daoEmploye.loginExist(login)) {
+                    if(!daoEmploye.isLoginExists(login)) {
                         JOptionPane.showMessageDialog(null,
                                 "Le login employé saisi n'est pas valide. Veuillez entrer un login existant.",
                                 "Erreur", JOptionPane.ERROR_MESSAGE);
@@ -139,8 +136,8 @@ public class ModifierMissionControleur {
 
                 try {
                     daoMission.updateMissionModifier(misInsert);
-                    daoMission.ajouterMissionCmp(misInsert, cmpAjoutees);
-                    daoMission.ajouterMissionEmp(misInsert, logEmpAjoutes);
+                    daoMission.ajouterCmpToMission(misInsert, cmpAjoutees);
+                    daoMission.ajouterEmpToMission(misInsert, logEmpAjoutes);
 
                     // Si on a affecté au moins un employé, on met à jour le statut à "Planifiée" (idSta = 2)
                     if(!logEmpAjoutes.isEmpty()) {
@@ -182,7 +179,7 @@ public class ModifierMissionControleur {
                         modificationMV.ajouterCompetenceAjoutee(cmp);
                     }
                     List<Competence>  lcmpAjout= modificationMV.getCompetencesAjoutees();
-                    List<Employe> listeEmployesSelectiones2 = daoEmploye.findEmpByCompetences(lcmpAjout);
+                    List<Employe> listeEmployesSelectiones2 = daoEmploye.findEmpByCmp(lcmpAjout);
                     modificationMV.setEmploye(listeEmployesSelectiones2); // Mise à jour de la table des employés
                 }
             }
@@ -222,7 +219,7 @@ public class ModifierMissionControleur {
                         model.removeRow(selectedRow);
                     }
                     listeCompetencesSelectionnees = modificationMV.getCompetencesAjoutees();
-                    listeEmployesSelectiones = daoEmploye.findEmpByCompetences(listeCompetencesSelectionnees);
+                    listeEmployesSelectiones = daoEmploye.findEmpByCmp(listeCompetencesSelectionnees);
                     modificationMV.setEmploye(listeEmployesSelectiones);
                 }
             }

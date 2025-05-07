@@ -11,10 +11,12 @@ public class RequeteCompetenceEmploye extends RequeteCompetence {
         return "SELECT c.IDCMP, c.IDCATCMP, c.NOMCMPEN, c.NOMCMPFR FROM COMPETENCE c, POSSEDER p WHERE c.IDCMP = p.IDCMP AND c.IDCATCMP = p.IDCATCMP AND p.LOGINEMP = ?";
     }
 
+    @Override
     public void parametres(PreparedStatement prSt, String... id) throws SQLException {
         prSt.setString(1, id[0]);
     }
 
+    @Override
     public void parametres(PreparedStatement prSt, Competence obj) throws SQLException {
         throw new UnsupportedOperationException("Non utilisé pour cette requête.");
     }

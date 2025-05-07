@@ -1,11 +1,11 @@
 package modele;
 
-public class CategorieCmp {
+public class CategorieCompetence {
     private final String titre;
     //private String idCatCmp;
     private static int compteurId = 0;
 
-    public CategorieCmp(String titre) {
+    public CategorieCompetence(String titre) {
         this.titre = titre;
         //this.idCatCmp = generateIdCatCmp();
         generateIdCatCmp();
@@ -24,7 +24,7 @@ public class CategorieCmp {
             id.insert(0, (char) ('A' + (num % 26))); 
             num = (num / 26) - 1; 
         }
-        CategorieCmp.compteurId++;
+        CategorieCompetence.compteurId++;
         return id.toString();
     }
 
