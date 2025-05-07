@@ -64,6 +64,7 @@ public class DAOMission {
         RequeteMissionDeleteCmp reqDC = new RequeteMissionDeleteCmp();
         PreparedStatement psDel = cn.prepareStatement(reqDC.requete());
         reqDC.parametres(psDel, mis);
+        psDel.executeQuery();
         for (Competence cmp : lcmpA) {
             RequeteMissionNecessiterCmp req = new RequeteMissionNecessiterCmp();
             PreparedStatement ps = cn.prepareStatement(req.requete());
