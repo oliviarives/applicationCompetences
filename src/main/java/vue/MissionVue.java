@@ -247,8 +247,6 @@ public class MissionVue extends JPanel {
         return mission;
     }
 
-
-
     public JTable getMissionTable() {
         return this.tableMission;
     }

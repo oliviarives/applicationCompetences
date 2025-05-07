@@ -1,5 +1,6 @@
 package vue;
 
+import com.toedter.calendar.JDateChooser;
 import modele.Competence;
 import modele.Employe;
 import modele.Mission;
@@ -21,8 +22,8 @@ public class ModificationMissionVue extends JPanel {
     private JButton buttonConfirmer;
     private JTextField titreMisField;
     private JTextArea descriptionMisField;
-    private JFormattedTextField dateDebutMisField;
-    private JFormattedTextField dateFinMisField;
+    private JDateChooser dateDebutMisField;
+    private JDateChooser dateFinMisField;
     private JSpinner nbEmpField;
     private JTextField logEmpField;
     private JButton ajouterCompetences;
@@ -77,10 +78,14 @@ public class ModificationMissionVue extends JPanel {
 
         this.titreMisField = new JTextField(20);
         this.descriptionMisField = new JTextArea(3, 30);
-        this.dateDebutMisField = new JFormattedTextField(dateFormatter);
-        this.dateDebutMisField.setValue(new Date(System.currentTimeMillis()));
-        this.dateFinMisField = new JFormattedTextField(dateFormatter);
-        this.dateFinMisField.setValue(new Date(System.currentTimeMillis()));
+        this.dateDebutMisField = new JDateChooser();
+        dateDebutMisField.setDateFormatString("yyyy-MM-dd");
+        dateDebutMisField.setDate(new java.util.Date());
+        dateDebutMisField.setPreferredSize(new Dimension(100, 25));
+        this.dateFinMisField = new JDateChooser();
+        dateFinMisField.setDateFormatString("yyyy-MM-dd");
+        dateFinMisField.setDate(new java.util.Date());
+        dateFinMisField.setPreferredSize(new Dimension(100, 25));
         SpinnerModel modelSpinner = new SpinnerNumberModel(0, 0, 30, 1);
         this.nbEmpField = new JSpinner(modelSpinner);
         this.nomStaField = new JTextField(15);
@@ -195,20 +200,37 @@ public class ModificationMissionVue extends JPanel {
         return this.titreMisField.getText();
     }
 
+    public JTextField getTitreMisField2(){return this.titreMisField;}
+
     public String getDescriptionMisField() {
         return this.descriptionMisField.getText();
     }
 
-    public Date getDateDebutMisField() {
-        return java.sql.Date.valueOf(this.dateDebutMisField.getText());
+    public JTextArea getDescriptionMisField2() {
+        return this.descriptionMisField;
     }
 
-    public Date getDateFinMisField() {
-        return java.sql.Date.valueOf(this.dateFinMisField.getText());
+    public java.sql.Date getDateDebutMisField() {
+        java.util.Date d = dateDebutMisField.getDate();
+        return (d != null) ? new java.sql.Date(d.getTime()) : null;
+    }
+    public JDateChooser getDateDebutMisFieldComponent() {
+        return this.dateDebutMisField;
+    }
+    public java.sql.Date getDateFinMisField() {
+        java.util.Date d = dateFinMisField.getDate();
+        return (d != null) ? new java.sql.Date(d.getTime()) : null;
+    }
+
+    public JDateChooser getDateFinMisFieldComponent() {
+        return this.dateFinMisField;
     }
 
     public String getLogEmpField() {
         return this.logEmpField.getText();
+    }
+    public JTextField getLogEmpField2() {
+        return this.logEmpField;
     }
 
 
@@ -239,6 +261,11 @@ public class ModificationMissionVue extends JPanel {
     public JTable getEmployesTable() {
         return this.employesTable;
     }
+
+    public JSpinner getNbEmpFieldComponent() {
+        return this.nbEmpField;
+    }
+
 
     public void setCompetencesAjout(List<Competence> competences) {
         //System.out.println("Mise à jour de la table des compétences avec " + competences.size() + " entrées."); // Debug
@@ -327,8 +354,8 @@ public class ModificationMissionVue extends JPanel {
     public void setMission(Mission missionSelectionnee) {
 
         titreMisField.setText(missionSelectionnee.getTitreMis());
-        dateDebutMisField.setText(missionSelectionnee.getDateDebutMis().toString());
-        dateFinMisField.setText(missionSelectionnee.getDateFinMis().toString());
+        dateDebutMisField.setDate(missionSelectionnee.getDateDebutMis());
+        dateFinMisField.setDate(missionSelectionnee.getDateFinMis());
         descriptionMisField.setText(missionSelectionnee.getDescription());
         nbEmpField.setValue(missionSelectionnee.getNbEmpMis());
         nomStaField.setText(missionSelectionnee.getNomSta());
@@ -372,8 +399,8 @@ public class ModificationMissionVue extends JPanel {
 
     public void setMissionData(Mission mission) {
         this.titreMisField.setText(mission.getTitreMis());
-        this.dateDebutMisField.setText(mission.getDateDebutMis().toString());
-        this.dateFinMisField.setText(mission.getDateFinMis().toString());
+        this.dateDebutMisField.setDate(mission.getDateDebutMis());
+        this.dateFinMisField.setDate(mission.getDateFinMis());
         this.descriptionMisField.setText(mission.getDescription());
         this.logEmpField.setText(mission.getLoginEmp());
     }
