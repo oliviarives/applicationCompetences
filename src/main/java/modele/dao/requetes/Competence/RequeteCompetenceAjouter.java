@@ -6,7 +6,7 @@ import modele.Mission;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class RequeteCompetenceAjouter extends RequeteCompetence{
+/*public class RequeteCompetenceAjouter extends RequeteCompetence{
     @Override
     public String requete() {
         return "INSERT INTO COMPETENCE () VALUES (?,?,?,…)";
@@ -19,4 +19,4 @@ public class RequeteCompetenceAjouter extends RequeteCompetence{
     public void parametres(PreparedStatement prSt, Competence obj) throws SQLException {
         throw new UnsupportedOperationException("Non utilisé pour cette requête.");
     }
-}
+}*/

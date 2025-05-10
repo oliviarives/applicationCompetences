@@ -29,7 +29,8 @@ public class Employe {
         this.actif = true;
     }
     //Constructeur pour affichage
-    public Employe(String prenom, String nom, String poste) {
+    public Employe(String log, String prenom, String nom, String poste) {
+        this.login = log;
         this.prenom = prenom;
         this.nom = nom;
         this.poste = poste;

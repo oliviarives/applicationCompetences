@@ -11,8 +11,9 @@ public class Mission {
     private String description;
     private Date dateCreation;
     private String loginEmp;
-    private int idSta;
-    private String nomSta;
+    //private int idSta;
+    //private String nomSta;
+    private Statut statut;
     static int compteurMis = 20;
     //constructeur avec 7 dont login arguments si creation d'une mission
     public Mission(String titre, Date dateDebut, Date dateFin, String d, Date dateC, int nbEmp, String login,int idS) {
@@ -24,7 +25,7 @@ public class Mission {
         this.dateCreation = dateC;
         this.loginEmp = login;
         this.nbEmpMis = nbEmp;
-        this.idSta = idS;
+        this.statut = Statut.fromId(idS);
     }
 
     public Mission(int idMis, String titre, Date dateDebut, Date dateFin, String description, Date dateCreation, int nbEmp, String nomSta, int idS, String logEmp) {
@@ -35,8 +36,7 @@ public class Mission {
         this.description = description;
         this.dateCreation = dateCreation;
         this.nbEmpMis = nbEmp;
-        this.nomSta = nomSta;
-        this.idSta = idS;
+        this.statut = Statut.fromId(idS);
         this.loginEmp=logEmp;
     }
 
@@ -73,7 +73,7 @@ public class Mission {
     }
 
     public String getNomSta() {
-        return this.nomSta;
+        return this.statut.toString();
     }
 
     public int getNbEmpMis() {
@@ -85,7 +85,7 @@ public class Mission {
     }
 
     public int getIdSta(){
-        return this.idSta;
+        return this.statut.getIdStatut();
     }
 
     public void setIdMission(int id) {

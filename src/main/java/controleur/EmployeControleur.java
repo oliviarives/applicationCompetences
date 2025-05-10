@@ -2,16 +2,16 @@ package controleur;
 
 import modele.Employe;
 import modele.dao.DAOEmploye;
-import vue.EmployeView;
+import vue.EmployeVue;
 
 import java.util.List;
 
 public class EmployeControleur {
-    private EmployeView empView;
+    private EmployeVue empView;
     private DAOEmploye daoEmploye;
     private NavigationControleur navC;
 
-    public EmployeControleur(EmployeView empView, DAOEmploye daoEmploye, NavigationControleur navC) {
+    public EmployeControleur(EmployeVue empView, DAOEmploye daoEmploye, NavigationControleur navC) {
         this.empView = empView;
         this.daoEmploye = daoEmploye;
         this.navC = navC; 

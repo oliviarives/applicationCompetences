@@ -78,7 +78,7 @@ public class ConnexionVue extends JDialog {
     private void verifierConnexion() {
         String identifiant = IdentifiantJTextField.getText();
         String motDePasse = new String(MdpJTextFieldPwd.getPassword());
-        NavigationView navigationView = new NavigationView();
+        NavigationVue navigationView = new NavigationVue();
 
         boolean connexionReussie = this.controleur.tenterConnexion(identifiant, motDePasse);
 

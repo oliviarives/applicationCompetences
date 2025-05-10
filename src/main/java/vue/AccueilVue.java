@@ -16,7 +16,7 @@ public class AccueilVue extends JPanel {
     private final JPanel cardPanel;
     private final ChartPanel chartPanel;
 
-    // On conserve des références aux cartes pour pouvoir les recréer lors update
+    // On conserve des références aux cartes pour pouvoir les recréer lors  update
     private JPanel cardPrep;
     private JPanel cardEnCours;
     private JPanel cardTermine;

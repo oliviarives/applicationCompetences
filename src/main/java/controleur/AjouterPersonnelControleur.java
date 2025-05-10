@@ -5,7 +5,7 @@ import modele.Employe;
 import modele.MdpUtils;
 import modele.dao.DAOCompetence;
 import modele.dao.DAOEmploye;
-import vue.AjoutPersonnelVue;
+import vue.AjoutEmployeVue;
 
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
@@ -15,12 +15,12 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class AjouterPersonnelControleur {
-    private final AjoutPersonnelVue ajoutPersonnelVue;
+    private final AjoutEmployeVue ajoutPersonnelVue;
     private final DAOEmploye daoEmploye;
     private final DAOCompetence daoCompetence;
     private final NavigationControleur navC;
 
-    public AjouterPersonnelControleur(AjoutPersonnelVue ajoutPersonnelVue, DAOEmploye daoEmp, DAOCompetence daoCmp, NavigationControleur navigationC) {
+    public AjouterPersonnelControleur(AjoutEmployeVue ajoutPersonnelVue, DAOEmploye daoEmp, DAOCompetence daoCmp, NavigationControleur navigationC) {
         this.ajoutPersonnelVue = ajoutPersonnelVue;
         this.daoEmploye = daoEmp;
         this.navC = navigationC;
@@ -73,7 +73,7 @@ public class AjouterPersonnelControleur {
         }
 
         try {
-            if (daoEmploye.loginExist(login)) {
+            if (daoEmploye.isLoginExists(login)) {
                 ajoutPersonnelVue.afficherMessage("Ce login est déjà utilisé, veuillez en choisir un autre.");
                 return;
             }
@@ -81,9 +81,9 @@ public class AjouterPersonnelControleur {
             String mdpHashed = MdpUtils.hashPassword(mdp);
             // Création de l'employé
             Employe employe = new Employe(prenom, nom, login, mdpHashed, poste, dateEntree);
-            daoEmploye.ajouterPersonnel(employe);
+            daoEmploye.ajouterEmploye(employe);
             for (Competence cmp : ajoutPersonnelVue.getCompetencesAjoutees()) {
-                daoEmploye.ajouterPossession(employe.getLogin(), cmp);
+                daoEmploye.ajouterCmpToEmp(employe.getLogin(), cmp);
             }
         } catch (SQLException ex) {
             ajoutPersonnelVue.afficherMessage("Erreur lors de l'ajout de l'employé.");
@@ -91,7 +91,7 @@ public class AjouterPersonnelControleur {
         }
     }
 
-    public void loadCompetences() {
+   public void loadCompetences() {
         List<Competence> competences = daoCompetence.findAll();
         ajoutPersonnelVue.setToutesCompetences(competences);
     }

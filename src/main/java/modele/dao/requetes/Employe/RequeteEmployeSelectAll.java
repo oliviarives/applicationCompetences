@@ -12,10 +12,12 @@ public class RequeteEmployeSelectAll extends RequeteEmploye{
         //return "SELECT * FROM EMPLOYE";
     }
 
+    @Override
     public void parametres(PreparedStatement prSt, String... id) throws SQLException {
         throw new UnsupportedOperationException("Non utilisé pour cette requête.");
     }
 
+    @Override
     public void parametres(PreparedStatement prSt, Employe obj) throws SQLException {
         throw new UnsupportedOperationException("Non utilisé pour cette requête.");
     }

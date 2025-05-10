@@ -1,5 +1,6 @@
 package vue;
 
+import com.toedter.calendar.JDateChooser;
 import modele.Competence;
 import modele.Employe;
 import modele.Mission;
@@ -16,13 +17,13 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-public class ModificationMissionView extends JPanel {
+public class ModificationMissionVue extends JPanel {
 
     private JButton buttonConfirmer;
     private JTextField titreMisField;
     private JTextArea descriptionMisField;
-    private JFormattedTextField dateDebutMisField;
-    private JFormattedTextField dateFinMisField;
+    private JDateChooser dateDebutMisField;
+    private JDateChooser dateFinMisField;
     private JSpinner nbEmpField;
     private JTextField logEmpField;
     private JButton ajouterCompetences;
@@ -46,7 +47,7 @@ public class ModificationMissionView extends JPanel {
     private static final String NOM_EN = "Nom (En)";
     private static final String NOM_FR = "Nom (Fr)";
 
-    public ModificationMissionView() {
+    public ModificationMissionVue() {
         StyleManager.setupFlatLaf();
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
@@ -77,10 +78,14 @@ public class ModificationMissionView extends JPanel {
 
         this.titreMisField = new JTextField(20);
         this.descriptionMisField = new JTextArea(3, 30);
-        this.dateDebutMisField = new JFormattedTextField(dateFormatter);
-        this.dateDebutMisField.setValue(new Date(System.currentTimeMillis()));
-        this.dateFinMisField = new JFormattedTextField(dateFormatter);
-        this.dateFinMisField.setValue(new Date(System.currentTimeMillis()));
+        this.dateDebutMisField = new JDateChooser();
+        dateDebutMisField.setDateFormatString("yyyy-MM-dd");
+        dateDebutMisField.setDate(new java.util.Date());
+        dateDebutMisField.setPreferredSize(new Dimension(100, 25));
+        this.dateFinMisField = new JDateChooser();
+        dateFinMisField.setDateFormatString("yyyy-MM-dd");
+        dateFinMisField.setDate(new java.util.Date());
+        dateFinMisField.setPreferredSize(new Dimension(100, 25));
         SpinnerModel modelSpinner = new SpinnerNumberModel(0, 0, 30, 1);
         this.nbEmpField = new JSpinner(modelSpinner);
         this.nomStaField = new JTextField(15);
@@ -139,13 +144,18 @@ public class ModificationMissionView extends JPanel {
         JLabel employesLabel = new JLabel("Employés ajoutés :");
         panellisteEmployes.add(employesLabel, BorderLayout.NORTH); // Place le label en haut
         this.listeEmployesAjoutee = new JTable();
-        String[] employesColumnNames = {"Prenom", "Nom", "Poste"};
+        String[] employesColumnNames = {"login","Prenom", "Nom", "Poste"};
         DefaultTableModel employesModel = new DefaultTableModel(employesColumnNames, 0) {
             public boolean isCellEditable(int row, int col) { //cellules de la table ne sont plus editables
                 return false;
             }
         };
         listeEmployesAjoutee.setModel(employesModel);
+        TableColumn column = this.listeEmployesAjoutee.getColumnModel().getColumn(0);
+        column.setMinWidth(0);
+        column.setMaxWidth(0);
+        column.setPreferredWidth(0);
+        column.setResizable(false);
         this.listeEmployesScrollPane = new JScrollPane(listeEmployesAjoutee);
         listeEmployesScrollPane.setPreferredSize(new Dimension(150, 200));
         panellisteEmployes.add(listeEmployesScrollPane, BorderLayout.CENTER); // Place la table sous le label
@@ -190,20 +200,37 @@ public class ModificationMissionView extends JPanel {
         return this.titreMisField.getText();
     }
 
+    public JTextField getTitreMisField2(){return this.titreMisField;}
+
     public String getDescriptionMisField() {
         return this.descriptionMisField.getText();
     }
 
-    public Date getDateDebutMisField() {
-        return java.sql.Date.valueOf(this.dateDebutMisField.getText());
+    public JTextArea getDescriptionMisField2() {
+        return this.descriptionMisField;
     }
 
-    public Date getDateFinMisField() {
-        return java.sql.Date.valueOf(this.dateFinMisField.getText());
+    public java.sql.Date getDateDebutMisField() {
+        java.util.Date d = dateDebutMisField.getDate();
+        return (d != null) ? new java.sql.Date(d.getTime()) : null;
+    }
+    public JDateChooser getDateDebutMisFieldComponent() {
+        return this.dateDebutMisField;
+    }
+    public java.sql.Date getDateFinMisField() {
+        java.util.Date d = dateFinMisField.getDate();
+        return (d != null) ? new java.sql.Date(d.getTime()) : null;
+    }
+
+    public JDateChooser getDateFinMisFieldComponent() {
+        return this.dateFinMisField;
     }
 
     public String getLogEmpField() {
         return this.logEmpField.getText();
+    }
+    public JTextField getLogEmpField2() {
+        return this.logEmpField;
     }
 
 
@@ -234,6 +261,11 @@ public class ModificationMissionView extends JPanel {
     public JTable getEmployesTable() {
         return this.employesTable;
     }
+
+    public JSpinner getNbEmpFieldComponent() {
+        return this.nbEmpField;
+    }
+
 
     public void setCompetencesAjout(List<Competence> competences) {
         //System.out.println("Mise à jour de la table des compétences avec " + competences.size() + " entrées."); // Debug
@@ -296,10 +328,11 @@ public class ModificationMissionView extends JPanel {
     public Employe getEmployeSelectionne() {
         int selectedRow = employesTable.getSelectedRow();
         if (selectedRow != -1) { //  si une ligne est sélectionnée
+            String login = (String) employesTable.getValueAt(selectedRow, 0);
             String prenom = (String) employesTable.getValueAt(selectedRow, 1);
             String nom = (String) employesTable.getValueAt(selectedRow, 2);
             String poste = (String) employesTable.getValueAt(selectedRow, 3);
-            return new Employe(prenom, nom, poste);
+            return new Employe(login,prenom, nom, poste);
         }
         return null; // Aucune ligne sélectionnée
     }
@@ -314,15 +347,15 @@ public class ModificationMissionView extends JPanel {
     //ajout employé selectionner a tables des employés ajoutés à la mission
     public void ajouterEmployesAjoutee(Employe emp) {
         DefaultTableModel model = (DefaultTableModel) listeEmployesAjoutee.getModel();
-        Object[] row = {emp.getPrenom(), emp.getNom(), emp.getPoste()};
+        Object[] row = {emp.getLogin(),emp.getPrenom(), emp.getNom(), emp.getPoste()};
         model.addRow(row);
     }
 
     public void setMission(Mission missionSelectionnee) {
 
         titreMisField.setText(missionSelectionnee.getTitreMis());
-        dateDebutMisField.setText(missionSelectionnee.getDateDebutMis().toString());
-        dateFinMisField.setText(missionSelectionnee.getDateFinMis().toString());
+        dateDebutMisField.setDate(missionSelectionnee.getDateDebutMis());
+        dateFinMisField.setDate(missionSelectionnee.getDateFinMis());
         descriptionMisField.setText(missionSelectionnee.getDescription());
         nbEmpField.setValue(missionSelectionnee.getNbEmpMis());
         nomStaField.setText(missionSelectionnee.getNomSta());
@@ -366,8 +399,8 @@ public class ModificationMissionView extends JPanel {
 
     public void setMissionData(Mission mission) {
         this.titreMisField.setText(mission.getTitreMis());
-        this.dateDebutMisField.setText(mission.getDateDebutMis().toString());
-        this.dateFinMisField.setText(mission.getDateFinMis().toString());
+        this.dateDebutMisField.setDate(mission.getDateDebutMis());
+        this.dateFinMisField.setDate(mission.getDateFinMis());
         this.descriptionMisField.setText(mission.getDescription());
         this.logEmpField.setText(mission.getLoginEmp());
     }
