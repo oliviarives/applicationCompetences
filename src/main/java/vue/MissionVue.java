@@ -5,6 +5,7 @@ import controleur.NavigationControleur;
 import modele.Mission;
 import modele.dao.DAOMission;
 import utilitaires.StyleManager;
+import java.sql.SQLException;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -231,7 +232,7 @@ public class MissionVue extends JPanel {
     }
 
     //permet de recupererer la mission selectionne dans le tableau
-    public Mission getMissionSelectionnee() {
+    public Mission getMissionSelectionnee() throws SQLException {
         int selectedRow = tableMission.getSelectedRow();
         if (selectedRow == -1) {
             JOptionPane.showMessageDialog(this, "Veuillez sélectionner la mission que vous souhaitez modifier.");

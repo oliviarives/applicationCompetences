@@ -1,18 +1,16 @@
 package vue;
-import controleur.NavigationControleur;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.logging.Logger;
-import javax.swing.*;
+
 import controleur.ConnexionControleur;
 import modele.connexion.CictOracleDataSource;
 import modele.dao.DAOUtilisateur;
 
+import javax.swing.*;
+import java.awt.*;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.logging.Logger;
+
 public class ConnexionVue extends JDialog {
-    private final ConnexionControleur controleur;
     private static final Logger logger = Logger.getLogger(ConnexionVue.class.getName());
     private JPanel page;
     private JTextField IdentifiantJTextField;
@@ -31,30 +29,17 @@ public class ConnexionVue extends JDialog {
     private JLabel ConnexionJLabel;
 
 
-    /**
-     * Crée la fenêtre de connexion.
-     */
-    public ConnexionVue(ConnexionControleur controleur) {
-        super(); // Appel au constructeur de JDialog
-        this.controleur = controleur;
-
-        // Configurer la fenêtre
+    public ConnexionVue() {
+        super();
         setContentPane(page);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         pack();
         setLocationRelativeTo(null);
+        new ConnexionControleur(this, new DAOUtilisateur());
         setVisible(true);
-
-        // Ajouter un ActionListener aux champs de texte pour pouvoir appuyer sur le bouton Entrer du clavier
-        IdentifiantJTextField.addActionListener(e -> verifierConnexion());
-        MdpJTextFieldPwd.addActionListener(e -> verifierConnexion());
-        loginButton.addActionListener(e -> verifierConnexion());
-
     }
 
-    /**
-     * Lance l'application.
-     */
+
     public static void main(String[] args) {
         try {
             Connection connection = CictOracleDataSource.getConnectionBD();
@@ -62,51 +47,30 @@ public class ConnexionVue extends JDialog {
                 throw new SQLException("Impossible d'obtenir une connexion valide à la base de données.");
             }
 
-            ConnexionControleur controleur = new ConnexionControleur(new DAOUtilisateur());
-
-            // Passer le contrôleur à la vue
-            new ConnexionVue(controleur);
+            SwingUtilities.invokeLater(() -> new ConnexionVue());
 
         } catch (Exception e) {
             logger.severe("Erreur lors de la connexion : " + e.getMessage());
         }
     }
 
-    /**
-     * Vérifie la connexion
-     */
-    private void verifierConnexion() {
-        String identifiant = IdentifiantJTextField.getText();
-        String motDePasse = new String(MdpJTextFieldPwd.getPassword());
-        NavigationVue navigationView = new NavigationVue();
 
-        boolean connexionReussie = this.controleur.tenterConnexion(identifiant, motDePasse);
+    public String getIdentifiant() {
+        return IdentifiantJTextField.getText().trim();
+    }
 
-        if (connexionReussie) {
-            try {
-                new NavigationControleur(navigationView);
-                navigationView.setVisible(true);
-                setVisible(false);
-                dispose();
+    public String getMotDePasse() {
+        return new String (MdpJTextFieldPwd.getPassword());
+    }
 
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        } else {
-            // Affichage du message d'erreur
-            messageLabel.setText("Identifiant ou mot de passe incorrect !");
-            messageLabel.setForeground(Color.RED);
+    public JButton getLoginButton() {
+        return loginButton;
+    }
 
-            // Démarrer un Timer pour effacer le message après 3 secondes
-            Timer timer = new Timer(3000, new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    messageLabel.setText(""); // Effacer le message
-                }
-            });
-
-            timer.setRepeats(false); // Exécuter une seule fois
-            timer.start();
+    public void setMessage(String message, Color color) {
+        messageLabel.setText(message);
+        if (color != null) {
+            messageLabel.setForeground(color);
         }
     }
 }

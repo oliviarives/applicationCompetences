@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="8a6a944a-9d37-4efc-8e13-2a1cfc5dc086" name="Changes" comment="10/05 - commit and push des fichiers .ideas qui posent pbm pour pull">
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/controleur/AjouterPersonnelControleur.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/controleur/AjouterEmployeControleur.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/controleur/ConnexionControleur.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/controleur/ConnexionControleur.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/controleur/ModifierPersonnelControleur.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/controleur/ModifierEmployeControleur.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/controleur/NavigationControleur.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/controleur/NavigationControleur.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/modele/dao/DAOEmploye.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/modele/dao/DAOEmploye.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/modele/dao/DAOMission.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/modele/dao/DAOMission.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/modele/dao/requetes/Employe/RequeteEmployeModifier.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/modele/dao/requetes/Employe/RequeteEmployeModifier.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/vue/AjoutEmployeVue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/vue/AjoutEmployeVue.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/vue/ConnexionVue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/vue/ConnexionVue.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/vue/MissionVue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/vue/MissionVue.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/oliviarives/applicationCompetences.git",
+    "accountId": "dab7c300-7d71-4d40-a890-5c23d9812b48"
+  }
+}]]></component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.ConnexionVue.executor": "Run",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "SONARLINT_PRECOMMIT_ANALYSIS": "true",
+    "git-widget-placeholder": "ange"
+  }
+}]]></component>
+  <component name="RunManager">
+    <configuration default="true" type="JetRunConfigurationType">
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <option name="filePath" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="TaskManager">
+    <task id="LOCAL-00001" summary="10/05 - commit and push des fichiers .ideas qui posent pbm pour pull">
+      <option name="closed" value="true" />
+      <created>1746882871216</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1746882871216</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="10/05 - commit and push des fichiers .ideas qui posent pbm pour pull" />
+    <option name="LAST_COMMIT_MESSAGE" value="10/05 - commit and push des fichiers .ideas qui posent pbm pour pull" />
+  </component>
+</project>
