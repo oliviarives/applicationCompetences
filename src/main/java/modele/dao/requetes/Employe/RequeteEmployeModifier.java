@@ -8,7 +8,7 @@ import java.sql.SQLException;
 public class RequeteEmployeModifier extends RequeteEmploye {
     @Override
     public String requete() {
-        return "UPDATE EMPLOYE SET PRENOMEMP = ?, NOMEMP = ?, DATEENTREEEMP = ?, MDPEMP = ?, ACTIF = ?, POSTEEMP = ? WHERE LOGINEMP = ?";
+        return "UPDATE EMPLOYE SET PRENOMEMP = ?, NOMEMP = ?, DATEENTREEEMP = ?, POSTEEMP = ? WHERE LOGINEMP = ?";
     }
 
     @Override
@@ -21,8 +21,6 @@ public class RequeteEmployeModifier extends RequeteEmploye {
         prSt.setString(1, obj.getPrenom());
         prSt.setString(2, obj.getNom());
         prSt.setDate(3, new java.sql.Date(obj.getDateEntree().getTime()));
-        prSt.setString(4, obj.gethashedPwd());
-        prSt.setInt(5, 1);
         prSt.setString(6, obj.getPoste());
         prSt.setString(7, obj.getLogin());
     }

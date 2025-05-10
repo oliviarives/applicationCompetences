@@ -8,6 +8,7 @@ import java.util.Map;
 
 import modele.Competence;
 import modele.Mission;
+import modele.connexion.CictOracleDataSource;
 import modele.dao.requetes.Mission.*;
 import oracle.jdbc.OraclePreparedStatement;
 
@@ -18,7 +19,7 @@ public class DAOMission {
     private Connection cn;
 
     public DAOMission() throws SQLException {
-        this.cn = getConnectionBD();
+        this.cn = CictOracleDataSource.getConnectionBD();
 
     }
 
