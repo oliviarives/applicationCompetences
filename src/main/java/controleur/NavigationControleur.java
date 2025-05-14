@@ -17,7 +17,7 @@ public class NavigationControleur {
 
     private static final String MOT_ACCUEIL = "ACCUEIL";
     private static NavigationVue vueV;
-  
+
     private final DAOCompetence competenceDao;
     private final DAOEmploye employeDao;
     private final DAOMission missionDao;
@@ -38,21 +38,20 @@ public class NavigationControleur {
     private final ModifierEmployeControleur modifEmployeC;
 
     private final AccueilVue accueilV;
-  
-    private VacanceVue vacanceVue = new VacanceVue();
-    private VacanceControleur vacanceC = new VacanceControleur(vacanceVue, employeDao, this);
 
+    private VacanceVue vacanceVue;
+    private VacanceControleur vacanceC;
 
     public NavigationControleur(NavigationVue navView) throws SQLException {
         this.vueV = navView;
 
-        //initialisation des DAO
+        // Initialisation des DAO
         this.competenceDao = new DAOCompetence();
         this.employeDao = new DAOEmploye();
         this.missionDao = new DAOMission();
         this.missionDaoInstance = new DAOMission();
 
-        //initialisation des vues
+        // Initialisation des vues
         this.empView = new EmployeVue();
         this.missionV = new MissionVue();
         this.modifMissionV = new ModificationMissionVue();
@@ -62,16 +61,19 @@ public class NavigationControleur {
         this.modifEmployeVue = new ModificationEmployeVue();
         this.accueilV = new AccueilVue();
 
-        //initialisation des contrôleurs
+        // Initialisation des contrôleurs
         this.missionC = new MissionControleur(missionV, missionDao, this, creaMissionV, modifMissionV);
         this.ajoutMissionControleur = new AjouterMissionControleur(creaMissionV, missionDao, this, competenceDao, employeDao, infosEmpVue);
         this.ajoutPersonnelC = new AjouterEmployeControleur(ajoutPersonnelV, employeDao, competenceDao, this);
         this.modifEmployeC = new ModifierEmployeControleur(modifEmployeVue, employeDao, competenceDao, this);
 
+        // Initialisation de VacanceVue et VacanceControleur
+        this.vacanceVue = new VacanceVue();
+        this.vacanceC = new VacanceControleur(vacanceVue, employeDao, this);
 
         EmployeControleur empC = new EmployeControleur(empView, employeDao, this);
 
-        //chargement des données
+        // Chargement des données
         missionC.loadMissions();
         ajoutMissionControleur.loadCompetences();
         ajoutMissionControleur.loadEmployes();
@@ -83,7 +85,7 @@ public class NavigationControleur {
         CompetenceControleur competenceC = new CompetenceControleur(competencesV, competenceDao);
         competenceC.loadCompetences();
 
-        //Ajout des pages de l'app
+        // Ajout des pages de l'app
         vueV.addPage(MOT_ACCUEIL, accueilV);
         vueV.addPage("Missions", missionV);
         vueV.addPage("Competences", competencesV);
@@ -162,7 +164,6 @@ public class NavigationControleur {
             public void actionPerformed(ActionEvent e) {
                 vueV.showPage("Creation");
                 creaMissionV.resetFields();
-                //employeDao.miseAJourEmpByCmpByDate();
             }
         });
 
@@ -195,7 +196,6 @@ public class NavigationControleur {
             }
         });
 
-
         vueV.getButtonAccueil().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -204,7 +204,7 @@ public class NavigationControleur {
                 int nbTerminees = missionDao.countMissionsByStatus(3);
                 Map<String, Integer> statsMois = missionDao.getMissionsStatsParMois();
 
-                //MAJ dashboard (AccueilVue)
+                // MAJ dashboard (AccueilVue)
                 accueilV.updateDashboard(nbEnPreparation, nbEnCours, nbTerminees, statsMois);
                 vueV.showPage(MOT_ACCUEIL);
             }
@@ -224,13 +224,6 @@ public class NavigationControleur {
                 vueV.showPage("Creation");
             }
         });
-        /*creaMissionV.getInfoButton().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                vueV.showPage("Infos");
-            }
-        })*/
-
     }
 
     public void loadEmploye() {
@@ -238,7 +231,7 @@ public class NavigationControleur {
         empView.setEmploye(emp);
     }
 
-    public static DAOMission getMissionDao() throws SQLException {
+    public static DAOMission getMissionDao() {
         return missionDaoInstance;
     }
 
