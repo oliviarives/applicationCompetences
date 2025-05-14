@@ -2,14 +2,17 @@ package modele.dao;
 
 import modele.Competence;
 import modele.Employe;
+
 import modele.dao.requetes.Employe.*;
 import modele.dao.requetes.Mission.RequeteVacance;
 import modele.connexion.CictOracleDataSource;
-
+import modele.dao.requetes.Employe.*;
 
 import java.sql.*;
-import java.sql.Date;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class DAOEmploye {
     private final Connection cn;
@@ -25,7 +28,7 @@ public class DAOEmploye {
     public DAOEmploye()   {
         this.cn = CictOracleDataSource.getConnectionBD();
         try {
-           PreparedStatement req = cn.prepareStatement(new RequeteEmployeSelectByCmp().requete());
+            PreparedStatement req = cn.prepareStatement(new RequeteEmployeSelectByCmp().requete());
             this.dataEmployeByCmp =req.executeQuery();
             remplirMapEmpCmp();
             PreparedStatement reqEC = cn.prepareStatement(new RequeteEmployeSelectMis().requete());
@@ -50,7 +53,7 @@ public class DAOEmploye {
         ResultSet curseur = this.dataEmployeByCmp;
         while (curseur.next()) {
             Competence cmp = new Competence(curseur.getInt("idcmp"),curseur.getString("idcatcmp"),curseur.getString("nomCmpEn"),curseur.getString("nomCmpFr"));
-           // this.mapEmpCmp.put(creerInstance(curseur), new String[]{curseur.getString("idcatcmp"),curseur.getString("idcmp"),curseur.getString("nomCmpEn"),curseur.getString("nomCmpFr")});
+            // this.mapEmpCmp.put(creerInstance(curseur), new String[]{curseur.getString("idcatcmp"),curseur.getString("idcmp"),curseur.getString("nomCmpEn"),curseur.getString("nomCmpFr")});
             this.mapEmpCmp.put(creerInstance(curseur),cmp);
         }
         for (Employe e : this.mapEmpCmp.keySet()) {

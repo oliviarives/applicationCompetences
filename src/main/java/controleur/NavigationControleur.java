@@ -39,8 +39,8 @@ public class NavigationControleur {
 
     private final AccueilVue accueilV;
 
-    private VacanceVue vacanceVue = new VacanceVue();
-    private VacanceControleur vacanceC = new VacanceControleur(vacanceVue, employeDao, this);
+    private VacanceVue vacanceVue;
+    private VacanceControleur vacanceC;
 
     public NavigationControleur(NavigationVue navView) throws SQLException {
         this.vueV = navView;
@@ -66,6 +66,10 @@ public class NavigationControleur {
         this.ajoutMissionControleur = new AjouterMissionControleur(creaMissionV, missionDao, this, competenceDao, employeDao, infosEmpVue);
         this.ajoutPersonnelC = new AjouterEmployeControleur(ajoutPersonnelV, employeDao, competenceDao, this);
         this.modifEmployeC = new ModifierEmployeControleur(modifEmployeVue, employeDao, competenceDao, this);
+
+        // Initialisation de VacanceVue et VacanceControleur
+        this.vacanceVue = new VacanceVue();
+        this.vacanceC = new VacanceControleur(vacanceVue, employeDao, this);
 
         EmployeControleur empC = new EmployeControleur(empView, employeDao, this);
 
