@@ -29,23 +29,22 @@ public class NavigationControleur {
     private DAOMission missionDao = new DAOMission();
     private InformationEmpVue infosEmpView = new InformationEmpVue(employeDao);
     private MissionControleur missionC = new MissionControleur(missionV, missionDao, this, creaMissionV, modifMissionV);
-    private AjouterMissionControleur ajoutMC = new AjouterMissionControleur(creaMissionV,missionDao,this,competenceDao,employeDao,infosEmpView);
+    private AjouterMissionControleur ajoutMC = new AjouterMissionControleur(creaMissionV, missionDao, this, competenceDao, employeDao, infosEmpView);
 
     private AjoutEmployeVue ajoutPersonnelV = new AjoutEmployeVue();
-    private AjouterPersonnelControleur ajoutPersonnelC= new AjouterPersonnelControleur(ajoutPersonnelV, employeDao, competenceDao, this);
+    private AjouterPersonnelControleur ajoutPersonnelC = new AjouterPersonnelControleur(ajoutPersonnelV, employeDao, competenceDao, this);
     private ModificationEmployeVue modifEmployeVue = new ModificationEmployeVue();
     private ModifierPersonnelControleur modifEmployeC = new ModifierPersonnelControleur(modifEmployeVue, employeDao, competenceDao, this);
 
     private VacanceVue vacanceVue = new VacanceVue();
     private VacanceControleur vacanceC = new VacanceControleur(vacanceVue, employeDao, this);
 
-
     private AccueilVue accueilV = new AccueilVue();
 
     private static DAOMission missionDaoInstance; // variable statique pour DAOMission
 
-    public NavigationControleur( NavigationVue navView) throws SQLException {
-        this.vueV =navView;
+    public NavigationControleur(NavigationVue navView) throws SQLException {
+        this.vueV = navView;
 
         MissionVue missionV = new MissionVue();
         InformationEmpVue infosEmpView = new InformationEmpVue(employeDao);
@@ -133,7 +132,6 @@ public class NavigationControleur {
             }
         });
 
-        //LLLAAALLLAALLLAALLLAAALLLAAAALLALAAAALLAAA
         empView.getButtonVacance().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -152,7 +150,6 @@ public class NavigationControleur {
             public void actionPerformed(ActionEvent e) {
                 vueV.showPage("Creation");
                 creaMissionV.resetFields();
-                //employeDao.miseAJourEmpByCmpByDate();
             }
         });
 
@@ -160,17 +157,9 @@ public class NavigationControleur {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Mission missionSelectionnee = missionV.getMissionSelectionnee();
-                System.out.println("idsta mis select :"+missionSelectionnee.getIdSta());
-                /*if(missionSelectionnee.getIdSta()!=1){
-
-                    JOptionPane.showMessageDialog(null, "Vous ne pouvez plus modifier cette mission, elle n'est plus en préparation.",
-                            "WARNING!" , JOptionPane.WARNING_MESSAGE);
-                } else if  (missionSelectionnee != null) {*/
-                //faire if avec : loginField.setEditable(false);
-                if(missionSelectionnee != null) {
-                    // Crée une instance de ModifierMissionControleur en passant la mission sélectionnée
+                System.out.println("idsta mis select :" + missionSelectionnee.getIdSta());
+                if (missionSelectionnee != null) {
                     ModifierMissionControleur modifMC = new ModifierMissionControleur(modifMissionV, missionDao, NavigationControleur.this, competenceDao, employeDao, missionSelectionnee);
-
                     try {
                         modifMC.preRemplirFormulaire();
                     } catch (SQLException ex) {
@@ -181,7 +170,7 @@ public class NavigationControleur {
                     vueV.showPage("Modification");
                 }
 
-                if(missionSelectionnee.getIdSta()!=1 || missionSelectionnee == null ){
+                if (missionSelectionnee.getIdSta() != 1 || missionSelectionnee == null) {
                     modifMissionV.getTitreMisField2().setEditable(false);
                     modifMissionV.getDescriptionMisField2().setEditable(false);
                     modifMissionV.getLogEmpField2().setEditable(false);
@@ -195,17 +184,14 @@ public class NavigationControleur {
             }
         });
 
-
         vueV.getButtonAccueil().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Récupérer les données réelles depuis le DAO/Service
                 int nbEnPreparation = missionDao.countMissionsByStatus(1);
                 int nbEnCours = missionDao.countMissionsByStatus(2);
                 int nbTerminees = missionDao.countMissionsByStatus(3);
                 Map<String, Integer> statsMois = missionDao.getMissionsStatsParMois();
 
-                // Mettre à jour le dashboard (AccueilVue)
                 accueilV.updateDashboard(nbEnPreparation, nbEnCours, nbTerminees, statsMois);
                 vueV.showPage(MOT_ACCUEIL);
             }
@@ -225,13 +211,6 @@ public class NavigationControleur {
                 vueV.showPage("Creation");
             }
         });
-        /*creaMissionV.getInfoButton().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                vueV.showPage("Infos");
-            }
-        })*/
-
     }
 
     public void loadEmploye() {
