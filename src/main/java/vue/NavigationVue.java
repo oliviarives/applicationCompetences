@@ -46,6 +46,7 @@ public class NavigationVue extends JFrame {
         navigationPanel.add(buttonEmploye);
 
 
+
         //panel permettant le changement de vue
         this.cardLayout = new CardLayout(40, 40);
         panelCards = new JPanel(cardLayout);

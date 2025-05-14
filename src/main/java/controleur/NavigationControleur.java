@@ -17,7 +17,7 @@ public class NavigationControleur {
 
     private static final String MOT_ACCUEIL = "ACCUEIL";
     private static NavigationVue vueV;
-
+  
     private final DAOCompetence competenceDao;
     private final DAOEmploye employeDao;
     private final DAOMission missionDao;
@@ -38,6 +38,10 @@ public class NavigationControleur {
     private final ModifierEmployeControleur modifEmployeC;
 
     private final AccueilVue accueilV;
+  
+    private VacanceVue vacanceVue = new VacanceVue();
+    private VacanceControleur vacanceC = new VacanceControleur(vacanceVue, employeDao, this);
+
 
     public NavigationControleur(NavigationVue navView) throws SQLException {
         this.vueV = navView;
@@ -64,6 +68,7 @@ public class NavigationControleur {
         this.ajoutPersonnelC = new AjouterEmployeControleur(ajoutPersonnelV, employeDao, competenceDao, this);
         this.modifEmployeC = new ModifierEmployeControleur(modifEmployeVue, employeDao, competenceDao, this);
 
+
         EmployeControleur empC = new EmployeControleur(empView, employeDao, this);
 
         //chargement des données
@@ -87,6 +92,7 @@ public class NavigationControleur {
         vueV.addPage("Modification", modifMissionV);
         vueV.addPage("AjouterEmploye", ajoutPersonnelV);
         vueV.addPage("ModifierEmploye", modifEmployeVue);
+        vueV.addPage("Vacance", vacanceVue);
         vueV.addPage("InfosEmp", infosEmpVue);
 
         int nbEnPreparation = missionDao.countMissionsByStatus(1);
@@ -134,6 +140,19 @@ public class NavigationControleur {
                     modifEmployeVue.setEmploye(employeSelectionnee);
                     vueV.showPage("ModifierEmploye");
                     modifEmployeC.loadCompetencesEmploye();
+                }
+            }
+        });
+
+        empView.getButtonVacance().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Employe employeSelectionne = empView.getEmployeSelectionne();
+                if (employeSelectionne != null) {
+                    vacanceVue.setLogin(employeSelectionne.getLogin());
+                    vueV.showPage("Vacance");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Veuillez sélectionner un employé.");
                 }
             }
         });

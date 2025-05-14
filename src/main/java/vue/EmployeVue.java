@@ -14,6 +14,7 @@ public class EmployeVue extends JPanel {
     private final JPanel panelBouttons;
     private final JButton bouttonModifierEmploye;
     private final JButton bouttonAjouterEmploye;
+    private final JButton boutonVacance;
     private List<Employe> employes;
 
     public EmployeVue() {
@@ -23,6 +24,8 @@ public class EmployeVue extends JPanel {
         // Initialisation des boutons
         this.bouttonAjouterEmploye = new JButton("Ajouter");
         this.bouttonModifierEmploye = new JButton("Modifier");
+        this.boutonVacance = new JButton("Vacance");
+
 
         // Table et scroll
         this.tableEmploye = new JTable();
@@ -34,6 +37,8 @@ public class EmployeVue extends JPanel {
         this.panelBouttons = new JPanel(new FlowLayout(FlowLayout.CENTER));
         this.panelBouttons.add(this.bouttonAjouterEmploye);
         this.panelBouttons.add(this.bouttonModifierEmploye);
+        this.panelBouttons.add(this.boutonVacance);
+
         add(this.panelBouttons, BorderLayout.SOUTH);
     }
 
@@ -64,6 +69,10 @@ public class EmployeVue extends JPanel {
         return this.bouttonModifierEmploye;
     }
 
+    public JButton getButtonVacance() {
+        return this.boutonVacance;
+    }
+
     public Employe getEmployeSelectionne() {
         int selectedRow = tableEmploye.getSelectedRow();
         if (selectedRow >= 0 && employes != null && selectedRow < employes.size()) {
@@ -71,4 +80,6 @@ public class EmployeVue extends JPanel {
         }
         return null;
     }
+
+
 }

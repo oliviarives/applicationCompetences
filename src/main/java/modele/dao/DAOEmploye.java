@@ -2,6 +2,9 @@ package modele.dao;
 
 import modele.Competence;
 import modele.Employe;
+
+import modele.dao.requetes.Employe.*;
+import modele.dao.requetes.Mission.RequeteVacance;
 import modele.connexion.CictOracleDataSource;
 import modele.dao.requetes.Employe.*;
 
@@ -235,10 +238,6 @@ public class DAOEmploye {
         return this.listeFinaleEmpCmpDates;
     }
 
-
-
-
-
     /*public Employe getEmployeByLogin(String login) throws SQLException {
         String sql = "SELECT * FROM employe WHERE loginEmp = ?";
         try (PreparedStatement ps = cn.prepareStatement(sql)) {
@@ -252,11 +251,22 @@ public class DAOEmploye {
         return null;
     }*/
 
-
-
     public HashMap<Employe,Competence> getHashMapEmpCmp(){
         return this.mapEmpCmp;
     }
 
+    public void ajouterVacance(Date dateDebut, Date dateFin, String loginEmp) throws SQLException {
+        RequeteVacance req = new RequeteVacance();
+        String sql = req.requete();
 
+        try (PreparedStatement ps = cn.prepareStatement(sql)) {
+            ps.setDate(1, dateDebut);
+            ps.setDate(2, dateFin);
+            ps.setDate(3, new Date(System.currentTimeMillis())); // date de création
+            ps.setString(4, loginEmp);
+
+            ps.executeUpdate();
+            System.out.println("Mission Vacance ajoutée");
+        }
+    }
 }
