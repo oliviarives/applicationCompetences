@@ -71,7 +71,6 @@ public class NavigationControleur {
         modifEmployeC.loadCompetences();
 
         empC.loadEmploye();
-
         vueV.addPage(MOT_ACCUEIL, accueilV);
         vueV.addPage("Missions", missionV);
         vueV.addPage("Competences", competencesV);
