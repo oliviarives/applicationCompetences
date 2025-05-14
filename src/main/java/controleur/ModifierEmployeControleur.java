@@ -2,7 +2,6 @@ package controleur;
 
 import modele.Competence;
 import modele.Employe;
-import modele.MdpUtils;
 import modele.dao.DAOCompetence;
 import modele.dao.DAOEmploye;
 import vue.ModificationEmployeVue;
@@ -14,14 +13,14 @@ import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
 
-public class ModifierPersonnelControleur {
+public class ModifierEmployeControleur {
 
     private final ModificationEmployeVue modifPersonnelVue;
     private final DAOEmploye daoEmploye;
     private final DAOCompetence daoCompetence;
     private final NavigationControleur navC;
 
-    public ModifierPersonnelControleur (ModificationEmployeVue modifPersonnelVue, DAOEmploye daoEmp, DAOCompetence daoCmp, NavigationControleur navigationC) {
+    public ModifierEmployeControleur(ModificationEmployeVue modifPersonnelVue, DAOEmploye daoEmp, DAOCompetence daoCmp, NavigationControleur navigationC) {
         this.modifPersonnelVue = modifPersonnelVue;
         this.daoEmploye = daoEmp;
         this.navC = navigationC;
@@ -53,21 +52,17 @@ public class ModifierPersonnelControleur {
         String prenom = modifPersonnelVue.getPrenomField().getText();
         String nom = modifPersonnelVue.getNomField().getText();
         String login = modifPersonnelVue.getLoginField().getText();
-        String mdp = modifPersonnelVue.getMdpField().getText();
         String poste = modifPersonnelVue.getPosteField().getText();
         java.util.Date utilDate = (java.util.Date) modifPersonnelVue.getDateEntreeField().getValue();
         Date dateEntree = new Date(utilDate.getTime());
         //Employe employeNv = new Employe(prenom, nom, login, mdp, poste, dateEntree);
-        // Vérification des champs obligatoires
-        if (prenom.isEmpty() || nom.isEmpty() || login.isEmpty() || mdp.isEmpty() || poste.isEmpty()) {
+        if (prenom.isEmpty() || nom.isEmpty() || login.isEmpty() || poste.isEmpty()) {
             modifPersonnelVue.afficherMessage("Tous les champs sont obligatoires !");
             return;
         }
 
         try {
-            // Hashage du mot de passe
-            String mdpHashed = MdpUtils.hashPassword(mdp);
-            // Recherche de l'employé à mettre à jour
+            //Recherche de l'employé à mettre à jour
             Employe employe = daoEmploye.findEmpByLogin(login);
             daoEmploye.retirerAllCmpFromEmp(login);
             daoEmploye.modifierEmploye(employe);
@@ -102,7 +97,7 @@ public class ModifierPersonnelControleur {
             DefaultTableModel modelToutes = (DefaultTableModel) modifPersonnelVue.getTableToutesCompetences().getModel();
             DefaultTableModel modelEmploye = (DefaultTableModel) modifPersonnelVue.getTableCompetencesEmploye().getModel();
 
-            // Supprimer la ligne sélectionnée du tableau "Toutes compétences"
+            //Supprimer la ligne sélectionnée du tableau "Toutes compétences"
             int selectedRow = modifPersonnelVue.getTableToutesCompetences().getSelectedRow();
             if (selectedRow != -1) {
                 modelToutes.removeRow(selectedRow);
@@ -117,7 +112,7 @@ public class ModifierPersonnelControleur {
             DefaultTableModel modelToutes = (DefaultTableModel) modifPersonnelVue.getTableToutesCompetences().getModel();
             DefaultTableModel modelEmploye = (DefaultTableModel) modifPersonnelVue.getTableCompetencesEmploye().getModel();
 
-            // Supprimer la ligne sélectionnée du tableau "Compétences employé"
+            //Supprimer la ligne sélectionnée du tableau "Compétences employé"
             int selectedRow = modifPersonnelVue.getTableCompetencesEmploye().getSelectedRow();
             if (selectedRow != -1) {
                 modelEmploye.removeRow(selectedRow);

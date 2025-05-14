@@ -30,14 +30,13 @@ public class AjoutEmployeVue extends JPanel {
     public AjoutEmployeVue() {
         setLayout(new BorderLayout());
 
-        // Panel Principal avec JSplitPane
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
         splitPane.setDividerLocation(550);
 
-        // PANEL GAUCHE (Formulaire + Compétences Employé)
+        //panel gauche (formulaire + compétences emp)
         JPanel panelGauche = new JPanel(new BorderLayout());
 
-        // Formulaire
+        //formulaire
         JPanel formulaire = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
@@ -59,7 +58,6 @@ public class AjoutEmployeVue extends JPanel {
         formulaire.add(new JLabel("Login "), gbc);
         gbc.gridx = 1;
         loginField = new JTextField(20);
-        loginField.setEditable(false);
         formulaire.add(loginField, gbc);
 
         gbc.gridx = 0; gbc.gridy = 3;
@@ -98,12 +96,11 @@ public class AjoutEmployeVue extends JPanel {
         panelTableEmploye.add(scrollCompetences, BorderLayout.CENTER);
         panelGauche.add(panelTableEmploye, BorderLayout.CENTER);
 
-        // PANEL DROITE (Toutes les compétences + flèches)
+        //panel droite : Toutes les compétences + flèches
         JPanel panelDroite = new JPanel(new BorderLayout());
 
         panelDroite.add(new JLabel("Liste des compétences", SwingConstants.CENTER), BorderLayout.NORTH);
 
-        // Tableau
         DefaultTableModel modelToutesCompetences = new DefaultTableModel(new String[]{"Catégorie", "Compétence", "Titre"}, 0) {
             public boolean isCellEditable(int row, int col) {  //cellules de la table ne sont plus editables
                 return false;
@@ -114,7 +111,6 @@ public class AjoutEmployeVue extends JPanel {
         JScrollPane scrollToutesCompetences = new JScrollPane(tableToutesCompetences);
         panelDroite.add(scrollToutesCompetences, BorderLayout.CENTER);
 
-        // Ajout des flèches au centre
         JPanel panelCentre = new JPanel();
         panelCentre.setLayout(new BoxLayout(panelCentre, BoxLayout.Y_AXIS));
         buttonAjouter = new JButton("←");
@@ -133,7 +129,6 @@ public class AjoutEmployeVue extends JPanel {
         add(splitPane, BorderLayout.CENTER);
         add(panelCentre, BorderLayout.EAST);
 
-        // Message + boutons
         messageLabel = new JLabel("", SwingConstants.CENTER);
         messageLabel.setForeground(Color.RED);
         add(messageLabel, BorderLayout.NORTH);
@@ -146,7 +141,6 @@ public class AjoutEmployeVue extends JPanel {
         add(buttonPanel, BorderLayout.SOUTH);
     }
 
-    // Getters
     public JTextField getPrenomField() { return prenomField; }
     public JTextField getNomField() { return nomField; }
     public JTextField getLoginField() { return loginField; }

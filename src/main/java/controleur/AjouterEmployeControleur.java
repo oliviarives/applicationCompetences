@@ -14,19 +14,18 @@ import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
 
-public class AjouterPersonnelControleur {
+public class AjouterEmployeControleur {
     private final AjoutEmployeVue ajoutPersonnelVue;
     private final DAOEmploye daoEmploye;
     private final DAOCompetence daoCompetence;
     private final NavigationControleur navC;
 
-    public AjouterPersonnelControleur(AjoutEmployeVue ajoutPersonnelVue, DAOEmploye daoEmp, DAOCompetence daoCmp, NavigationControleur navigationC) {
+    public AjouterEmployeControleur(AjoutEmployeVue ajoutPersonnelVue, DAOEmploye daoEmp, DAOCompetence daoCmp, NavigationControleur navigationC) {
         this.ajoutPersonnelVue = ajoutPersonnelVue;
         this.daoEmploye = daoEmp;
         this.navC = navigationC;
         this.daoCompetence = daoCmp;
 
-        // Ajout des listener
         ajoutPersonnelVue.getButtonConfirmer().addActionListener(e -> {
             ajouterPersonnel();
             effacerChamps();
@@ -61,12 +60,11 @@ public class AjouterPersonnelControleur {
         String prenom = ajoutPersonnelVue.getPrenomField().getText();
         String nom = ajoutPersonnelVue.getNomField().getText();
         String login = ajoutPersonnelVue.getLoginField().getText();
-        String mdp = ajoutPersonnelVue.getMdpField().getText();
+        String mdp = ajoutPersonnelVue.getMdpField().toString();
         String poste = ajoutPersonnelVue.getPosteField().getText();
         java.util.Date utilDate = (java.util.Date) ajoutPersonnelVue.getDateEntreeField().getValue();
         Date dateEntree = new Date(utilDate.getTime());
 
-        // Vérification des champs obligatoires
         if (prenom.isEmpty() || nom.isEmpty() || login.isEmpty() || mdp.isEmpty() || poste.isEmpty()) {
             ajoutPersonnelVue.afficherMessage("Tous les champs sont obligatoires !");
             return;
@@ -77,13 +75,12 @@ public class AjouterPersonnelControleur {
                 ajoutPersonnelVue.afficherMessage("Ce login est déjà utilisé, veuillez en choisir un autre.");
                 return;
             }
-            // Hashage du mot de passe
             String mdpHashed = MdpUtils.hashPassword(mdp);
-            // Création de l'employé
             Employe employe = new Employe(prenom, nom, login, mdpHashed, poste, dateEntree);
             daoEmploye.ajouterEmploye(employe);
             for (Competence cmp : ajoutPersonnelVue.getCompetencesAjoutees()) {
                 daoEmploye.ajouterCmpToEmp(employe.getLogin(), cmp);
+                daoEmploye.getHashMapEmpCmp().put(employe, cmp);
             }
         } catch (SQLException ex) {
             ajoutPersonnelVue.afficherMessage("Erreur lors de l'ajout de l'employé.");
@@ -91,7 +88,8 @@ public class AjouterPersonnelControleur {
         }
     }
 
-   public void loadCompetences() {
+
+    public void loadCompetences() {
         List<Competence> competences = daoCompetence.findAll();
         ajoutPersonnelVue.setToutesCompetences(competences);
     }
@@ -102,7 +100,6 @@ public class AjouterPersonnelControleur {
             DefaultTableModel modelToutes = (DefaultTableModel) ajoutPersonnelVue.getTableToutesCompetences().getModel();
             DefaultTableModel modelEmploye = (DefaultTableModel) ajoutPersonnelVue.getTableCompetencesEmploye().getModel();
 
-            // Supprimer la ligne sélectionnée du tableau "Toutes compétences"
             int selectedRow = ajoutPersonnelVue.getTableToutesCompetences().getSelectedRow();
             if (selectedRow != -1) {
                 modelToutes.removeRow(selectedRow);
@@ -117,7 +114,6 @@ public class AjouterPersonnelControleur {
             DefaultTableModel modelToutes = (DefaultTableModel) ajoutPersonnelVue.getTableToutesCompetences().getModel();
             DefaultTableModel modelEmploye = (DefaultTableModel) ajoutPersonnelVue.getTableCompetencesEmploye().getModel();
 
-            // Supprimer la ligne sélectionnée du tableau "Compétences employé"
             int selectedRow = ajoutPersonnelVue.getTableCompetencesEmploye().getSelectedRow();
             if (selectedRow != -1) {
                 modelEmploye.removeRow(selectedRow);
