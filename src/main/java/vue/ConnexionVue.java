@@ -49,7 +49,6 @@ public class ConnexionVue extends JDialog {
         IdentifiantJTextField.addActionListener(e -> verifierConnexion());
         MdpJTextFieldPwd.addActionListener(e -> verifierConnexion());
         loginButton.addActionListener(e -> verifierConnexion());
-
     }
 
     /**
