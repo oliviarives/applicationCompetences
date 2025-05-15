@@ -1,9 +1,5 @@
 package modele;
 
-import java.sql.Date;
-import java.util.HashSet;
-import java.util.Set;
-
 public class Responsable /*extends Employe*/ {
 /*
     private Set<DetailMission> missions; 

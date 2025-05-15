@@ -1,18 +1,16 @@
 package modele.dao;
 
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import modele.Competence;
 import modele.Mission;
 import modele.connexion.CictOracleDataSource;
 import modele.dao.requetes.Mission.*;
 import oracle.jdbc.OraclePreparedStatement;
 
-import static modele.connexion.CictOracleDataSource.getConnectionBD;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class DAOMission {
 

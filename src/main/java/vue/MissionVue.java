@@ -5,7 +5,6 @@ import controleur.NavigationControleur;
 import modele.Mission;
 import modele.dao.DAOMission;
 import utilitaires.StyleManager;
-import java.sql.SQLException;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -13,6 +12,7 @@ import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -39,21 +39,17 @@ public class MissionVue extends JPanel {
         StyleManager.setupFlatLaf();
         setLayout(new BorderLayout());
 
-        // Création du panel de filtres multi-critères
         panelFiltreMission = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
-        // Filtre sur le nom
         txtFiltreNom = new JTextField(15);
         panelFiltreMission.add(new JLabel("Nom :"));
         panelFiltreMission.add(txtFiltreNom);
 
-        // Filtre sur la date (utilise JDateChooser)
         dateChooser = new JDateChooser();
         dateChooser.setDateFormatString(FORMAT_DATE);
         panelFiltreMission.add(new JLabel("Date :"));
         panelFiltreMission.add(dateChooser);
 
-        // Filtre sur le statut
         comboStatut = new JComboBox<>();
         // On peut remplir le combo avec "Tous" puis les statuts récupérés (ici on met en dur)
         comboStatut.addItem("Tous");
@@ -63,7 +59,7 @@ public class MissionVue extends JPanel {
         panelFiltreMission.add(new JLabel("Statut :"));
         panelFiltreMission.add(comboStatut);
 
-        // Bouton pour lancer le filtre
+        //Bouton pour lancer le filtre
         btnFiltrer = new JButton("Filtrer");
         panelFiltreMission.add(btnFiltrer);
         btnFiltrer.addActionListener(new ActionListener() {
@@ -71,26 +67,26 @@ public class MissionVue extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 List<RowFilter<Object, Object>> filters = new ArrayList<>();
 
-                // Filtre sur le nom (colonne 1 : Nom Mission)
+                //Filtre sur le nom (colonne 1 : Nom Mission)
                 String nom = txtFiltreNom.getText().trim();
                 if (!nom.isEmpty()) {
                     filters.add(RowFilter.regexFilter("(?i)" + nom, 1));
                 }
 
-                // Filtre sur la date (colonne 2 : Date de début)
+                //Filtre sur la date (colonne 2 : Date de début)
                 if (dateChooser.getDate() != null) {
                     SimpleDateFormat sdf = new SimpleDateFormat(FORMAT_DATE);
                     String dateStr = sdf.format(dateChooser.getDate());
                     filters.add(RowFilter.regexFilter(dateStr, 2));
                 }
 
-                // Filtre sur le statut (colonne 5)
+                //Filtre sur le statut (colonne 5)
                 String statut = (String) comboStatut.getSelectedItem();
                 if (statut != null && !statut.equals("Tous")) {
                     filters.add(RowFilter.regexFilter("(?i)" + statut, 5));
                 }
 
-                // Si aucun critère n'est saisi, réinitialise le filtre
+                //Si aucun critère n'est saisi, réinitialise le filtre
                 if (filters.isEmpty()) {
                     sorter.setRowFilter(null);
                 } else {

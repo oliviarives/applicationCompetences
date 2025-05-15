@@ -8,8 +8,6 @@ import modele.dao.DAOEmploye;
 import vue.AjoutEmployeVue;
 
 import javax.swing.table.DefaultTableModel;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
@@ -18,41 +16,30 @@ public class AjouterEmployeControleur {
     private final AjoutEmployeVue ajoutPersonnelVue;
     private final DAOEmploye daoEmploye;
     private final DAOCompetence daoCompetence;
-    private final NavigationControleur navC;
 
-    public AjouterEmployeControleur(AjoutEmployeVue ajoutPersonnelVue, DAOEmploye daoEmp, DAOCompetence daoCmp, NavigationControleur navigationC) {
+    public AjouterEmployeControleur(AjoutEmployeVue ajoutPersonnelVue, DAOEmploye daoEmp, DAOCompetence daoCmp) {
         this.ajoutPersonnelVue = ajoutPersonnelVue;
         this.daoEmploye = daoEmp;
-        this.navC = navigationC;
         this.daoCompetence = daoCmp;
 
         ajoutPersonnelVue.getButtonConfirmer().addActionListener(e -> {
             ajouterPersonnel();
             effacerChamps();
-            navC.loadEmploye();
-            navC.getVueV().getButtonEmploye().doClick();
+            NavigationControleur.loadEmploye();
+            NavigationControleur.getVueV().getButtonEmploye().doClick();
 
         });
 
-        ajoutPersonnelVue.getButtonEffacer().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        ajoutPersonnelVue.getButtonEffacer().addActionListener (e -> {
                 effacerChamps();
-            }
         });
 
-        ajoutPersonnelVue.getButtonRetirer().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        ajoutPersonnelVue.getButtonRetirer().addActionListener(e -> {
                 retirerCompetenceEmploye();
-            }
         });
 
-        ajoutPersonnelVue.getButtonAjouter().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ajouterCompetenceEmploye();
-            }
+        ajoutPersonnelVue.getButtonAjouter().addActionListener(e -> {
+            ajouterCompetenceEmploye();
         });
     }
 

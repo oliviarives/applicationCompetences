@@ -2,9 +2,7 @@ package controleur;
 
 import modele.Mission;
 import modele.dao.DAOMission;
-import vue.CreationMissionVue;
 import vue.MissionVue;
-import vue.ModificationMissionVue;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

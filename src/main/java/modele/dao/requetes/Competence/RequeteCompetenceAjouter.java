@@ -1,11 +1,5 @@
 package modele.dao.requetes.Competence;
 
-import modele.Competence;
-import modele.Mission;
-
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-
 /*public class RequeteCompetenceAjouter extends RequeteCompetence{
     @Override
     public String requete() {

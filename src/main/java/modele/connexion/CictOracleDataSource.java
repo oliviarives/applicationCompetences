@@ -1,11 +1,10 @@
 package modele.connexion;
 
-import java.sql.Connection;
-
-import java.sql.SQLException;
- 
 import oracle.jdbc.datasource.impl.OracleDataSource;
 import utilitaires.Config;
+
+import java.sql.Connection;
+import java.sql.SQLException;
 
 public class CictOracleDataSource extends OracleDataSource {
 

@@ -15,6 +15,7 @@ import java.util.HashSet;
 import java.util.List;
 
 public class CreationMissionVue extends JPanel {
+    private final static String FORMAT_DATE = "yyyy-MM-dd";
     private JButton buttonConfirmer;
     private JTextField titreMisField;
     private JTextArea descriptionMisField;
@@ -47,7 +48,7 @@ public class CreationMissionVue extends JPanel {
         setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
 
         //Partie Formulaire Mission
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat formatter = new SimpleDateFormat(FORMAT_DATE);
 
 
         //panel affichant à la fois deux panel l'un a cote de l'autre
@@ -77,11 +78,11 @@ public class CreationMissionVue extends JPanel {
         this.titreMisField = new JTextField(20);
         this.descriptionMisField = new JTextArea(3,30);
         this.dateDebutMisField = new JDateChooser();
-        dateDebutMisField.setDateFormatString("yyyy-MM-dd");
+        dateDebutMisField.setDateFormatString(FORMAT_DATE);
         dateDebutMisField.setDate(new java.util.Date());
         dateDebutMisField.setPreferredSize(new Dimension(100, 25));
         this.dateFinMisField = new JDateChooser();
-        dateFinMisField.setDateFormatString("yyyy-MM-dd");
+        dateFinMisField.setDateFormatString(FORMAT_DATE);
         dateFinMisField.setDate(new java.util.Date());
         dateFinMisField.setPreferredSize(new Dimension(100, 25));
         SpinnerModel modelSpinner = new SpinnerNumberModel(0, 0, 30, 1);

@@ -13,6 +13,9 @@ public class AjoutEmployeVue extends JPanel {
     @Serial
     private static final long serialVersionUID = 1L;
 
+    private final static String MOT_COMPETENCE = "Compétence";
+    private final static String MOT_CATEGORIE = "Catégorie";
+    private final static String MOT_TITRE = "Titre";
     private final JButton buttonConfirmer;
     private final JButton buttonEffacer;
     private final JButton buttonAjouter;
@@ -85,7 +88,7 @@ public class AjoutEmployeVue extends JPanel {
         // === Tableau compétences employé + titre ===
         JPanel panelTableEmploye = new JPanel(new BorderLayout());
         panelTableEmploye.add(new JLabel("Compétences de l'employé", SwingConstants.CENTER), BorderLayout.NORTH);
-        DefaultTableModel modelCompetencesEmploye = new DefaultTableModel(new String[]{"Catégorie", "Compétence", "Titre"}, 0) {
+        DefaultTableModel modelCompetencesEmploye = new DefaultTableModel(new String[]{MOT_CATEGORIE, MOT_COMPETENCE, MOT_TITRE}, 0) {
             public boolean isCellEditable(int row, int col) {  //cellules de la table ne sont plus editables
                 return false;
             }
@@ -101,7 +104,7 @@ public class AjoutEmployeVue extends JPanel {
 
         panelDroite.add(new JLabel("Liste des compétences", SwingConstants.CENTER), BorderLayout.NORTH);
 
-        DefaultTableModel modelToutesCompetences = new DefaultTableModel(new String[]{"Catégorie", "Compétence", "Titre"}, 0) {
+        DefaultTableModel modelToutesCompetences = new DefaultTableModel(new String[]{MOT_CATEGORIE, MOT_COMPETENCE, MOT_TITRE}, 0) {
             public boolean isCellEditable(int row, int col) {  //cellules de la table ne sont plus editables
                 return false;
             }
@@ -157,7 +160,7 @@ public class AjoutEmployeVue extends JPanel {
     public JTable getTableToutesCompetences() { return tableToutesCompetences; }
 
     public void setToutesCompetences(java.util.List<Competence> competences) {
-        DefaultTableModel model = new DefaultTableModel(new String[]{"Catégorie", "Compétence", "Titre"}, 0);
+        DefaultTableModel model = new DefaultTableModel(new String[]{MOT_CATEGORIE, MOT_COMPETENCE, MOT_TITRE}, 0);
         for (Competence cmp : competences) {
             model.addRow(new Object[]{cmp.getIdCatCmp(), cmp.getIdCmp(), cmp.getNomCmpFr()});
         }

@@ -2,9 +2,9 @@ package modele.dao;
 
 import modele.Competence;
 import modele.connexion.CictOracleDataSource;
-import modele.dao.requetes.Competence.*;
+import modele.dao.requetes.Competence.RequeteCompetenceEmploye;
+import modele.dao.requetes.Competence.RequeteCompetenceSelectAll;
 
-import javax.swing.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

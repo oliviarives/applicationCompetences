@@ -2,11 +2,9 @@ package modele.dao;
 
 import modele.Competence;
 import modele.Employe;
-
-import modele.dao.requetes.Employe.*;
-import modele.dao.requetes.Mission.RequeteVacance;
 import modele.connexion.CictOracleDataSource;
 import modele.dao.requetes.Employe.*;
+import modele.dao.requetes.Mission.RequeteVacance;
 
 import java.sql.*;
 import java.util.ArrayList;
