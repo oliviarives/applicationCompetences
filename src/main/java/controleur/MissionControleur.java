@@ -7,6 +7,7 @@ import vue.MissionVue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
@@ -42,10 +43,20 @@ public class MissionControleur {
         });
 }
 
-    public void loadMissions() {
+    public void loadMissions() throws SQLException {
         List<Mission> missions = missionDAO.findAll();
+        for (Mission mission : missions){
+            updateMissionStatusIfNeeded(mission, new java.util.Date());
+        }
         vueM.setMissions(missions);
     }
+
+    public void updateMissionStatusIfNeeded(Mission mission, java.util.Date now) throws SQLException {
+        int currentStatus = mission.getIdSta();
+        if (currentStatus == 2 && now.compareTo(mission.getDateDebutMis()) >= 0) {
+            missionDAO.updateMissionStatus(mission, 3);
+        } else if (currentStatus == 3 && now.compareTo(mission.getDateFinMis()) >= 0) {
+            missionDAO.updateMissionStatus(mission, 4);    }}
 
     public void ajouterMission(Mission mission) {
         throw new UnsupportedOperationException("methode non utilisé");
