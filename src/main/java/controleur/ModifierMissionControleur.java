@@ -192,7 +192,7 @@ public class ModifierMissionControleur {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 if (evt.getClickCount() == 2) { //déclenchement au double click
                     int nbEmpMax = modificationMV.getNbEmpField(); // valeur du champ nbEmp
-                    int nbEmpAjoutes = modificationMV.getListeEmployesAjoutee().getRowCount(); // nbr d'employé ajouté à mision
+                    int nbEmpAjoutes = modificationMV.getTableEmployesAjoutes().getRowCount(); // nbr d'employé ajouté à mision
 
                     if (nbEmpAjoutes < nbEmpMax) { //si nbEmp nécessaire pas encore atteind
                         Employe emp = modificationMV.getEmployeSelectionne();
@@ -209,13 +209,13 @@ public class ModifierMissionControleur {
 
 
         //retirer compétence des compétences ajoutées
-        modificationMV.getListeCompetenceAjoutee().addMouseListener(new java.awt.event.MouseAdapter() {
+        modificationMV.getTableCompetencesAjoutees().addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 if (evt.getClickCount() == 2) {//déclenchement au double click
-                    int selectedRow = modificationMV.getListeCompetenceAjoutee().getSelectedRow();
+                    int selectedRow = modificationMV.getTableCompetencesAjoutees().getSelectedRow();
                     if (selectedRow != -1) {
-                        DefaultTableModel model = (DefaultTableModel) modificationMV.getListeCompetenceAjoutee().getModel();
+                        DefaultTableModel model = (DefaultTableModel) modificationMV.getTableCompetencesAjoutees().getModel();
                         model.removeRow(selectedRow);
                     }
                     listeCompetencesSelectionnees = modificationMV.getCompetencesAjoutees();
@@ -225,13 +225,13 @@ public class ModifierMissionControleur {
             }
         });
         //retirer employé des employés ajoutés
-        modificationMV.getListeEmployesAjoutee().addMouseListener(new java.awt.event.MouseAdapter() {
+        modificationMV.getTableEmployesAjoutes().addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 if (evt.getClickCount() == 2) { //déclenchement au double click
-                    int selectedRow = modificationMV.getListeEmployesAjoutee().getSelectedRow();
+                    int selectedRow = modificationMV.getTableEmployesAjoutes().getSelectedRow();
                     if (selectedRow != -1) {
-                        DefaultTableModel model = (DefaultTableModel) modificationMV.getListeEmployesAjoutee().getModel();
+                        DefaultTableModel model = (DefaultTableModel) modificationMV.getTableEmployesAjoutes().getModel();
                         model.removeRow(selectedRow);
                     }
                 }

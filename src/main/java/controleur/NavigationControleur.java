@@ -174,10 +174,27 @@ public class NavigationControleur {
                     Mission missionSelectionnee = missionV.getMissionSelectionnee();
                     if (missionSelectionnee == null) return;
 
-                    if (missionSelectionnee.getIdSta() != 1) {
-                        JOptionPane.showMessageDialog(null,
-                                "Vous ne pouvez plus modifier cette mission, elle n'est plus en préparation.",
-                                "WARNING!", JOptionPane.WARNING_MESSAGE);
+                    if (missionSelectionnee.getIdSta() != 1 || missionSelectionnee == null) {
+                        ModifierMissionControleur modifMC = new ModifierMissionControleur(
+                                modifMissionV, missionDao, NavigationControleur.this,
+                                competenceDao, employeDao, missionSelectionnee);
+                        modifMC.preRemplirFormulaire();
+
+                        int is = missionV.getIdMissionSelect();
+                        modifMC.setIdMissionSelect(is);
+                        vueV.showPage("Modification");
+                        modifMissionV.getTitreMisField2().setEditable(false);
+                        modifMissionV.getDescriptionMisField2().setEditable(false);
+                        modifMissionV.getLogEmpField2().setEditable(false);
+                        modifMissionV.getButtonConfirmer().setEnabled(false);
+                        modifMissionV.getAjouterCompetences().setEnabled(false);
+                        modifMissionV.getAjouterEmployes().setEnabled(false);
+                        modifMissionV.getDateDebutMisFieldComponent().setEnabled(false);
+                        modifMissionV.getDateFinMisFieldComponent().setEnabled(false);
+                        modifMissionV.getNbEmpFieldComponent().setEnabled(false);
+                        modifMissionV.getTableCompetencesAjoutees().setEnabled(false);
+                        modifMissionV.getTableEmployesAjoutes().setEnabled(false);
+                        modifMissionV.getCompetenceTable().setEnabled(false);
                     } else {
                         ModifierMissionControleur modifMC = new ModifierMissionControleur(
                                 modifMissionV, missionDao, NavigationControleur.this,

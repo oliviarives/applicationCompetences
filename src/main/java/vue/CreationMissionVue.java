@@ -33,7 +33,7 @@ public class CreationMissionVue extends JPanel {
     private CardLayout cardLayout;
     private JPanel cardLayoutPanel;
     private JLabel titreLabel;
-    private JTable listeCompetenceAjoutee;
+    private JTable tableCompetencesAjoutees;
     private JScrollPane listeCompetenceScrollPane;
     private JTable tableEmployesAjoutee;
     private JScrollPane listeEmployesScrollPane;
@@ -135,15 +135,15 @@ public class CreationMissionVue extends JPanel {
         //Tableau des compétences ajoutées à la mission
         JLabel competenceLabel = new JLabel("Compétences ajoutées :");
         panellisteCompetences.add(competenceLabel, BorderLayout.NORTH); // Place le label en haut
-        this.listeCompetenceAjoutee = new JTable();
+        this.tableCompetencesAjoutees = new JTable();
         String[] columnNames = {"Id", "Categorie", "Nom (En)", "Nom (FR)"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
             public boolean isCellEditable(int row, int col) {  //cellules de la table ne sont plus editables
                 return false;
             }
         };
-        listeCompetenceAjoutee.setModel(model);
-        this.listeCompetenceScrollPane = new JScrollPane(listeCompetenceAjoutee);
+        tableCompetencesAjoutees.setModel(model);
+        this.listeCompetenceScrollPane = new JScrollPane(tableCompetencesAjoutees);
         listeCompetenceScrollPane.setPreferredSize(new Dimension(200, 100));
         panellisteCompetences.add(listeCompetenceScrollPane, BorderLayout.CENTER); // Place la table sous le label
         formulaire.add(panellisteCompetences);
@@ -245,8 +245,8 @@ public class CreationMissionVue extends JPanel {
         return this.ajouterEmployes;
     }
 
-    public JTable getListeCompetenceAjoutee() {
-        return this.listeCompetenceAjoutee;
+    public JTable getTableCompetencesAjoutees() {
+        return this.tableCompetencesAjoutees;
     }
     public JTable getTableEmployesAjoutee() {
         return this.tableEmployesAjoutee;
@@ -338,7 +338,7 @@ public class CreationMissionVue extends JPanel {
     }
     //ajout compétence selectionner a tables des compétences ajoutées à la mission
     public void ajouterCompetenceAjoutee(Competence cmp) {
-        DefaultTableModel model = (DefaultTableModel) listeCompetenceAjoutee.getModel();
+        DefaultTableModel model = (DefaultTableModel) tableCompetencesAjoutees.getModel();
         Object[] row = {cmp.getIdCmp(), cmp.getIdCatCmp(), cmp.getNomCmpEn(), cmp.getNomCmpFr()};//création de la ligne
         model.addRow(row);
     }
@@ -352,7 +352,7 @@ public class CreationMissionVue extends JPanel {
     //retourne une liste des compétences ajoutées à la mission
     public List<Competence> getCompetencesAjoutees() {
         List<Competence> competences = new ArrayList<>();
-        DefaultTableModel model = (DefaultTableModel) listeCompetenceAjoutee.getModel();
+        DefaultTableModel model = (DefaultTableModel) tableCompetencesAjoutees.getModel();
         for (int i = 0; i < model.getRowCount(); i++) {
             int idCmp = (int) model.getValueAt(i, 0);
             String idCatCmp = (String) model.getValueAt(i, 1);
@@ -398,7 +398,7 @@ public class CreationMissionVue extends JPanel {
         nbEmpField.setValue(0); // ou 1, selon votre valeur par défaut souhaitée
 
         // Réinitialiser les tableaux d'ajouts
-        DefaultTableModel modelComp = (DefaultTableModel) listeCompetenceAjoutee.getModel();
+        DefaultTableModel modelComp = (DefaultTableModel) tableCompetencesAjoutees.getModel();
         modelComp.setRowCount(0);
 
         DefaultTableModel modelEmp = (DefaultTableModel) tableEmployesAjoutee.getModel();

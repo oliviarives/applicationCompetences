@@ -49,7 +49,7 @@ public class AccueilVue extends JPanel {
         // Création initiale du graphique (bar chart) vide
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         JFreeChart chart = ChartFactory.createBarChart(
-                "Missions par mois",
+                "Résumé des derniers mois",
                 "Mois",
                 "Nombre",
                 dataset
@@ -115,9 +115,9 @@ public class AccueilVue extends JPanel {
     public void updateDashboard(int nbEnPreparation, int nbEnCours, int nbTermine, Map<String, Integer> statsMois) {
         // Recrée les cartes avec les nouvelles valeurs
         cardPanel.removeAll();
-        cardPrep = createCard("A VENIR", nbEnPreparation + MOT_MISSION, StyleManager.BLEU_VERT);
-        cardEnCours = createCard("EN COURS", nbEnCours + MOT_MISSION, StyleManager.BLEU_CLAIR);
-        cardTermine = createCard("TERMINÉES", nbTermine + MOT_MISSION, StyleManager.BLEU_SITE);
+        cardPrep = createCard("A VENIR", nbEnPreparation + " " + MOT_MISSION, StyleManager.BLEU_VERT);
+        cardEnCours = createCard("EN COURS", nbEnCours + " " + MOT_MISSION, StyleManager.BLEU_CLAIR);
+        cardTermine = createCard("TERMINÉES", nbTermine + " " + MOT_MISSION, StyleManager.BLEU_SITE);
         cardPanel.add(cardPrep);
         cardPanel.add(cardEnCours);
         cardPanel.add(cardTermine);
@@ -130,7 +130,7 @@ public class AccueilVue extends JPanel {
             dataset.addValue(entry.getValue(), "Missions", entry.getKey());
         }
         JFreeChart updatedChart = ChartFactory.createBarChart(
-                "Nombre de missions par mois",
+                "Résumé des derniers mois",
                 "Mois",
                 "Nombre de missions",
                 dataset
@@ -151,7 +151,7 @@ public class AccueilVue extends JPanel {
             updatedChart.getLegend().setItemPaint(StyleManager.BLEU_SITE);
         }
         BarRenderer renderer = (BarRenderer) plot.getRenderer();
-        renderer.setSeriesPaint(0, StyleManager.BLEU_VERT); // Couleur des barres
+        renderer.setSeriesPaint(0, StyleManager.BLEU_VERT);
 
         chartPanel.setChart(updatedChart);
         repaint();
