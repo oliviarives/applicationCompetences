@@ -14,12 +14,10 @@ public class VacanceControleur {
 
     private final VacanceVue vacanceVue;
     private final DAOEmploye daoEmp;
-    private final NavigationControleur navC;
 
-    public VacanceControleur(VacanceVue vacanceVue, DAOEmploye daoEmp, NavigationControleur navigationC) {
+    public VacanceControleur(VacanceVue vacanceVue, DAOEmploye daoEmp) {
         this.vacanceVue = vacanceVue;
         this.daoEmp = daoEmp;
-        this.navC = navigationC;
         vacanceVue.getValiderBoutton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -48,8 +46,8 @@ public class VacanceControleur {
 
             daoEmp.ajouterVacance(dateDebut, dateFin, login);
             JOptionPane.showMessageDialog(null, "Vacances ajoutées pour l'employé " + login + " !");
-            navC.loadEmploye();
-            navC.getVueV().showPage("Employe"); // ferme le form vac pour ouvrir le tab emp
+            NavigationControleur.loadEmploye();
+            NavigationControleur.getVueV().showPage("Employe"); // ferme le form vac pour ouvrir le tab emp
         } catch (ParseException ex) {
             JOptionPane.showMessageDialog(null, "Format de date invalide. Utilisez le format YYYY-MM-DD.");
         } catch (Exception ex) {

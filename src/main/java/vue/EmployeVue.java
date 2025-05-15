@@ -21,19 +21,16 @@ public class EmployeVue extends JPanel {
         StyleManager.setupFlatLaf();
         setLayout(new BorderLayout());
 
-        // Initialisation des boutons
         this.bouttonAjouterEmploye = new JButton("Ajouter");
         this.bouttonModifierEmploye = new JButton("Modifier");
         this.boutonVacance = new JButton("Vacance");
 
-
-        // Table et scroll
         this.tableEmploye = new JTable();
         this.scrollEmploye = new JScrollPane(tableEmploye);
         this.scrollEmploye.setPreferredSize(new Dimension(800, 300));
         add(scrollEmploye, BorderLayout.CENTER);
 
-        // Panel des boutons
+        //Panel des boutons
         this.panelBouttons = new JPanel(new FlowLayout(FlowLayout.CENTER));
         this.panelBouttons.add(this.bouttonAjouterEmploye);
         this.panelBouttons.add(this.bouttonModifierEmploye);
@@ -43,7 +40,7 @@ public class EmployeVue extends JPanel {
     }
 
     public void setEmploye(List<Employe> emp) {
-        this.employes = emp; // pour permettre la récupération exacte via getEmployeSelectionne()
+        this.employes = emp;
 
         String[] columnNames = {"Prenom","Nom","Poste"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0){

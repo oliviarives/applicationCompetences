@@ -9,7 +9,6 @@ import vue.ModificationEmployeVue;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -18,33 +17,25 @@ public class ModifierEmployeControleur {
     private final ModificationEmployeVue modifPersonnelVue;
     private final DAOEmploye daoEmploye;
     private final DAOCompetence daoCompetence;
-    private final NavigationControleur navC;
 
-    public ModifierEmployeControleur(ModificationEmployeVue modifPersonnelVue, DAOEmploye daoEmp, DAOCompetence daoCmp, NavigationControleur navigationC) {
+    public ModifierEmployeControleur(ModificationEmployeVue modifPersonnelVue, DAOEmploye daoEmp, DAOCompetence daoCmp) {
         this.modifPersonnelVue = modifPersonnelVue;
         this.daoEmploye = daoEmp;
-        this.navC = navigationC;
         this.daoCompetence = daoCmp;
 
         modifPersonnelVue.getButtonConfirmer().addActionListener(e -> {
             this.modifierPersonnel();
             //effacerChamps();
-            navC.loadEmploye();
-            navC.getVueV().getButtonEmploye().doClick();
+            NavigationControleur.loadEmploye();
+            NavigationControleur.getVueV().getButtonEmploye().doClick();
         });
 
-        modifPersonnelVue.getButtonRetirer().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                retirerCompetenceEmploye();
-            }
+        modifPersonnelVue.getButtonRetirer().addActionListener(e -> {
+            this.retirerCompetenceEmploye();
         });
 
-        modifPersonnelVue.getButtonAjouter().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        modifPersonnelVue.getButtonAjouter().addActionListener(e -> {
                 ajouterCompetenceEmploye();
-            }
         });
     }
 
@@ -53,7 +44,7 @@ public class ModifierEmployeControleur {
         String nom = modifPersonnelVue.getNomField().getText();
         String login = modifPersonnelVue.getLoginField().getText();
         String poste = modifPersonnelVue.getPosteField().getText();
-        java.util.Date utilDate = (java.util.Date) modifPersonnelVue.getDateEntreeField().getValue();
+        //java.util.Date utilDate = (java.util.Date) modifPersonnelVue.getDateEntreeField().getValue();
         //Employe employeNv = new Employe(prenom, nom, login, mdp, poste, dateEntree);
         if (prenom.isEmpty() || nom.isEmpty() || login.isEmpty() || poste.isEmpty()) {
             modifPersonnelVue.afficherMessage("Tous les champs sont obligatoires !");
