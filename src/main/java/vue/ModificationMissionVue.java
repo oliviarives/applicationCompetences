@@ -47,13 +47,14 @@ public class ModificationMissionVue extends JPanel {
 
     private static final String NOM_EN = "Nom (En)";
     private static final String NOM_FR = "Nom (Fr)";
+    private static final String FORMAT_DATE = "yyyy-MM-dd";
 
     public ModificationMissionVue() {
         StyleManager.setupFlatLaf();
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         //Partie Formulaire Mission
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat formatter = new SimpleDateFormat(FORMAT_DATE);
         DateFormatter dateFormatter = new DateFormatter(formatter);
 
         this.splitPane = new JSplitPane();
@@ -81,11 +82,11 @@ public class ModificationMissionVue extends JPanel {
         this.titreMisField = new JTextField(20);
         this.descriptionMisField = new JTextArea(3, 30);
         this.dateDebutMisField = new JDateChooser();
-        dateDebutMisField.setDateFormatString("yyyy-MM-dd");
+        dateDebutMisField.setDateFormatString(FORMAT_DATE);
         dateDebutMisField.setDate(new java.util.Date());
         dateDebutMisField.setPreferredSize(new Dimension(100, 25));
         this.dateFinMisField = new JDateChooser();
-        dateFinMisField.setDateFormatString("yyyy-MM-dd");
+        dateFinMisField.setDateFormatString(FORMAT_DATE);
         dateFinMisField.setDate(new java.util.Date());
         dateFinMisField.setPreferredSize(new Dimension(100, 25));
         SpinnerModel modelSpinner = new SpinnerNumberModel(0, 0, 30, 1);
@@ -316,7 +317,7 @@ public class ModificationMissionVue extends JPanel {
     }
 
 
-    //Affiche soit liste des employés ou liste compétences ajoutables à mission
+    //Affiche soit la liste des employés ou liste compétences ajoutables à mission
     public void showPage(String pageName) {
         cardLayout.show(cardLayoutPanel, pageName);
     }
@@ -334,7 +335,7 @@ public class ModificationMissionVue extends JPanel {
         return null; // Aucune ligne sélectionnée
     }
 
-    //renvoi employé selectionner avec double click dans liste employés disponible
+    //renvoi employé selectionner avec double click dans la liste des employés disponible
     public Employe getEmployeSelectionne() {
         int selectedRow = employesTable.getSelectedRow();
         if (selectedRow != -1) { //  si une ligne est sélectionnée
