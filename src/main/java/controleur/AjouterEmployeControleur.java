@@ -30,17 +30,14 @@ public class AjouterEmployeControleur {
 
         });
 
-        ajoutPersonnelVue.getButtonEffacer().addActionListener (e -> {
-                effacerChamps();
-        });
+        ajoutPersonnelVue.getButtonEffacer().addActionListener (e ->
+                effacerChamps());
 
-        ajoutPersonnelVue.getButtonRetirer().addActionListener(e -> {
-                retirerCompetenceEmploye();
-        });
+        ajoutPersonnelVue.getButtonRetirer().addActionListener(e ->
+                retirerCompetenceEmploye());
 
-        ajoutPersonnelVue.getButtonAjouter().addActionListener(e -> {
-            ajouterCompetenceEmploye();
-        });
+        ajoutPersonnelVue.getButtonAjouter().addActionListener(e ->
+                ajouterCompetenceEmploye());
     }
 
     private void ajouterPersonnel() {

@@ -18,18 +18,18 @@ import java.util.List;
 public class ModifierMissionControleur {
     private ModificationMissionVue modificationMV;
     private DAOMission daoMission;
-    private NavigationControleur navC;
     private DAOCompetence daoCompetence;
     private DAOEmploye daoEmploye;
     private Mission mission;
     private List<Competence> listeCompetencesSelectionnees;
     private List<Employe> listeEmployesSelectiones;
     private int idMissionSelectMissionView;
+    private static final String MOT_TAB = "tabCompetences";
+    private static final String MOT_ERREUR = "Erreur";
 
-    public ModifierMissionControleur(ModificationMissionVue modificationMV, DAOMission daoMission, NavigationControleur navigationC, DAOCompetence daoComp, DAOEmploye daoEmp, Mission mission) {
+    public ModifierMissionControleur(ModificationMissionVue modificationMV, DAOMission daoMission, DAOCompetence daoComp, DAOEmploye daoEmp, Mission mission) {
         this.modificationMV = modificationMV;
         this.daoMission = daoMission;
-        this.navC = navigationC;
         this.daoCompetence = daoComp;
         this.daoEmploye = daoEmp;
         this.mission = mission;
@@ -62,105 +62,97 @@ public class ModifierMissionControleur {
                     }
                 }
         );*/
-        modificationMV.getButtonConfirmer().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Récupération des valeurs saisies
-                String titre = modificationMV.getTitreMisField().trim();
-                String login = modificationMV.getLogEmpField().trim();
-                java.sql.Date dateDebut = modificationMV.getDateDebutMisField();
-                java.sql.Date dateFin = modificationMV.getDateFinMisField();
-                String description = modificationMV.getDescriptionMisField();
+        modificationMV.getButtonConfirmer().addActionListener(e -> {
+            // Récupération des valeurs saisies
+            String titre = modificationMV.getTitreMisField().trim();
+            String login = modificationMV.getLogEmpField().trim();
+            java.sql.Date dateDebut = modificationMV.getDateDebutMisField();
+            java.sql.Date dateFin = modificationMV.getDateFinMisField();
+            String description = modificationMV.getDescriptionMisField();
 
-                // Vérification des champs obligatoires
-                if(titre.isEmpty() || login.isEmpty() || dateDebut == null || dateFin == null) {
+            // Vérification des champs obligatoires
+            if(titre.isEmpty() || login.isEmpty() || dateDebut == null || dateFin == null) {
+                JOptionPane.showMessageDialog(null,
+                        "Les champs Titre, Login Employé, Date de début et Date de fin sont obligatoires.",
+                        MOT_ERREUR, JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Vérifier que la date de début et la date de fin ne sont pas antérieures à aujourd'hui
+            java.sql.Date today = new java.sql.Date(System.currentTimeMillis());
+            if(dateDebut.before(today) || dateFin.before(today)) {
+                JOptionPane.showMessageDialog(null,
+                        "Les dates de début et de fin doivent être supérieures à la date d'aujourd'hui.",
+                        MOT_ERREUR, JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Vérifier que la date de fin n'est pas antérieure à la date de début
+            if(dateFin.before(dateDebut)) {
+                JOptionPane.showMessageDialog(null,
+                        "La date de fin ne peut pas être antérieure à la date de début.",
+                        MOT_ERREUR, JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Vérification de la validité du login employé via la méthode loginExist()
+            try {
+                if(!daoEmploye.isLoginExists(login)) {
                     JOptionPane.showMessageDialog(null,
-                            "Les champs Titre, Login Employé, Date de début et Date de fin sont obligatoires.",
-                            "Erreur", JOptionPane.ERROR_MESSAGE);
+                            "Le login employé saisi n'est pas valide. Veuillez entrer un login existant.",
+                            MOT_ERREUR, JOptionPane.ERROR_MESSAGE);
                     return;
                 }
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null,
+                        "Erreur lors de la vérification du login employé.",
+                        MOT_ERREUR, JOptionPane.ERROR_MESSAGE);
+                return;
+            }
 
-                // Vérifier que la date de début et la date de fin ne sont pas antérieures à aujourd'hui
-                java.sql.Date today = new java.sql.Date(System.currentTimeMillis());
-                if(dateDebut.before(today) || dateFin.before(today)) {
-                    JOptionPane.showMessageDialog(null,
-                            "Les dates de début et de fin doivent être supérieures à la date d'aujourd'hui.",
-                            "Erreur", JOptionPane.ERROR_MESSAGE);
-                    return;
+            // Vérifier que le titre de mission n'existe pas déjà dans une mission non terminée
+           /*if(daoMission.missionTitleExists(titre)) {
+                JOptionPane.showMessageDialog(null,
+                        "Le titre de la mission existe déjà pour une mission non terminée. Veuillez choisir un autre titre.",
+                        MOT_ERREUR, JOptionPane.ERROR_MESSAGE);
+                return;
+            }*/
+
+            // Tout est validé, on peut créer la mission avec le statut "Préparation" (idSta = 1)
+            Mission misInsert = new Mission(
+                    titre,
+                    description,
+                    dateDebut,
+                    dateFin,
+                    login,
+                    modificationMV.getNbEmpField(),
+                    idMissionSelectMissionView
+            );
+
+            List<Competence> cmpAjoutees = modificationMV.getCompetencesAjoutees();
+            List<String> logEmpAjoutes = modificationMV.getLogEmployeAjoutees();
+
+            try {
+                daoMission.updateMissionModifier(misInsert);
+                daoMission.ajouterCmpToMission(misInsert, cmpAjoutees);
+                daoMission.ajouterEmpToMission(misInsert, logEmpAjoutes);
+
+                // Si on a affecté au moins un employé, on met à jour le statut à "Planifiée" (idSta = 2)
+                if(!logEmpAjoutes.isEmpty()) {
+                    daoMission.updateMissionStatus(misInsert, 2);
                 }
-
-                // Vérifier que la date de fin n'est pas antérieure à la date de début
-                if(dateFin.before(dateDebut)) {
-                    JOptionPane.showMessageDialog(null,
-                            "La date de fin ne peut pas être antérieure à la date de début.",
-                            "Erreur", JOptionPane.ERROR_MESSAGE);
-                    return;
+                modificationMV.showPage(MOT_TAB);
+                NavigationControleur.getVueV().getButtonMissions().doClick();
+                for (String logEmp : logEmpAjoutes) {
+                    daoEmp.addEmpCollaborerToMap(logEmp,dateDebut,dateFin);
                 }
-
-                // Vérification de la validité du login employé via la méthode loginExist()
-                try {
-                    if(!daoEmploye.isLoginExists(login)) {
-                        JOptionPane.showMessageDialog(null,
-                                "Le login employé saisi n'est pas valide. Veuillez entrer un login existant.",
-                                "Erreur", JOptionPane.ERROR_MESSAGE);
-                        return;
-                    }
-                } catch (SQLException ex) {
-                    JOptionPane.showMessageDialog(null,
-                            "Erreur lors de la vérification du login employé.",
-                            "Erreur", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-
-                // Vérifier que le titre de mission n'existe pas déjà dans une mission non terminée
-               /*if(daoMission.missionTitleExists(titre)) {
-                    JOptionPane.showMessageDialog(null,
-                            "Le titre de la mission existe déjà pour une mission non terminée. Veuillez choisir un autre titre.",
-                            "Erreur", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }*/
-
-                // Tout est validé, on peut créer la mission avec le statut "Préparation" (idSta = 1)
-                Mission misInsert = new Mission(
-                        titre,
-                        description,
-                        dateDebut,
-                        dateFin,
-                        login,
-                        modificationMV.getNbEmpField(),
-                        idMissionSelectMissionView
-                );
-
-                List<Competence> cmpAjoutees = modificationMV.getCompetencesAjoutees();
-                List<String> logEmpAjoutes = modificationMV.getLogEmployeAjoutees();
-
-                try {
-                    daoMission.updateMissionModifier(misInsert);
-                    daoMission.ajouterCmpToMission(misInsert, cmpAjoutees);
-                    daoMission.ajouterEmpToMission(misInsert, logEmpAjoutes);
-
-                    // Si on a affecté au moins un employé, on met à jour le statut à "Planifiée" (idSta = 2)
-                    if(!logEmpAjoutes.isEmpty()) {
-                        daoMission.updateMissionStatus(misInsert, 2);
-                    }
-                    modificationMV.showPage("tabCompetences");
-                    navC.getVueV().getButtonMissions().doClick();
-                    for (String logEmp : logEmpAjoutes) {
-                        daoEmp.addEmpCollaborerToMap(logEmp,dateDebut,dateFin);
-                    }
-                } catch (SQLException ex) {
-                    throw new RuntimeException(ex);
-                }
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
             }
         });
         //boutons pour afficher les compétences disponibles ds creation mission
         modificationMV.getAjouterCompetences().addActionListener(
-                new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e){
-                        modificationMV.showPage("tabCompetences");
-                    }
-                }
+                e -> modificationMV.showPage(MOT_TAB)
         );
         //boutons pour afficher les employés dispo ds creation mission
         /*modificationMV.getAjouterEmployes().addActionListener(
@@ -173,15 +165,12 @@ public class ModifierMissionControleur {
         );*/
 
         modificationMV.getAjouterEmployes().addActionListener(
-                new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e){
-                        if(modificationMV.getCompetencesAjoutees().isEmpty() || modificationMV.getDateDebutMisField()==null || modificationMV.getDateFinMisField()==null) {
-                            JOptionPane.showMessageDialog(null, "Veuillez d'abord saisir des compétences et des dates à la mission!",
-                                    "Erreur de saisie!", JOptionPane.WARNING_MESSAGE);}
-                        else{
-                            modificationMV.showPage("tabEmployes");
-                        }
+                e -> {
+                    if(modificationMV.getCompetencesAjoutees().isEmpty() || modificationMV.getDateDebutMisField()==null || modificationMV.getDateFinMisField()==null) {
+                        JOptionPane.showMessageDialog(null, "Veuillez d'abord saisir des compétences et des dates à la mission!",
+                                "Erreur de saisie!", JOptionPane.WARNING_MESSAGE);}
+                    else{
+                        modificationMV.showPage("tabEmployes");
                     }
                 }
         );
@@ -255,26 +244,18 @@ public class ModifierMissionControleur {
         });
 
         modificationMV.getBoutonModifierDates().addActionListener(
-                new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        modificationMV.setDatesModifiables(true);
-                    }
-                }
+                e -> modificationMV.setDatesModifiables(true)
         );
 
         modificationMV.getBouttonConfirmerDates().addActionListener(
-                new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        modificationMV.setDatesModifiables(false);
-                        //daoEmp.setListeEmpCmp();
-                        //daoEmp.miseAJourEmpByCmpByDate(creationMV.getDateDebutMisField(), creationMV.getDateFinMisField());
-                        try {
-                            modificationMV.setEmploye(daoEmp.miseAJourEmpByCmpByDate(modificationMV.getDateDebutMisField(), modificationMV.getDateFinMisField()));
-                        } catch (SQLException ex) {
-                            throw new RuntimeException(ex);
-                        }
+                e -> {
+                    modificationMV.setDatesModifiables(false);
+                    //daoEmp.setListeEmpCmp();
+                    //daoEmp.miseAJourEmpByCmpByDate(creationMV.getDateDebutMisField(), creationMV.getDateFinMisField());
+                    try {
+                        modificationMV.setEmploye(daoEmp.miseAJourEmpByCmpByDate(modificationMV.getDateDebutMisField(), modificationMV.getDateFinMisField()));
+                    } catch (SQLException ex) {
+                        throw new RuntimeException(ex);
                     }
                 }
         );
@@ -315,7 +296,7 @@ public class ModifierMissionControleur {
         loadEmployes();
 
         // Affiche par défaut la vue des compétences associées (ou selon ton choix)
-        modificationMV.showPage("tabCompetences");
+        modificationMV.showPage(MOT_TAB);
     }
 
     public void setIdMissionSelect(int is){
