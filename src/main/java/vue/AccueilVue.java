@@ -7,6 +7,7 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.data.category.DefaultCategoryDataset;
+import utilitaires.StyleManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,7 +17,7 @@ public class AccueilVue extends JPanel {
     private final JPanel cardPanel;
     private final ChartPanel chartPanel;
 
-    // On conserve des références aux cartes pour pouvoir les recréer lors  update
+    // On conserve des références aux cartes pour pouvoir les recréer lors de l'update
     private JPanel cardPrep;
     private JPanel cardEnCours;
     private JPanel cardTermine;
@@ -24,6 +25,9 @@ public class AccueilVue extends JPanel {
     final String MOT_MISSION = "MISSIONS";
 
     public AccueilVue() {
+        // Appliquer les styles globaux
+        StyleManager.setupFlatLaf();
+
         setLayout(new BorderLayout());
 
         // Création du panel pour les cartes
@@ -32,9 +36,9 @@ public class AccueilVue extends JPanel {
         cardPanel.setOpaque(false);
 
         // Création initiale des cartes avec des valeurs par défaut
-        cardPrep = createCard("A VENIR", ZERO_MISSIONS, new Color(133, 167, 188));
-        cardEnCours = createCard("EN COURS", ZERO_MISSIONS, new Color(255, 165, 0));
-        cardTermine = createCard("TERMINÉES", ZERO_MISSIONS, new Color(70, 130, 180));
+        cardPrep = createCard("A VENIR", ZERO_MISSIONS, StyleManager.BLEU_VERT);
+        cardEnCours = createCard("EN COURS", ZERO_MISSIONS, StyleManager.BLEU_CLAIR);
+        cardTermine = createCard("TERMINÉES", ZERO_MISSIONS, StyleManager.BLEU_SITE);
 
         cardPanel.add(cardPrep);
         cardPanel.add(cardEnCours);
@@ -73,6 +77,12 @@ public class AccueilVue extends JPanel {
         card.add(lblTitle, BorderLayout.NORTH);
         card.add(lblValue, BorderLayout.CENTER);
 
+        // arrondir les angles
+        card.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(bgColor.darker(), 1),
+                BorderFactory.createEmptyBorder(20, 20, 20, 20)
+        ));
+
         return card;
     }
 
@@ -105,9 +115,9 @@ public class AccueilVue extends JPanel {
     public void updateDashboard(int nbEnPreparation, int nbEnCours, int nbTermine, Map<String, Integer> statsMois) {
         // Recrée les cartes avec les nouvelles valeurs
         cardPanel.removeAll();
-        cardPrep = createCard("A VENIR", nbEnPreparation + MOT_MISSION, new Color(174, 172, 228));
-        cardEnCours = createCard("EN COURS", nbEnCours + MOT_MISSION, new Color(120, 164, 207));
-        cardTermine = createCard("TERMINÉES", nbTermine + MOT_MISSION, new Color(139, 173, 179));
+        cardPrep = createCard("A VENIR", nbEnPreparation + MOT_MISSION, StyleManager.BLEU_VERT);
+        cardEnCours = createCard("EN COURS", nbEnCours + MOT_MISSION, StyleManager.BLEU_CLAIR);
+        cardTermine = createCard("TERMINÉES", nbTermine + MOT_MISSION, StyleManager.BLEU_SITE);
         cardPanel.add(cardPrep);
         cardPanel.add(cardEnCours);
         cardPanel.add(cardTermine);
@@ -127,21 +137,21 @@ public class AccueilVue extends JPanel {
         );
 
         // Personnalisation du chart
-        updatedChart.setBackgroundPaint(new Color(237, 227, 228)); // Fond global
+        updatedChart.setBackgroundPaint(StyleManager.BLANC); // Fond global
         CategoryPlot plot = (CategoryPlot) updatedChart.getPlot();
-        plot.setBackgroundPaint(new Color(237, 227, 228)); // Fond de la zone de tracé
-        plot.setDomainGridlinePaint(Color.BLACK);
-        plot.setRangeGridlinePaint(Color.BLACK);
-        plot.getDomainAxis().setTickLabelPaint(Color.BLACK);
-        plot.getDomainAxis().setLabelPaint(Color.BLACK);
-        plot.getRangeAxis().setTickLabelPaint(Color.BLACK);
-        plot.getRangeAxis().setLabelPaint(Color.BLACK);
+        plot.setBackgroundPaint(StyleManager.BLANC); // Fond de la zone de tracé
+        plot.setDomainGridlinePaint(StyleManager.BLEU_SITE);
+        plot.setRangeGridlinePaint(StyleManager.BLEU_SITE);
+        plot.getDomainAxis().setTickLabelPaint(StyleManager.BLEU_SITE);
+        plot.getDomainAxis().setLabelPaint(StyleManager.BLEU_SITE);
+        plot.getRangeAxis().setTickLabelPaint(StyleManager.BLEU_SITE);
+        plot.getRangeAxis().setLabelPaint(StyleManager.BLEU_SITE);
         if (updatedChart.getLegend() != null) {
-            updatedChart.getLegend().setBackgroundPaint(new Color(237, 227, 228));
-            updatedChart.getLegend().setItemPaint(Color.BLACK);
+            updatedChart.getLegend().setBackgroundPaint(StyleManager.BLANC);
+            updatedChart.getLegend().setItemPaint(StyleManager.BLEU_SITE);
         }
         BarRenderer renderer = (BarRenderer) plot.getRenderer();
-        renderer.setSeriesPaint(0, new Color(164, 163, 193)); // Couleur des barres
+        renderer.setSeriesPaint(0, StyleManager.BLEU_VERT); // Couleur des barres
 
         chartPanel.setChart(updatedChart);
         repaint();

@@ -21,19 +21,19 @@ public class NavigationVue extends JFrame {
         setLayout(new BorderLayout());
 
         // Définir la couleur de fond du contentPane
-        getContentPane().setBackground(new Color(237, 227, 228)); // Couleur de fond personnalisée
+        getContentPane().setBackground(new Color(0, 101, 255)); // Couleur de fond personnalisée // ne change rien
 
         //definition du panel de navigation contenant l'ensemble de l'application
         JPanel panelNavigation = new JPanel();
         panelNavigation.setLayout(new BorderLayout());
-        panelNavigation.setBackground(new Color(237, 227, 228)); // Couleur de fond pour le panelNavigation
+        panelNavigation.setBackground(new Color(255, 0, 0)); // Couleur de fond pour le panelNavigation //ne change rien
 
-        //definition du panel accueillant les boutons de navigation
+        // Navigation du menu
         JPanel navigationPanel = new JPanel();
         navigationPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
-        navigationPanel.setBackground(new Color(237, 227, 228)); // Couleur de fond pour le navigationPanel
+        navigationPanel.setBackground(new Color(40, 62, 80)); // Couleur de fond du menu
 
-        //definition des boutons servant à la navigation entres les vues
+        //definition des boutons servant à la navigation entre les vues
         this.buttonAccueil = new JButton("ACCUEIL");
         this.buttonMissions = new JButton("MISSIONS");
         this.buttonCompetences = new JButton("COMPETENCES");
@@ -45,12 +45,10 @@ public class NavigationVue extends JFrame {
         navigationPanel.add(buttonCompetences);
         navigationPanel.add(buttonEmploye);
 
-
-
         //panel permettant le changement de vue
         this.cardLayout = new CardLayout(40, 40);
         panelCards = new JPanel(cardLayout);
-        panelCards.setBackground(new Color(237, 227, 228)); // Couleur de fond pour le panelCards
+        panelCards.setBackground(new Color(255, 255, 255)); // Fond de l'appli
         panelCards.setSize(new Dimension(1100, 600));
 
         //ajout des elements de navigation, boutons et panels de vues
