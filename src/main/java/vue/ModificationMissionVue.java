@@ -12,7 +12,6 @@ import javax.swing.table.TableColumn;
 import javax.swing.text.DateFormatter;
 import java.awt.*;
 import java.text.SimpleDateFormat;
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -38,9 +37,9 @@ public class ModificationMissionVue extends JPanel {
     private CardLayout cardLayout;
     private JPanel cardLayoutPanel;
     private JLabel titreLabel;
-    private JTable listeCompetenceAjoutee;
+    private JTable tableCompetencesAjoutees;
     private JScrollPane listeCompetenceScrollPane;
-    private JTable listeEmployesAjoutee;
+    private JTable tableEmployesAjoutes;
     private JScrollPane listeEmployesScrollPane;
     private JTextField nomStaField;
 
@@ -126,15 +125,15 @@ public class ModificationMissionVue extends JPanel {
         //Tableau des compétences ajoutées à la mission
         JLabel competenceLabel = new JLabel("Compétences ajoutées :");
         panellisteCompetences.add(competenceLabel, BorderLayout.NORTH); // Place le label en haut
-        this.listeCompetenceAjoutee = new JTable();
+        this.tableCompetencesAjoutees = new JTable();
         String[] columnNames = {"Id", "Categorie", NOM_EN, NOM_FR };
         DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
             public boolean isCellEditable(int row, int col) {  //cellules de la table ne sont plus editables
                 return false;
             }
         };
-        listeCompetenceAjoutee.setModel(model);
-        this.listeCompetenceScrollPane = new JScrollPane(listeCompetenceAjoutee);
+        tableCompetencesAjoutees.setModel(model);
+        this.listeCompetenceScrollPane = new JScrollPane(tableCompetencesAjoutees);
         listeCompetenceScrollPane.setPreferredSize(new Dimension(200, 100));
         panellisteCompetences.add(listeCompetenceScrollPane, BorderLayout.CENTER); // Place la table sous le label
         formulaire.add(panellisteCompetences);
@@ -143,20 +142,20 @@ public class ModificationMissionVue extends JPanel {
         //Tableau des employés ajoutées à la mission
         JLabel employesLabel = new JLabel("Employés ajoutés :");
         panellisteEmployes.add(employesLabel, BorderLayout.NORTH); // Place le label en haut
-        this.listeEmployesAjoutee = new JTable();
+        this.tableEmployesAjoutes = new JTable();
         String[] employesColumnNames = {"login","Prenom", "Nom", "Poste"};
         DefaultTableModel employesModel = new DefaultTableModel(employesColumnNames, 0) {
             public boolean isCellEditable(int row, int col) { //cellules de la table ne sont plus editables
                 return false;
             }
         };
-        listeEmployesAjoutee.setModel(employesModel);
-        TableColumn column = this.listeEmployesAjoutee.getColumnModel().getColumn(0);
+        tableEmployesAjoutes.setModel(employesModel);
+        TableColumn column = this.tableEmployesAjoutes.getColumnModel().getColumn(0);
         column.setMinWidth(0);
         column.setMaxWidth(0);
         column.setPreferredWidth(0);
         column.setResizable(false);
-        this.listeEmployesScrollPane = new JScrollPane(listeEmployesAjoutee);
+        this.listeEmployesScrollPane = new JScrollPane(tableEmployesAjoutes);
         listeEmployesScrollPane.setPreferredSize(new Dimension(150, 200));
         panellisteEmployes.add(listeEmployesScrollPane, BorderLayout.CENTER); // Place la table sous le label
         formulaire.add(panellisteEmployes);
@@ -246,12 +245,12 @@ public class ModificationMissionVue extends JPanel {
         return this.ajouterEmployes;
     }
 
-    public JTable getListeCompetenceAjoutee() {
-        return this.listeCompetenceAjoutee;
+    public JTable getTableCompetencesAjoutees() {
+        return this.tableCompetencesAjoutees;
     }
 
-    public JTable getListeEmployesAjoutee() {
-        return this.listeEmployesAjoutee;
+    public JTable getTableEmployesAjoutes() {
+        return this.tableEmployesAjoutes;
     }
 
     public JTable getCompetenceTable() {
@@ -339,14 +338,14 @@ public class ModificationMissionVue extends JPanel {
 
     //ajout compétence selectionner a tables des compétences ajoutées à la mission
     public void ajouterCompetenceAjoutee(Competence cmp) {
-        DefaultTableModel model = (DefaultTableModel) listeCompetenceAjoutee.getModel();
+        DefaultTableModel model = (DefaultTableModel) tableCompetencesAjoutees.getModel();
         Object[] row = {cmp.getIdCmp(), cmp.getIdCatCmp(), cmp.getNomCmpEn(), cmp.getNomCmpFr()};
         model.addRow(row);
     }
 
     //ajout employé selectionner a tables des employés ajoutés à la mission
     public void ajouterEmployesAjoutee(Employe emp) {
-        DefaultTableModel model = (DefaultTableModel) listeEmployesAjoutee.getModel();
+        DefaultTableModel model = (DefaultTableModel) tableEmployesAjoutes.getModel();
         Object[] row = {emp.getLogin(),emp.getPrenom(), emp.getNom(), emp.getPoste()};
         model.addRow(row);
     }
@@ -365,7 +364,7 @@ public class ModificationMissionVue extends JPanel {
     //retourne une liste des compétences ajoutées à la mission
     public List<Competence> getCompetencesAjoutees() {
         List<Competence> competences = new ArrayList<>();
-        DefaultTableModel model = (DefaultTableModel) listeCompetenceAjoutee.getModel();
+        DefaultTableModel model = (DefaultTableModel) tableCompetencesAjoutees.getModel();
         for (int i = 0; i < model.getRowCount(); i++) {
             int idCmp = (int) model.getValueAt(i, 0);
             String idCatCmp = (String) model.getValueAt(i, 1);
@@ -394,7 +393,7 @@ public class ModificationMissionVue extends JPanel {
             Object[] row = {cmp.getIdCmp(), cmp.getIdCatCmp(), cmp.getNomCmpEn(), cmp.getNomCmpFr()};
             model.addRow(row);
         }
-        this.listeCompetenceAjoutee.setModel(model);
+        this.tableCompetencesAjoutees.setModel(model);
     }
 
     public void setMissionData(Mission mission) {
@@ -408,7 +407,7 @@ public class ModificationMissionVue extends JPanel {
     //retourne une liste d'employe ajoutés à la mission pour insertion BD à cretion mission
     public List<String> getLogEmployeAjoutees() {
         HashSet<String> empsALogin = new HashSet<>();
-        DefaultTableModel model = (DefaultTableModel) listeEmployesAjoutee.getModel();
+        DefaultTableModel model = (DefaultTableModel) tableEmployesAjoutes.getModel();
         //recuperation des login des emp ajoutés pour comparaison
         for (int i = 0; i < model.getRowCount(); i++) {
             String loginEmp = (String) model.getValueAt(i, 0);

@@ -194,13 +194,13 @@ public class AjouterMissionControleur {
         });
 
         //retirer compétence des compétences ajoutées
-        creationMV.getListeCompetenceAjoutee().addMouseListener(new java.awt.event.MouseAdapter() {
+        creationMV.getTableCompetencesAjoutees().addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 if (evt.getClickCount() == 2) {//déclenchement au double click
-                    int selectedRow = creationMV.getListeCompetenceAjoutee().getSelectedRow();
+                    int selectedRow = creationMV.getTableCompetencesAjoutees().getSelectedRow();
                     if (selectedRow != -1) {
-                        DefaultTableModel model = (DefaultTableModel) creationMV.getListeCompetenceAjoutee().getModel();
+                        DefaultTableModel model = (DefaultTableModel) creationMV.getTableCompetencesAjoutees().getModel();
                         model.removeRow(selectedRow);
                     }
                     listeCompetencesSelectionnees = creationMV.getCompetencesAjoutees();
