@@ -42,6 +42,8 @@ public class ModificationMissionVue extends JPanel {
     private JTable tableEmployesAjoutes;
     private JScrollPane listeEmployesScrollPane;
     private JTextField nomStaField;
+    private JButton bouttonModifierDates;
+    private JButton bouttonConfirmerDates;
 
     private static final String NOM_EN = "Nom (En)";
     private static final String NOM_FR = "Nom (Fr)";
@@ -73,6 +75,7 @@ public class ModificationMissionVue extends JPanel {
         JPanel panelBouttons = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JPanel panellisteCompetences = new JPanel(new BorderLayout());
         JPanel panellisteEmployes = new JPanel(new BorderLayout());
+        JPanel modifDates = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
 
         this.titreMisField = new JTextField(20);
@@ -112,6 +115,14 @@ public class ModificationMissionVue extends JPanel {
         panelDate.add(new JLabel("Date de fin : "));
         panelDate.add(dateFinMisField);
         formulaire.add(panelDate);
+
+        //boutons modifier confirmer dates
+        this.bouttonModifierDates = new JButton("Modifier les dates");
+        this.bouttonConfirmerDates = new JButton("Confirmer");
+        modifDates.add(bouttonModifierDates);
+        modifDates.add(bouttonConfirmerDates);
+        setDatesModifiables(false);
+        formulaire.add(modifDates);
 
         //Nbr d'employé dans mission
         panelNbEmp.add(new JLabel("Nombre d'émployé necessaires : "));
@@ -402,6 +413,20 @@ public class ModificationMissionVue extends JPanel {
         this.dateFinMisField.setDate(mission.getDateFinMis());
         this.descriptionMisField.setText(mission.getDescription());
         this.logEmpField.setText(mission.getLoginEmp());
+    }
+
+    //permet de rendre les choix de dates modifiables ou pas
+    public void setDatesModifiables(boolean b){
+        this.dateDebutMisField.setEnabled(b);
+        this.dateFinMisField.setEnabled(b);
+    }
+
+    public JButton getBoutonModifierDates(){
+        return this.bouttonModifierDates;
+    }
+
+    public JButton getBouttonConfirmerDates(){
+        return this.bouttonConfirmerDates;
     }
 
     //retourne une liste d'employe ajoutés à la mission pour insertion BD à cretion mission

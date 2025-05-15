@@ -169,9 +169,9 @@ public class NavigationControleur {
             public void actionPerformed(ActionEvent e) {
                 try {
                     Mission missionSelectionnee = missionV.getMissionSelectionnee();
-                    if (missionSelectionnee == null) return;
+                    //if (missionSelectionnee == null) return;
 
-                    if (missionSelectionnee.getIdSta() != 1 || missionSelectionnee == null) {
+                    if (missionSelectionnee.getIdSta() != 1) {
                         ModifierMissionControleur modifMC = new ModifierMissionControleur(
                                 modifMissionV, missionDao, NavigationControleur.this,
                                 competenceDao, employeDao, missionSelectionnee);
@@ -192,6 +192,8 @@ public class NavigationControleur {
                         modifMissionV.getTableCompetencesAjoutees().setEnabled(false);
                         modifMissionV.getTableEmployesAjoutes().setEnabled(false);
                         modifMissionV.getCompetenceTable().setEnabled(false);
+                        modifMissionV.getBouttonConfirmerDates().setEnabled(false);
+                        modifMissionV.getBoutonModifierDates().setEnabled(false);
                     } else {
                         ModifierMissionControleur modifMC = new ModifierMissionControleur(
                                 modifMissionV, missionDao, NavigationControleur.this,
