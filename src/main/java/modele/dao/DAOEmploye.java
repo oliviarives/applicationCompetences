@@ -262,11 +262,11 @@ public class DAOEmploye {
         try (PreparedStatement ps = cn.prepareStatement(sql)) {
             ps.setDate(1, dateDebut);
             ps.setDate(2, dateFin);
-            ps.setDate(3, new Date(System.currentTimeMillis())); // date de création
+            ps.setDate(3, new Date(System.currentTimeMillis()));
             ps.setString(4, loginEmp);
 
             ps.executeUpdate();
-            System.out.println("Mission Vacance ajoutée");
+            System.out.println("Vacances ajoutées");
         }
     }
 }

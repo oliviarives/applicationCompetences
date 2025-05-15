@@ -56,7 +56,7 @@ public class AjouterEmployeControleur {
         });
     }
 
-    public void ajouterPersonnel() {
+    private void ajouterPersonnel() {
         String prenom = ajoutPersonnelVue.getPrenomField().getText();
         String nom = ajoutPersonnelVue.getNomField().getText();
         String login = ajoutPersonnelVue.getLoginField().getText();
@@ -94,7 +94,7 @@ public class AjouterEmployeControleur {
         ajoutPersonnelVue.setToutesCompetences(competences);
     }
 
-    public void ajouterCompetenceEmploye() {
+    private void ajouterCompetenceEmploye() {
         Competence selected = ajoutPersonnelVue.getCompetenceSelectionneeToutesCmp();
         if (selected != null) {
             DefaultTableModel modelToutes = (DefaultTableModel) ajoutPersonnelVue.getTableToutesCompetences().getModel();

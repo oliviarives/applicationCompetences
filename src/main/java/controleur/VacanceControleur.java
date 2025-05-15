@@ -20,16 +20,6 @@ public class VacanceControleur {
         this.vacanceVue = vacanceVue;
         this.daoEmp = daoEmp;
         this.navC = navigationC;
-
-        initialiserVue();
-        ajouterListeners();
-    }
-
-    private void initialiserVue() {
-        // Initialisation de la vue si nécessaire
-    }
-
-    private void ajouterListeners() {
         vacanceVue.getValiderBoutton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -39,7 +29,7 @@ public class VacanceControleur {
     }
 
     private void ajouterVacance() {
-        String login = vacanceVue.getLogin(); // Récupérer le login depuis la vue
+        String login = vacanceVue.getLogin();
         String dateDebutStr = vacanceVue.getDateDebut();
         String dateFinStr = vacanceVue.getDateFin();
 
