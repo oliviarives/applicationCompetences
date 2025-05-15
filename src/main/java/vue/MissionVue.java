@@ -187,6 +187,7 @@ public class MissionVue extends JPanel {
         comboStatut.removeAllItems();
         comboStatut.addItem("Tous");
         for (Mission mission : missions) {
+            if(mission.getIdSta()!=5){
             Object[] row = {
                     mission.getIdMission(),
                     mission.getTitreMis(),
@@ -197,7 +198,7 @@ public class MissionVue extends JPanel {
             };
             model.addRow(row);
             statuts.add(mission.getNomSta());
-        }
+        }}
         // Remplissage du combo avec les statuts uniques
         for (String s : statuts) {
             comboStatut.addItem(s);

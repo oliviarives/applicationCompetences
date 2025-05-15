@@ -147,8 +147,8 @@ public class AjouterMissionControleur {
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e){
-                        if(creationMV.getCompetencesAjoutees().isEmpty()) {
-                            JOptionPane.showMessageDialog(null, "Veuillez d'abord saisir des compétences à la mission!",
+                        if(creationMV.getCompetencesAjoutees().isEmpty() || creationMV.getDateDebutMisField()==null || creationMV.getDateFinMisField()==null) {
+                            JOptionPane.showMessageDialog(null, "Veuillez d'abord saisir des compétences et des dates à la mission!",
                                     "Erreur de saisie!", JOptionPane.WARNING_MESSAGE);}
                         else{
                             creationMV.showPage("tabEmployes");
