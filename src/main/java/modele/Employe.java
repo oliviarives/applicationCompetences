@@ -128,6 +128,22 @@ public class Employe {
     public String getIdCatCmp() {
         return this.idCatCmp;
     }
+
+    public void setPrenom(String prenom) {
+        this.prenom = prenom;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    public void setPoste(String poste) {
+        this.poste = poste;
+    }
+
+    public void setDateEntree(Date dateEntree) {
+        this.dateEntree = dateEntree;
+    }
 }
 
 

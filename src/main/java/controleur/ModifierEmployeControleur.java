@@ -1,5 +1,6 @@
 package controleur;
 
+
 import modele.Competence;
 import modele.Employe;
 import modele.dao.DAOCompetence;
@@ -7,6 +8,10 @@ import modele.dao.DAOEmploye;
 import vue.ModificationEmployeVue;
 
 import javax.swing.table.DefaultTableModel;
+import javax.swing.JTable;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -39,16 +44,52 @@ public class ModifierEmployeControleur {
         this.daoCompetence = daoCmp;
 
         modifPersonnelVue.getButtonConfirmer().addActionListener(e -> {
-            this.modifierPersonnel();
+            modifierPersonnel();
             NavigationControleur.loadEmploye();
             NavigationControleur.getVueV().getButtonEmploye().doClick();
         });
 
-        modifPersonnelVue.getButtonRetirer().addActionListener(e ->
-                this.retirerCompetenceEmploye());
+        // Double-clic sur table des compétences disponibles : ajouter
+        modifPersonnelVue.getTableToutesCompetences().addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    JTable source = modifPersonnelVue.getTableToutesCompetences();
+                    int row = source.rowAtPoint(e.getPoint());
+                    if (row != -1) {
+                        DefaultTableModel modelToutes = (DefaultTableModel) source.getModel();
+                        DefaultTableModel modelEmp = (DefaultTableModel) modifPersonnelVue.getTableCompetencesEmploye().getModel();
+                        Object[] data = {
+                                modelToutes.getValueAt(row, 0),
+                                modelToutes.getValueAt(row, 1),
+                                modelToutes.getValueAt(row, 2)
+                        };
+                        modelToutes.removeRow(row);
+                        modelEmp.addRow(data);
+                    }
+                }
+            }
+        });
 
-        modifPersonnelVue.getButtonAjouter().addActionListener(e ->
-                ajouterCompetenceEmploye());
+        //double clic pour modifier
+        modifPersonnelVue.getTableCompetencesEmploye().addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    JTable source = modifPersonnelVue.getTableCompetencesEmploye();
+                    int row = source.rowAtPoint(e.getPoint());
+                    if (row != -1) {
+                        DefaultTableModel modelEmp = (DefaultTableModel) source.getModel();
+                        DefaultTableModel modelToutes = (DefaultTableModel) modifPersonnelVue.getTableToutesCompetences().getModel();
+                        Object[] data = {
+                                modelEmp.getValueAt(row, 0),
+                                modelEmp.getValueAt(row, 1),
+                                modelEmp.getValueAt(row, 2)
+                        };
+                        modelEmp.removeRow(row);
+                        modelToutes.addRow(data);
+                    }
+                }
+            }
+        });
     }
 
     /**
@@ -59,6 +100,7 @@ public class ModifierEmployeControleur {
         String nom = modifPersonnelVue.getNomField().getText();
         String login = modifPersonnelVue.getLoginField().getText();
         String poste = modifPersonnelVue.getPosteField().getText();
+        Date dateEntree = new Date(((java.util.Date) modifPersonnelVue.getDateEntreeField().getValue()).getTime());
 
         if (prenom.isEmpty() || nom.isEmpty() || login.isEmpty() || poste.isEmpty()) {
             modifPersonnelVue.afficherMessage("Tous les champs sont obligatoires !");
@@ -66,71 +108,45 @@ public class ModifierEmployeControleur {
         }
 
         try {
-            // Recherche de l'employé à mettre à jour
-            Employe employe = daoEmploye.findEmpByLogin(login);
+            Employe emp = daoEmploye.findEmpByLogin(login);
+            emp.setPrenom(prenom);
+            emp.setNom(nom);
+            emp.setPoste(poste);
+            emp.setDateEntree(dateEntree);
+
             daoEmploye.retirerAllCmpFromEmp(login);
-            daoEmploye.modifierEmploye(employe);
-            for (Competence cmp : modifPersonnelVue.getCompetencesAjoutees()) {
-                daoEmploye.ajouterCmpToEmp(employe.getLogin(), cmp);
-                daoEmploye.getHashMapEmpCmp().remove(employe);
-                daoEmploye.getHashMapEmpCmp().put(employe, cmp);
+            daoEmploye.modifierEmploye(emp);
+
+            DefaultTableModel modelEmp = (DefaultTableModel) modifPersonnelVue.getTableCompetencesEmploye().getModel();
+            for (int i = 0; i < modelEmp.getRowCount(); i++) {
+                String cat = (String) modelEmp.getValueAt(i, 0);
+                int id = (int) modelEmp.getValueAt(i, 1);
+                String titre = (String) modelEmp.getValueAt(i, 2);
+                Competence cmp = new Competence(id, cat, "", titre);
+                daoEmploye.ajouterCmpToEmp(login, cmp);
+                daoEmploye.getHashMapEmpCmp().put(emp, cmp); // inchangé comme demandé
             }
+
         } catch (SQLException e) {
             modifPersonnelVue.afficherMessage("Erreur lors de la modification de l'employé.");
+            e.printStackTrace();
         }
     }
     /**
      * Charge toutes les compétences disponibles et les affiche dans la vue
      */
     public void loadCompetences() {
-        List<Competence> competences = daoCompetence.findAll();
-        modifPersonnelVue.setToutesCompetences(competences);
+        modifPersonnelVue.setToutesCompetences(daoCompetence.findAll());
     }
     /**
      * Charge les compétences de l'employé sélectionné et les affiche dans la vue
      */
     public void loadCompetencesEmploye() {
-        List<Competence> competences;
         try {
-            competences = daoCompetence.findCmpByLoginEmp(modifPersonnelVue.getLoginField().getText());
+            List<Competence> liste = daoCompetence.findCmpByLoginEmp(modifPersonnelVue.getLoginField().getText());
+            modifPersonnelVue.setTableCompetencesEmploye(liste);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        modifPersonnelVue.setTableCompetencesEmploye(competences);
-    }
-    /**
-     * Ajoute une compétence sélectionnée à l'employé et met à jour les tableaux
-     */
-    public void ajouterCompetenceEmploye() {
-        Competence selected = modifPersonnelVue.getCompetenceSelectionneeToutesCmp();
-        if (selected != null) {
-            DefaultTableModel modelToutes = (DefaultTableModel) modifPersonnelVue.getTableToutesCompetences().getModel();
-            DefaultTableModel modelEmploye = (DefaultTableModel) modifPersonnelVue.getTableCompetencesEmploye().getModel();
-
-            // Supprimer la ligne sélectionnée du tableau "Toutes les compétences"
-            int selectedRow = modifPersonnelVue.getTableToutesCompetences().getSelectedRow();
-            if (selectedRow != -1) {
-                modelToutes.removeRow(selectedRow);
-                modelEmploye.addRow(new Object[]{selected.getIdCatCmp(), selected.getIdCmp(), selected.getNomCmpFr()});
-            }
-        }
-    }
-    /**
-     * Retire une compétence de l'employé et la remet dans les compétences disponibles
-     */
-    private void retirerCompetenceEmploye() {
-        Competence selected = modifPersonnelVue.getCompetenceSelectionneeEmploye();
-        if (selected != null) {
-            DefaultTableModel modelToutes = (DefaultTableModel) modifPersonnelVue.getTableToutesCompetences().getModel();
-            DefaultTableModel modelEmploye = (DefaultTableModel) modifPersonnelVue.getTableCompetencesEmploye().getModel();
-
-            // Supprimer la ligne sélectionnée du tableau "Compétences employé"
-            int selectedRow = modifPersonnelVue.getTableCompetencesEmploye().getSelectedRow();
-            if (selectedRow != -1) {
-                modelEmploye.removeRow(selectedRow);
-                modelToutes.addRow(new Object[]{selected.getIdCatCmp(), selected.getIdCmp(), selected.getNomCmpFr()});
-            }
+            modifPersonnelVue.afficherMessage("Erreur chargement compétences employé.");
         }
     }
 
-}

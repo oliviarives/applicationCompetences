@@ -115,5 +115,4 @@ public class VacanceVue extends JPanel {
     public JButton getValiderBoutton() {
         return validerBoutton;
     }
-
 }

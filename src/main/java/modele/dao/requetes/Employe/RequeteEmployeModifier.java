@@ -37,8 +37,8 @@ public class RequeteEmployeModifier extends RequeteEmploye {
         prSt.setString(1, obj.getPrenom());
         prSt.setString(2, obj.getNom());
         prSt.setDate(3, new java.sql.Date(obj.getDateEntree().getTime()));
-        prSt.setString(6, obj.getPoste());
-        prSt.setString(7, obj.getLogin());
+        prSt.setString(4, obj.getPoste());
+        prSt.setString(5, obj.getLogin());
     }
 }
 
