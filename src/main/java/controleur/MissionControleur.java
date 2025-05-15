@@ -55,7 +55,7 @@ public class MissionControleur {
         int currentStatus = mission.getIdSta();
         if (currentStatus == 2 && now.compareTo(mission.getDateDebutMis()) >= 0) {
             missionDAO.updateMissionStatus(mission, 3);
-        } else if (currentStatus == 3 && now.compareTo(mission.getDateFinMis()) >= 0) {
+        } else if (now.compareTo(mission.getDateFinMis()) >= 0) {
             missionDAO.updateMissionStatus(mission, 4);    }}
 
     public void ajouterMission(Mission mission) {
