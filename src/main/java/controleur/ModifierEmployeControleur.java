@@ -48,13 +48,12 @@ public class ModifierEmployeControleur {
         });
     }
 
-    public void modifierPersonnel () {
+    private void modifierPersonnel () {
         String prenom = modifPersonnelVue.getPrenomField().getText();
         String nom = modifPersonnelVue.getNomField().getText();
         String login = modifPersonnelVue.getLoginField().getText();
         String poste = modifPersonnelVue.getPosteField().getText();
         java.util.Date utilDate = (java.util.Date) modifPersonnelVue.getDateEntreeField().getValue();
-        Date dateEntree = new Date(utilDate.getTime());
         //Employe employeNv = new Employe(prenom, nom, login, mdp, poste, dateEntree);
         if (prenom.isEmpty() || nom.isEmpty() || login.isEmpty() || poste.isEmpty()) {
             modifPersonnelVue.afficherMessage("Tous les champs sont obligatoires !");
@@ -68,10 +67,11 @@ public class ModifierEmployeControleur {
             daoEmploye.modifierEmploye(employe);
             for (Competence cmp : modifPersonnelVue.getCompetencesAjoutees()) {
                 daoEmploye.ajouterCmpToEmp(employe.getLogin(), cmp);
+                daoEmploye.getHashMapEmpCmp().remove(employe);
+                daoEmploye.getHashMapEmpCmp().put(employe, cmp);
             }
-        } catch (SQLException ex) {
+        } catch (SQLException e) {
             modifPersonnelVue.afficherMessage("Erreur lors de la modification de l'employé.");
-            ex.printStackTrace();
         }
     }
 
@@ -81,7 +81,7 @@ public class ModifierEmployeControleur {
     }
 
     public void loadCompetencesEmploye() {
-        List<Competence> competences = null;
+        List<Competence> competences;
         System.out.println(modifPersonnelVue.getLoginField().getText());
         try {
             competences = daoCompetence.findCmpByLoginEmp(modifPersonnelVue.getLoginField().getText());
@@ -106,7 +106,7 @@ public class ModifierEmployeControleur {
         }
     }
 
-    public void retirerCompetenceEmploye() {
+    private void retirerCompetenceEmploye() {
         Competence selected = modifPersonnelVue.getCompetenceSelectionneeEmploye();
         if (selected != null) {
             DefaultTableModel modelToutes = (DefaultTableModel) modifPersonnelVue.getTableToutesCompetences().getModel();

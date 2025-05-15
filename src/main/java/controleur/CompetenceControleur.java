@@ -14,12 +14,10 @@ public class CompetenceControleur {
     public CompetenceControleur(CompetencesVue vue, DAOCompetence daoC) {
         this.vueC = vue;
         this.competenceDAO = daoC;
-
     }
 
     public void loadCompetences() {
         List<Competence> competences = competenceDAO.findAll();
         vueC.setCompetences(competences);
     }
-
 }

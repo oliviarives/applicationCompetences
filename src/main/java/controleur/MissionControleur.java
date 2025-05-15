@@ -16,31 +16,18 @@ public class MissionControleur {
 
     private MissionVue vueM;
     private DAOMission missionDAO;
-    private NavigationControleur navControleur; //unused
-    private CreationMissionVue creationMV;//unused
-    private ModificationMissionVue modificationMV;//unused
 
-    public MissionControleur(MissionVue vue, DAOMission daoM, NavigationControleur navC, CreationMissionVue creationMV, ModificationMissionVue modificationMV) {
+    public MissionControleur(MissionVue vue, DAOMission daoM) {
         this.vueM = vue;
         this.missionDAO = daoM;
-        this.navControleur = navC;
-        this.creationMV = creationMV;
-        this.modificationMV = modificationMV;
 
-
-    // Ajoute le listener sur le bouton "Filtrer"
         vueM.getBtnFiltrer().addActionListener(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-            // Récupère le filtre sur le nom
             String nomCritere = vueM.getTxtFiltreNom().getText().trim();
-
-            // Récupère la date (JDateChooser retourne un java.util.Date)
             java.util.Date utilDate = vueM.getDateChooser().getDate();
-            // Convertir en java.sql.Date si non null
             Date dateCritere = (utilDate != null) ? new Date(utilDate.getTime()) : null;
 
-            // Récupère le statut sélectionné
             String statutSelectionne = (String) vueM.getComboStatut().getSelectedItem();
             Integer statutCritere = null;
             if (!"Tous".equals(statutSelectionne)) {
@@ -53,10 +40,8 @@ public class MissionControleur {
                 }
             }
 
-            // Appelle la méthode de filtrage dans le DAO
             List<Mission> missionsFiltrees = missionDAO.filterMissions(nomCritere, dateCritere, statutCritere);
 
-            // Met à jour la vue avec les missions filtrées
             vueM.setMissions(missionsFiltrees);
         }
     });

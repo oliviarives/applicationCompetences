@@ -39,19 +39,19 @@ public class NavigationControleur {
 
     private final AccueilVue accueilV;
 
-    private VacanceVue vacanceVue;
-    private VacanceControleur vacanceC;
+    private final VacanceVue vacanceVue;
+    private final VacanceControleur vacanceC;
 
     public NavigationControleur(NavigationVue navView) throws SQLException {
         this.vueV = navView;
 
-        // Initialisation des DAO
+        //Initialisation DAO
         this.competenceDao = new DAOCompetence();
         this.employeDao = new DAOEmploye();
         this.missionDao = new DAOMission();
         this.missionDaoInstance = new DAOMission();
 
-        // Initialisation des vues
+        //Initialisation vues
         this.empView = new EmployeVue();
         this.missionV = new MissionVue();
         this.modifMissionV = new ModificationMissionVue();
@@ -60,20 +60,17 @@ public class NavigationControleur {
         this.ajoutPersonnelV = new AjoutEmployeVue();
         this.modifEmployeVue = new ModificationEmployeVue();
         this.accueilV = new AccueilVue();
+        this.vacanceVue = new VacanceVue();
 
-        // Initialisation des contrôleurs
-        this.missionC = new MissionControleur(missionV, missionDao, this, creaMissionV, modifMissionV);
+        //Initialisation contrôleurs
+        this.missionC = new MissionControleur(missionV, missionDao);
         this.ajoutMissionControleur = new AjouterMissionControleur(creaMissionV, missionDao, this, competenceDao, employeDao, infosEmpVue);
         this.ajoutPersonnelC = new AjouterEmployeControleur(ajoutPersonnelV, employeDao, competenceDao, this);
         this.modifEmployeC = new ModifierEmployeControleur(modifEmployeVue, employeDao, competenceDao, this);
-
-        // Initialisation de VacanceVue et VacanceControleur
-        this.vacanceVue = new VacanceVue();
         this.vacanceC = new VacanceControleur(vacanceVue, employeDao, this);
+        EmployeControleur empC = new EmployeControleur(empView, employeDao);
 
-        EmployeControleur empC = new EmployeControleur(empView, employeDao, this);
-
-        // Chargement des données
+        //chargement données
         missionC.loadMissions();
         ajoutMissionControleur.loadCompetences();
         ajoutMissionControleur.loadEmployes();
@@ -85,7 +82,7 @@ public class NavigationControleur {
         CompetenceControleur competenceC = new CompetenceControleur(competencesV, competenceDao);
         competenceC.loadCompetences();
 
-        // Ajout des pages de l'app
+        //ajout des pages de l'appli
         vueV.addPage(MOT_ACCUEIL, accueilV);
         vueV.addPage("Missions", missionV);
         vueV.addPage("Competences", competencesV);
