@@ -25,18 +25,15 @@ public class ModifierEmployeControleur {
 
         modifPersonnelVue.getButtonConfirmer().addActionListener(e -> {
             this.modifierPersonnel();
-            //effacerChamps();
             NavigationControleur.loadEmploye();
             NavigationControleur.getVueV().getButtonEmploye().doClick();
         });
 
-        modifPersonnelVue.getButtonRetirer().addActionListener(e -> {
-            this.retirerCompetenceEmploye();
-        });
+        modifPersonnelVue.getButtonRetirer().addActionListener(e ->
+                this.retirerCompetenceEmploye());
 
-        modifPersonnelVue.getButtonAjouter().addActionListener(e -> {
-                ajouterCompetenceEmploye();
-        });
+        modifPersonnelVue.getButtonAjouter().addActionListener(e ->
+                ajouterCompetenceEmploye());
     }
 
     private void modifierPersonnel () {

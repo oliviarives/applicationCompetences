@@ -103,144 +103,101 @@ public class NavigationControleur {
         accueilV.updateDashboard(nbEnPreparation, nbEnCours, nbTerminees, statsMois);
         vueV.showPage(MOT_ACCUEIL);
 
-        vueV.getButtonMissions().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                vueV.showPage("Missions");
-                missionC.loadMissions();
+        vueV.getButtonMissions().addActionListener(e -> {
+            vueV.showPage("Missions");
+            missionC.loadMissions();
+        });
+
+        vueV.getButtonCompetences().addActionListener(e -> vueV.showPage("Competences"));
+
+        vueV.getButtonEmploye().addActionListener(e -> vueV.showPage("Employe"));
+
+        empV.getButtonAjouterEmploye().addActionListener(e -> vueV.showPage("AjouterEmploye"));
+
+        empV.getButtonModifierEmploye().addActionListener(e -> {
+            Employe employeSelectionnee = empV.getEmployeSelectionne();
+            if (employeSelectionnee != null) {
+                modifEmployeVue.setEmploye(employeSelectionnee);
+                vueV.showPage("ModifierEmploye");
+                modifEmployeC.loadCompetencesEmploye();
             }
         });
 
-        vueV.getButtonCompetences().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                vueV.showPage("Competences");
+        empV.getButtonVacance().addActionListener(e -> {
+            Employe employeSelectionne = empV.getEmployeSelectionne();
+            if (employeSelectionne != null) {
+                vacanceVue.setLogin(employeSelectionne.getLogin());
+                vueV.showPage("Vacance");
+            } else {
+                JOptionPane.showMessageDialog(null, "Veuillez sélectionner un employé.");
             }
         });
 
-        vueV.getButtonEmploye().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                vueV.showPage("Employe");
-            }
+        missionV.getButtonAjouterMission().addActionListener(e -> {
+            vueV.showPage(MOT_CREATION);
+            creaMissionV.resetFields();
         });
 
-        empV.getButtonAjouterEmploye().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                vueV.showPage("AjouterEmploye");
-            }
-        });
+        missionV.getButtonModifierMission().addActionListener(e -> {
+            try {
+                Mission missionSelectionnee = missionV.getMissionSelectionnee();
+                //if (missionSelectionnee == null) return;
 
-        empV.getButtonModifierEmploye().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Employe employeSelectionnee = empV.getEmployeSelectionne();
-                if (employeSelectionnee != null) {
-                    modifEmployeVue.setEmploye(employeSelectionnee);
-                    vueV.showPage("ModifierEmploye");
-                    modifEmployeC.loadCompetencesEmploye();
-                }
-            }
-        });
+                if (missionSelectionnee.getIdSta() != 1) {
+                    ModifierMissionControleur modifMC = new ModifierMissionControleur(
+                            modifMissionV, missionDao, competenceDao, employeDao, missionSelectionnee);
+                    modifMC.preRemplirFormulaire();
 
-        empV.getButtonVacance().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Employe employeSelectionne = empV.getEmployeSelectionne();
-                if (employeSelectionne != null) {
-                    vacanceVue.setLogin(employeSelectionne.getLogin());
-                    vueV.showPage("Vacance");
+                    int is = missionV.getIdMissionSelect();
+                    modifMC.setIdMissionSelect(is);
+                    vueV.showPage(MOT_MODIFICATION);
+                    modifMissionV.getTitreMisField2().setEditable(false);
+                    modifMissionV.getDescriptionMisField2().setEditable(false);
+                    modifMissionV.getLogEmpField2().setEditable(false);
+                    modifMissionV.getButtonConfirmer().setEnabled(false);
+                    modifMissionV.getAjouterCompetences().setEnabled(false);
+                    modifMissionV.getAjouterEmployes().setEnabled(false);
+                    modifMissionV.getDateDebutMisFieldComponent().setEnabled(false);
+                    modifMissionV.getDateFinMisFieldComponent().setEnabled(false);
+                    modifMissionV.getNbEmpFieldComponent().setEnabled(false);
+                    modifMissionV.getTableCompetencesAjoutees().setEnabled(false);
+                    modifMissionV.getTableEmployesAjoutes().setEnabled(false);
+                    modifMissionV.getCompetenceTable().setEnabled(false);
+                    modifMissionV.getBouttonConfirmerDates().setEnabled(false);
+                    modifMissionV.getBoutonModifierDates().setEnabled(false);
                 } else {
-                    JOptionPane.showMessageDialog(null, "Veuillez sélectionner un employé.");
+                    ModifierMissionControleur modifMC = new ModifierMissionControleur(
+                            modifMissionV, missionDao, competenceDao, employeDao, missionSelectionnee);
+                    modifMC.preRemplirFormulaire();
+
+                    int is = missionV.getIdMissionSelect();
+                    modifMC.setIdMissionSelect(is);
+                    vueV.showPage(MOT_MODIFICATION);
                 }
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null,
+                        "Erreur lors de la récupération de la mission : " + ex.getMessage(),
+                        "Erreur", JOptionPane.ERROR_MESSAGE);
             }
         });
 
-        missionV.getButtonAjouterMission().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                vueV.showPage(MOT_CREATION);
-                creaMissionV.resetFields();
-            }
+        vueV.getButtonAccueil().addActionListener(e -> {
+            int nbEnPreparation1 = missionDao.countMissionsByStatus(1);
+            int nbEnCours1 = missionDao.countMissionsByStatus(2);
+            int nbTerminees1 = missionDao.countMissionsByStatus(3);
+            Map<String, Integer> statsMois1 = missionDao.getMissionsStatsParMois();
+
+            // MAJ dashboard (AccueilVue)
+            accueilV.updateDashboard(nbEnPreparation1, nbEnCours1, nbTerminees1, statsMois1);
+            vueV.showPage(MOT_ACCUEIL);
         });
 
-        missionV.getButtonModifierMission().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    Mission missionSelectionnee = missionV.getMissionSelectionnee();
-                    //if (missionSelectionnee == null) return;
-
-                    if (missionSelectionnee.getIdSta() != 1) {
-                        ModifierMissionControleur modifMC = new ModifierMissionControleur(
-                                modifMissionV, missionDao, NavigationControleur.this,
-                                competenceDao, employeDao, missionSelectionnee);
-                        modifMC.preRemplirFormulaire();
-
-                        int is = missionV.getIdMissionSelect();
-                        modifMC.setIdMissionSelect(is);
-                        vueV.showPage(MOT_MODIFICATION);
-                        modifMissionV.getTitreMisField2().setEditable(false);
-                        modifMissionV.getDescriptionMisField2().setEditable(false);
-                        modifMissionV.getLogEmpField2().setEditable(false);
-                        modifMissionV.getButtonConfirmer().setEnabled(false);
-                        modifMissionV.getAjouterCompetences().setEnabled(false);
-                        modifMissionV.getAjouterEmployes().setEnabled(false);
-                        modifMissionV.getDateDebutMisFieldComponent().setEnabled(false);
-                        modifMissionV.getDateFinMisFieldComponent().setEnabled(false);
-                        modifMissionV.getNbEmpFieldComponent().setEnabled(false);
-                        modifMissionV.getTableCompetencesAjoutees().setEnabled(false);
-                        modifMissionV.getTableEmployesAjoutes().setEnabled(false);
-                        modifMissionV.getCompetenceTable().setEnabled(false);
-                        modifMissionV.getBouttonConfirmerDates().setEnabled(false);
-                        modifMissionV.getBoutonModifierDates().setEnabled(false);
-                    } else {
-                        ModifierMissionControleur modifMC = new ModifierMissionControleur(
-                                modifMissionV, missionDao, NavigationControleur.this,
-                                competenceDao, employeDao, missionSelectionnee);
-                        modifMC.preRemplirFormulaire();
-
-                        int is = missionV.getIdMissionSelect();
-                        modifMC.setIdMissionSelect(is);
-                        vueV.showPage(MOT_MODIFICATION);
-                    }
-                } catch (SQLException ex) {
-                    JOptionPane.showMessageDialog(null,
-                            "Erreur lors de la récupération de la mission : " + ex.getMessage(),
-                            "Erreur", JOptionPane.ERROR_MESSAGE);
-                }
-            }
+        creaMissionV.getInfoButton().addActionListener(e -> {
+            infosEmpVue.setEmpSelectionne(creaMissionV.getEmployeSelectionne());
+            vueV.showPage("InfosEmp");
         });
 
-        vueV.getButtonAccueil().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int nbEnPreparation = missionDao.countMissionsByStatus(1);
-                int nbEnCours = missionDao.countMissionsByStatus(2);
-                int nbTerminees = missionDao.countMissionsByStatus(3);
-                Map<String, Integer> statsMois = missionDao.getMissionsStatsParMois();
-
-                // MAJ dashboard (AccueilVue)
-                accueilV.updateDashboard(nbEnPreparation, nbEnCours, nbTerminees, statsMois);
-                vueV.showPage(MOT_ACCUEIL);
-            }
-        });
-
-        creaMissionV.getInfoButton().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                infosEmpVue.setEmpSelectionne(creaMissionV.getEmployeSelectionne());
-                vueV.showPage("InfosEmp");
-            }
-        });
-
-        infosEmpVue.getCroixRetour().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                vueV.showPage(MOT_CREATION);
-            }
-        });
+        infosEmpVue.getCroixRetour().addActionListener(e -> vueV.showPage(MOT_CREATION));
     }
 
     public static void loadEmploye() {

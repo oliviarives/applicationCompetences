@@ -18,12 +18,7 @@ public class VacanceControleur {
     public VacanceControleur(VacanceVue vacanceVue, DAOEmploye daoEmp) {
         this.vacanceVue = vacanceVue;
         this.daoEmp = daoEmp;
-        vacanceVue.getValiderBoutton().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ajouterVacance();
-            }
-        });
+        vacanceVue.getValiderBoutton().addActionListener(e -> ajouterVacance());
     }
 
     private void ajouterVacance() {

@@ -19,9 +19,7 @@ public class MissionControleur {
         this.vueM = vue;
         this.missionDAO = daoM;
 
-        vueM.getBtnFiltrer().addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
+        vueM.getBtnFiltrer().addActionListener(e -> {
             String nomCritere = vueM.getTxtFiltreNom().getText().trim();
             java.util.Date utilDate = vueM.getDateChooser().getDate();
             Date dateCritere = (utilDate != null) ? new Date(utilDate.getTime()) : null;
@@ -41,8 +39,7 @@ public class MissionControleur {
             List<Mission> missionsFiltrees = missionDAO.filterMissions(nomCritere, dateCritere, statutCritere);
 
             vueM.setMissions(missionsFiltrees);
-        }
-    });
+        });
 }
 
     public void loadMissions() {
