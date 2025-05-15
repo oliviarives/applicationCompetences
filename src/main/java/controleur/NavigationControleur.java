@@ -105,7 +105,11 @@ public class NavigationControleur {
 
         vueV.getButtonMissions().addActionListener(e -> {
             vueV.showPage("Missions");
-            missionC.loadMissions();
+            try {
+                missionC.loadMissions();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
         });
 
         vueV.getButtonCompetences().addActionListener(e -> vueV.showPage("Competences"));
