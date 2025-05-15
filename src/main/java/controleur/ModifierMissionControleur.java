@@ -113,7 +113,7 @@ public class ModifierMissionControleur {
                 }
 
                 // Vérifier que le titre de mission n'existe pas déjà dans une mission non terminée
-               /* if(daoMission.missionTitleExists(titre)) {
+               /*if(daoMission.missionTitleExists(titre)) {
                     JOptionPane.showMessageDialog(null,
                             "Le titre de la mission existe déjà pour une mission non terminée. Veuillez choisir un autre titre.",
                             "Erreur", JOptionPane.ERROR_MESSAGE);
@@ -143,9 +143,11 @@ public class ModifierMissionControleur {
                     if(!logEmpAjoutes.isEmpty()) {
                         daoMission.updateMissionStatus(misInsert, 2);
                     }
-
+                    modificationMV.showPage("tabCompetences");
                     navC.getVueV().getButtonMissions().doClick();
-
+                    for (String logEmp : logEmpAjoutes) {
+                        daoEmp.addEmpCollaborerToMap(logEmp,dateDebut,dateFin);
+                    }
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
                 }
@@ -161,11 +163,25 @@ public class ModifierMissionControleur {
                 }
         );
         //boutons pour afficher les employés dispo ds creation mission
-        modificationMV.getAjouterEmployes().addActionListener(
+        /*modificationMV.getAjouterEmployes().addActionListener(
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e){
                         modificationMV.showPage("tabEmployes");
+                    }
+                }
+        );*/
+
+        modificationMV.getAjouterEmployes().addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e){
+                        if(modificationMV.getCompetencesAjoutees().isEmpty() || modificationMV.getDateDebutMisField()==null || modificationMV.getDateFinMisField()==null) {
+                            JOptionPane.showMessageDialog(null, "Veuillez d'abord saisir des compétences et des dates à la mission!",
+                                    "Erreur de saisie!", JOptionPane.WARNING_MESSAGE);}
+                        else{
+                            modificationMV.showPage("tabEmployes");
+                        }
                     }
                 }
         );
@@ -237,6 +253,31 @@ public class ModifierMissionControleur {
                 }
             }
         });
+
+        modificationMV.getBoutonModifierDates().addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        modificationMV.setDatesModifiables(true);
+                    }
+                }
+        );
+
+        modificationMV.getBouttonConfirmerDates().addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        modificationMV.setDatesModifiables(false);
+                        //daoEmp.setListeEmpCmp();
+                        //daoEmp.miseAJourEmpByCmpByDate(creationMV.getDateDebutMisField(), creationMV.getDateFinMisField());
+                        try {
+                            modificationMV.setEmploye(daoEmp.miseAJourEmpByCmpByDate(modificationMV.getDateDebutMisField(), modificationMV.getDateFinMisField()));
+                        } catch (SQLException ex) {
+                            throw new RuntimeException(ex);
+                        }
+                    }
+                }
+        );
 
 
     }

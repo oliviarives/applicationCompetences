@@ -152,7 +152,6 @@ public class AccueilVue extends JPanel {
         }
         BarRenderer renderer = (BarRenderer) plot.getRenderer();
         renderer.setSeriesPaint(0, StyleManager.BLEU_VERT);
-
         chartPanel.setChart(updatedChart);
         repaint();
     }
