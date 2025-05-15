@@ -100,8 +100,5 @@ public class VacanceVue extends JPanel {
     public JButton getValiderBoutton() {
         return validerBoutton;
     }
-
-    public void afficherMessage(String message) {
-        JOptionPane.showMessageDialog(this, message);
-    }
+    
 }

@@ -1,4 +1,4 @@
-package modele.dao.requetes.Employe;
+/*package modele.dao.requetes.Employe;
 
 import modele.Employe;
 
@@ -21,4 +21,4 @@ public class RequeteEmployeCmp extends RequeteEmploye{
     public void parametres(PreparedStatement prSt, Employe obj) throws SQLException {
         throw new UnsupportedOperationException("Non utilisé pour cette requête.");
     }
-}
+}*/
