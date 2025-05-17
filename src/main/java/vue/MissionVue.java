@@ -56,7 +56,7 @@ public class MissionVue extends JPanel {
 
         // On peut remplir le combo avec "Tous" puis les statuts récupérés (ici on met en dur)
         comboStatut.addItem("Tous");
-        comboStatut.addItem("Préparation");
+        comboStatut.addItem("En préparation");
         comboStatut.addItem("En cours");
         comboStatut.addItem("Terminée");
         panelFiltreMission.add(new JLabel("Statut :"));
