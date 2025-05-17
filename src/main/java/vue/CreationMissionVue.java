@@ -410,6 +410,8 @@ public class CreationMissionVue extends JPanel {
         return this.infosEmp;
     }
 
-
+    public JTable getTableEmployesAjoutees() {
+        return this.tableEmployesAjoutee;
+    }
 
 }

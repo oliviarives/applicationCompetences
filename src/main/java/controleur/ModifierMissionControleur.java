@@ -253,9 +253,15 @@ public class ModifierMissionControleur {
                     //daoEmp.setListeEmpCmp();
                     //daoEmp.miseAJourEmpByCmpByDate(creationMV.getDateDebutMisField(), creationMV.getDateFinMisField());
                     try {
+
+                        JOptionPane.showMessageDialog(null, "Lorsque vous modifiez les dates, les employés ajoutés sont éffacés !",
+                                "INFORMATION", JOptionPane.WARNING_MESSAGE);
                         modificationMV.setEmploye(daoEmp.miseAJourEmpByCmpByDate(modificationMV.getDateDebutMisField(), modificationMV.getDateFinMisField()));
+                        DefaultTableModel model = new DefaultTableModel(new String[]{"login","Prenom", "Nom", "Poste"},0);
+                        modificationMV.getTableEmployesAjoutees().setModel(model);
                     } catch (SQLException ex) {
                         throw new RuntimeException(ex);
+
                     }
                 }
         );

@@ -443,6 +443,10 @@ public class ModificationMissionVue extends JPanel {
         return  resultSet;
     }
 
+    public JTable getTableEmployesAjoutees() {
+        return this.tableEmployesAjoutes;
+    }
+
 }
 
 

@@ -199,6 +199,7 @@ public class AjouterMissionControleur {
                         System.out.println("empdslistecontroleur apres ajout cmp"+emp.getLogin());
                     }
                     creationMV.setEmploye(listeEmployesSelectiones);
+
                 }
             }
         });
@@ -226,7 +227,11 @@ public class AjouterMissionControleur {
                     //daoEmp.setListeEmpCmp();
                     //daoEmp.miseAJourEmpByCmpByDate(creationMV.getDateDebutMisField(), creationMV.getDateFinMisField());
                     try {
+                        JOptionPane.showMessageDialog(null, "Lorsque vous modifiez les dates, les employés ajoutés sont éffacés !",
+                                "INFORMATION", JOptionPane.WARNING_MESSAGE);
                         creationMV.setEmploye(daoEmp.miseAJourEmpByCmpByDate(creationMV.getDateDebutMisField(), creationMV.getDateFinMisField()));
+                        DefaultTableModel model = new DefaultTableModel(new String[]{"login","Prenom", "Nom", "Poste"},0);
+                        creationMV.getTableEmployesAjoutees().setModel(model);
                     } catch (SQLException ex) {
                         throw new RuntimeException(ex);
                     }

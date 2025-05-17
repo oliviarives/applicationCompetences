@@ -6,6 +6,7 @@ import modele.dao.DAOUtilisateur;
 
 import javax.swing.*;
 import java.awt.*;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Logger;
@@ -20,18 +21,23 @@ public class ConnexionVue extends JDialog {
     @SuppressWarnings("unused")
     private JPanel gauche;
     @SuppressWarnings("unused")
-    private JPanel droite;
-    @SuppressWarnings("unused")
     private JLabel MdpJLabel;
     @SuppressWarnings("unused")
     private JLabel IdentifiantJLabel;
     @SuppressWarnings("unused")
     private JLabel ConnexionJLabel;
+    private JLabel loadingGifLabel;
+    private JPanel gifPanel;
+
+
 
 
     public ConnexionVue() {
         super();
         setContentPane(page);
+
+
+
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         pack();
         setLocationRelativeTo(null);
@@ -72,5 +78,16 @@ public class ConnexionVue extends JDialog {
             messageLabel.setForeground(color);
         }
     }
+
+   /* public void afficherChargement(boolean visible) {
+        if (loadingGifLabel != null) {
+            loadingGifLabel.setVisible(visible);
+            loadingGifLabel.revalidate();
+            loadingGifLabel.repaint();
+        }
+    }*/
+
 }
+
+
 
