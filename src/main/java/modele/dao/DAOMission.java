@@ -11,16 +11,29 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+/**
+ * DAO pour gérer l'accès aux missions dans la base de données
+ * Permet d'ajouter, modifier, rechercher ou lier des missions à des compétences ou des employés
+ */
 public class DAOMission {
-
+    /**
+     * Connexion à la base de données
+     */
     private Connection cn;
-
+    /**
+     * Initialise le DAO et établit la connexion
+     * @throws SQLException en cas d'erreur de connexion
+     */
     public DAOMission() throws SQLException {
         this.cn = CictOracleDataSource.getConnectionBD();
 
     }
-
+    /**
+     * Crée une instance de Mission à partir d’un ResultSet
+     * @param rset résultat SQL
+     * @return objet Mission
+     * @throws SQLException en cas d’accès aux données échoué
+     */
     public Mission creerInstance(ResultSet rset) throws SQLException {
         return new Mission(
                 rset.getInt("idMis"),
@@ -35,8 +48,11 @@ public class DAOMission {
                 rset.getString("loginEmp")
         );
     }
-
-
+    /**
+     * Ajoute une mission à la base et récupère son ID
+     * @param mis mission à insérer
+     * @throws SQLException si l’insertion échoue
+     */
     public void ajouterMission(Mission mis) throws SQLException {
         RequeteMissionAjouter req = new RequeteMissionAjouter();
         String sql = req.requete();
@@ -58,7 +74,12 @@ public class DAOMission {
             }
         }
     }
-
+    /**
+     * Supprime les compétences liées à la mission puis ajoute celles passées en paramètre
+     * @param mis mission
+     * @param lcmpA liste de compétences à ajouter
+     * @throws SQLException en cas d’erreur SQL
+     */
     public void ajouterCmpToMission(Mission mis, List<Competence> lcmpA) throws SQLException{
         RequeteMissionDeleteCmp reqDC = new RequeteMissionDeleteCmp();
         PreparedStatement psDel = cn.prepareStatement(reqDC.requete());
@@ -71,7 +92,12 @@ public class DAOMission {
             ps.executeQuery();
         }
     }
-
+    /**
+     * Supprime les employés liés à la mission puis ajoute ceux passés en paramètre
+     * @param mis mission
+     * @param lEmpA liste des logins des employés à ajouter
+     * @throws SQLException en cas d’erreur SQL
+     */
     public void ajouterEmpToMission(Mission mis, List<String> lEmpA) throws SQLException{
         RequeteMissionDeleteEmp reqDE = new RequeteMissionDeleteEmp();
         PreparedStatement psDel = cn.prepareStatement(reqDE.requete());
@@ -83,7 +109,11 @@ public class DAOMission {
             ps.executeQuery();
         }
     }
-
+    /**
+     * Retourne la liste des compétences nécessaires à une mission
+     * @param idMis identifiant de la mission
+     * @return liste de compétences
+     */
     public List<Competence> getCompetencesForMission(int idMis) {
         List<Competence> competences = new ArrayList<>();
         String sql = "SELECT cmp.idCmp, cmp.idCatCmp, cmp.nomCmpEn, cmp.nomCmpFr FROM necessiter n JOIN competence cmp ON n.idcmp = cmp.idcmp AND n.idcatcmp = cmp.idcatcmp WHERE n.idmis = ?";
@@ -105,13 +135,10 @@ public class DAOMission {
         }
         return competences;
     }
-
-
-
-
-
-
-
+    /**
+     * Récupère toutes les missions
+     * @return liste de missions
+     */
     public List<Mission> findAll() {
         List<Mission> resultats = new ArrayList<>();
         try {
@@ -129,9 +156,11 @@ public class DAOMission {
         }
         return resultats;
     }
-
-
-
+    /**
+     * Compte le nombre de missions pour un statut donné
+     * @param statusId identifiant d'un statut
+     * @return nombre de missions ayant ce statut
+     */
     public int countMissionsByStatus(int statusId) {
         int count = 0;
         String sql = "SELECT COUNT(*) FROM mission WHERE idsta = ?";
@@ -147,8 +176,10 @@ public class DAOMission {
         }
         return count;
     }
-
-
+    /**
+     * Calcule le nombre de missions par mois
+     * @return map mois/nombre de missions
+     */
     public Map<String, Integer> getMissionsStatsParMois() {
         Map<String, Integer> stats = new HashMap<>();
         String sql = "SELECT TO_CHAR(dateDebutMis, 'Month') AS mois, COUNT(*) FROM mission GROUP BY TO_CHAR(dateDebutMis, 'Month')";
@@ -165,45 +196,12 @@ public class DAOMission {
         }
         return stats;
     }
-
-    public List<Mission> filterMissions(String nom, java.sql.Date date, Integer statutId) {
-        List<Mission> resultats = new ArrayList<>();
-        StringBuilder sql = new StringBuilder("SELECT m.*, s.nomSta FROM mission m LEFT JOIN statut s ON m.idsta = s.idsta WHERE 1=1 ");
-
-        if (nom != null && !nom.isEmpty()) {
-            sql.append("AND LOWER(m.titreMis) LIKE ? ");
-        }
-        if (date != null) {
-            sql.append("AND m.dateDebutMis = ? ");
-        }
-        if (statutId != null) {
-            sql.append("AND m.idsta = ? ");
-        }
-
-        try (PreparedStatement stmt = cn.prepareStatement(sql.toString())) {
-            int index = 1;
-            if (nom != null && !nom.isEmpty()) {
-                stmt.setString(index++, "%" + nom.toLowerCase() + "%");
-            }
-            if (date != null) {
-                stmt.setDate(index++, date);
-            }
-            if (statutId != null) {
-                stmt.setInt(index++, statutId);
-            }
-
-            try (ResultSet rs = stmt.executeQuery()) {
-                while (rs.next()) {
-                    Mission instance = creerInstance(rs);
-                    resultats.add(instance);
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return resultats;
-    }
-
+    /**
+     * Met à jour le statut d’une mission
+     * @param mission mission concernée
+     * @param newStatusId nouvel identifiant de statut
+     * @throws SQLException en cas d’erreur SQL
+     */
     public void updateMissionStatus(Mission mission, int newStatusId) throws SQLException {
         String sql = "UPDATE mission SET idsta=? WHERE idMis=?";
         try (PreparedStatement ps = cn.prepareStatement(sql)) {
@@ -212,7 +210,11 @@ public class DAOMission {
             ps.executeUpdate();
         }
     }
-
+    /**
+     * Vérifie si un titre de mission est déjà utilisé dans une mission non terminée
+     * @param titre titre de la mission
+     * @return true si le titre est déjà utilisé
+     */
     public boolean missionTitleExists(String titre) {
         String sql = "SELECT * FROM mission WHERE LOWER(titreMis) = ? AND idsta <> 4";
         try (PreparedStatement ps = cn.prepareStatement(sql)) {
@@ -222,10 +224,14 @@ public class DAOMission {
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
-            return false; // Ou gérer autrement l'erreur
+            return false;
         }
     }
-
+    /**
+     * Recherche une mission par son identifiant
+     * @param idMis identifiant de la mission
+     * @return objet Mission ou null si introuvable
+     */
     public Mission getMissionById(int idMis) {
         String sql = "SELECT m.*, nomsta FROM mission m LEFT JOIN statut s ON m.idsta = s.idsta WHERE m.idMis = ?";
         try (PreparedStatement ps = cn.prepareStatement(sql)) {
@@ -240,7 +246,11 @@ public class DAOMission {
         }
         return null;
     }
-
+    /**
+     * Met à jour les informations d’une mission
+     * @param mis mission à modifier
+     * @throws SQLException en cas d’erreur SQL
+     */
     public void updateMissionModifier(Mission mis) throws SQLException {
         RequeteMissionModifier req = new RequeteMissionModifier();
         PreparedStatement ps = cn.prepareStatement(req.requete());
@@ -251,8 +261,4 @@ public class DAOMission {
             ex.printStackTrace();
         }
     }
-
-
-
-
 }

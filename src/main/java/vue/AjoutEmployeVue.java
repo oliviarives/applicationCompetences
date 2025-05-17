@@ -8,7 +8,11 @@ import java.awt.*;
 import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * Vue  permettant d'ajouter un nouvel employé
+ * Comprend un formulaire de saisie, une table de compétences disponibles
+ * et une autre table pour les compétences affectées à l'employé
+ */
 public class AjoutEmployeVue extends JPanel {
     @Serial
     private static final long serialVersionUID = 1L;
@@ -30,6 +34,11 @@ public class AjoutEmployeVue extends JPanel {
     private final JTable tableCompetencesEmploye;
     private final JTable tableToutesCompetences;
 
+    /**
+     * Constructeur qui initialise l'interface d'ajout d'un employé
+     * avec les champs de formulaire, les deux tableaux de compétences,
+     * et les boutons
+     */
     public AjoutEmployeVue() {
         setLayout(new BorderLayout());
 
@@ -159,6 +168,11 @@ public class AjoutEmployeVue extends JPanel {
     public JTable getTableCompetencesEmploye() { return tableCompetencesEmploye; }
     public JTable getTableToutesCompetences() { return tableToutesCompetences; }
 
+    /**
+     * Remplit la table avec toutes les compétences disponibles
+     *
+     * @param competences liste des compétences à afficher
+     */
     public void setToutesCompetences(java.util.List<Competence> competences) {
         DefaultTableModel model = new DefaultTableModel(new String[]{MOT_CATEGORIE, MOT_COMPETENCE, MOT_TITRE}, 0);
         for (Competence cmp : competences) {
@@ -166,7 +180,11 @@ public class AjoutEmployeVue extends JPanel {
         }
         tableToutesCompetences.setModel(model);
     }
-
+    /**
+     * Récupère la compétence sélectionnée dans la table des compétences disponibles
+     *
+     * @return la compétence sélectionnée ou null si aucune
+     */
     public Competence getCompetenceSelectionneeToutesCmp() {
         int selectedRow = tableToutesCompetences.getSelectedRow();
         if (selectedRow != -1) {
@@ -178,7 +196,11 @@ public class AjoutEmployeVue extends JPanel {
         }
         return null;
     }
-
+    /**
+     * Récupère la compétence sélectionnée dans la table des compétences de l'employé
+     *
+     * @return la compétence sélectionnée ou null si aucune
+     */
     public Competence getCompetenceSelectionneeEmploye() {
         int selectedRow = tableCompetencesEmploye.getSelectedRow();
         if (selectedRow != -1) {
@@ -190,7 +212,11 @@ public class AjoutEmployeVue extends JPanel {
         }
         return null;
     }
-
+    /**
+     * Récupère toutes les compétences affectées à l'employé
+     *
+     * @return liste des compétences ajoutées à l'employé
+     */
     public List<Competence> getCompetencesAjoutees() {
         List<Competence> competences = new ArrayList<>();
         DefaultTableModel model = (DefaultTableModel) tableCompetencesEmploye.getModel();
@@ -202,7 +228,11 @@ public class AjoutEmployeVue extends JPanel {
         }
         return competences;
     }
-
+    /**
+     * Affiche un message d'erreur ou d'information au-dessus du formulaire
+     *
+     * @param message le message à afficher
+     */
     public void afficherMessage(String message) {
         messageLabel.setText(message);
     }

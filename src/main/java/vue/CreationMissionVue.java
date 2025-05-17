@@ -13,7 +13,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-
+/**
+ * Vue pour la création d'une mission
+ * Permet de saisir les informations de base d'une mission, d'ajouter des compétences et des employés
+ */
 public class CreationMissionVue extends JPanel {
     private final static String FORMAT_DATE = "yyyy-MM-dd";
     private JButton buttonConfirmer;
@@ -47,23 +50,14 @@ public class CreationMissionVue extends JPanel {
         StyleManager.setupFlatLaf();
         setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
 
-        //Partie Formulaire Mission
-        SimpleDateFormat formatter = new SimpleDateFormat(FORMAT_DATE);
-
-
-        //panel affichant à la fois deux panel l'un a cote de l'autre
         this.splitPane = new JSplitPane();
         this.splitPane.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
         this.splitPane.setDividerLocation(600);
 
-        //this.formulaire.setLayout(new BoxLayout(formulaire, BoxLayout.Y_AXIS));
         this.formulaire = new JPanel();
-
-
         this.formulaire.setLayout(new BoxLayout(formulaire, BoxLayout.Y_AXIS));
 
-
-        //definition de l'ensmeble des panels accueillants différents champ du formulaire
+        // Définition des panels
         JPanel panelTitre = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JPanel panelDescription = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JPanel panelDate = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -74,7 +68,7 @@ public class CreationMissionVue extends JPanel {
         JPanel panellisteEmployes = new JPanel(new BorderLayout());
         JPanel modifDates = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
-        //definition des differents champs du formulaire
+        // Champs du formulaire
         this.titreMisField = new JTextField(20);
         this.descriptionMisField = new JTextArea(3,30);
         this.dateDebutMisField = new JDateChooser();
@@ -93,29 +87,29 @@ public class CreationMissionVue extends JPanel {
         this.ajouterEmployes = new JButton("Ajouter Employés");
 
 
-        //definition du panel pouvant afficher soit les missions soit les compétences
+        // Panel qui affiche soit le tableau des compétences ou des employés
         this.cardLayout = new CardLayout();
         this.cardLayoutPanel = new JPanel(cardLayout);
         this.titreLabel = new JLabel("Création d'une mission");
 
-        //Titre Mission
+        // Titre mission
         panelTitre.add(new JLabel("Titre Mission : "));
         panelTitre.add(titreMisField);
         formulaire.add(panelTitre);
 
-        //Description Mission
+        // Description mission
         panelDescription.add(new JLabel("Description : "));
         panelDescription.add(descriptionMisField);
         formulaire.add(panelDescription);
 
-        //Date debut et fin Mission
+        // Date debut et fin mission
         panelDate.add(new JLabel("Date de début : "));
         panelDate.add(dateDebutMisField);
         panelDate.add(new JLabel("Date de fin : "));
         panelDate.add(dateFinMisField);
         formulaire.add(panelDate);
 
-        //boutons modifier confirmer dates
+        // Boutons pour modifier et confirmer les dates
         this.bouttonModifierDates = new JButton("Modifier les dates");
         this.bouttonConfirmerDates = new JButton("Confirmer");
         modifDates.add(bouttonModifierDates);
@@ -123,11 +117,11 @@ public class CreationMissionVue extends JPanel {
         setDatesModifiables(false);
         formulaire.add(modifDates);
 
-        //Nbr d'employé dans mission et login employe
+        //Nombre d'employés nécessaires pour la mission
         panelNbEmp.add(new JLabel("Nombre d'employé nécessaires : "));
         panelNbEmp.add(nbEmpField);
 
-        //login employé créateur mission
+        //Login employé créateur de la mission
         loginEmp.add(new JLabel("Login employé : "));
         loginEmp.add(logEmpField);
         formulaire.add(panelNbEmp);
@@ -135,28 +129,28 @@ public class CreationMissionVue extends JPanel {
 
         //Tableau des compétences ajoutées à la mission
         JLabel competenceLabel = new JLabel("Compétences ajoutées :");
-        panellisteCompetences.add(competenceLabel, BorderLayout.NORTH); // Place le label en haut
+        panellisteCompetences.add(competenceLabel, BorderLayout.NORTH);
         this.tableCompetencesAjoutees = new JTable();
         String[] columnNames = {"Id", "Categorie", "Nom (En)", "Nom (FR)"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
-            public boolean isCellEditable(int row, int col) {  //cellules de la table ne sont plus editables
+            public boolean isCellEditable(int row, int col) {
                 return false;
             }
         };
         tableCompetencesAjoutees.setModel(model);
         this.listeCompetenceScrollPane = new JScrollPane(tableCompetencesAjoutees);
         listeCompetenceScrollPane.setPreferredSize(new Dimension(200, 100));
-        panellisteCompetences.add(listeCompetenceScrollPane, BorderLayout.CENTER); // Place la table sous le label
+        panellisteCompetences.add(listeCompetenceScrollPane, BorderLayout.CENTER);
         formulaire.add(panellisteCompetences);
 
 
-        //Tableau des employés ajoutées à la mission
+        // Tableau des employés ajoutées à la mission
         JLabel employesLabel = new JLabel("Employés ajoutés :");
-        panellisteEmployes.add(employesLabel, BorderLayout.NORTH); // Place le label en haut
+        panellisteEmployes.add(employesLabel, BorderLayout.NORTH);
         this.tableEmployesAjoutee = new JTable();
         String[] employesColumnNames = {"login","Prenom", "Nom", "Poste"};
         DefaultTableModel employesModel = new DefaultTableModel(employesColumnNames, 0) {
-            public boolean isCellEditable(int row, int col) { //cellules de la table ne sont plus editables
+            public boolean isCellEditable(int row, int col) {
                 return false;
             }
         };
@@ -168,22 +162,22 @@ public class CreationMissionVue extends JPanel {
         column.setResizable(false);
         this.listeEmployesScrollPane = new JScrollPane(tableEmployesAjoutee);
         listeEmployesScrollPane.setPreferredSize(new Dimension(150, 200));
-        panellisteEmployes.add(listeEmployesScrollPane, BorderLayout.CENTER); // Place la table sous le label
+        panellisteEmployes.add(listeEmployesScrollPane, BorderLayout.CENTER);
         formulaire.add(panellisteEmployes);
 
-        //Boutons ajouts et confirmation
+        // Boutons d'ajouts des compétences et employés et de confirmation de la création de la mission
         panelBouttons.add(ajouterCompetences);
         panelBouttons.add(ajouterEmployes);
         panelBouttons.add(buttonConfirmer);
 
 
-        //partie Ajout compétence
+        // Partie ajout compétence
         this.competenceTable = new JTable();
         this.competenceScrollPane = new JScrollPane(competenceTable);
         this.competenceScrollPane.setPreferredSize(new Dimension(150,200));
         this.cardLayoutPanel.add(this.competenceScrollPane,"tabCompetences");
 
-        //partie Ajout Employe
+        // Partie ajout employé
         this.employesTable = new JTable();
         this.employeScrollPane = new JScrollPane(employesTable);
         JPanel panelBouttonInfosEmp = new JPanel();
@@ -194,7 +188,7 @@ public class CreationMissionVue extends JPanel {
         partieEmp.add(panelBouttonInfosEmp, BorderLayout.SOUTH);
         this.cardLayoutPanel.add(partieEmp,"tabEmployes");
 
-        //Construction visuel final
+        // Construction visuelle finale
         JPanel panelForm = new JPanel(new BorderLayout());
         JScrollPane scrollFormulaire = new JScrollPane(formulaire);
         panelForm.add(scrollFormulaire,BorderLayout.CENTER);
@@ -267,7 +261,10 @@ public class CreationMissionVue extends JPanel {
         return this.bouttonConfirmerDates;
     }
 
-
+    /**
+     * Définit les compétences affichées dans la liste de sélection
+     * @param competences Liste des compétences à afficher
+     */
     public void setCompetencesAjout(List<Competence> competences) {
         String[] columnNames = {"Id", "Categorie","Nom (En)","Nom (FR)"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0){
@@ -281,7 +278,10 @@ public class CreationMissionVue extends JPanel {
         }
         this.competenceTable.setModel(model);
     }
-
+    /**
+     * Définit les employés affichés dans la liste de sélection
+     * @param emp Liste des employés à afficher
+     */
     public void setEmploye(List<Employe> emp) {
         String[] columnNames = {"login","Prenom","Nom","Poste"};
         HashSet<String> listeLoginUnicite = new HashSet<>();
@@ -307,50 +307,67 @@ public class CreationMissionVue extends JPanel {
     }
 
 
-    //Affiche soit liste des employés ou liste compétences ajoutables à mission
+    /**
+     * Affiche un panneau selon son nom
+     * @param pageName Nom du panneau à afficher
+     */
     public void showPage(String pageName) {
         cardLayout.show(cardLayoutPanel, pageName);
     }
 
-    //renvoi compétence selectionnée avce double click dans liste compétence disponible
+    /**
+     * Retourne la compétence sélectionnée dans la liste de sélection
+     * @return Compétence sélectionnée ou null
+     */
     public Competence getCompetenceSelectionnee() {
         int selectedRow = competenceTable.getSelectedRow();
-        if (selectedRow != -1) { //  si une ligne est sélectionnée
+        if (selectedRow != -1) {
             int id = (int) competenceTable.getValueAt(selectedRow, 0);
             String categorie = (String) competenceTable.getValueAt(selectedRow, 1);
             String nomEn = (String) competenceTable.getValueAt(selectedRow, 2);
             String nomFr = (String) competenceTable.getValueAt(selectedRow, 3);
             return new Competence(id, categorie, nomEn, nomFr);
         }
-        return null; // Aucune ligne sélectionnée
+        return null;
     }
 
-    //renvoi employé selectionner avec double click dans liste employés disponible
+    /**
+     * Retourne l'employé sélectionné dans la liste de sélection
+     * @return Employé sélectionné ou null
+     */
     public Employe getEmployeSelectionne() {
         int selectedRow = employesTable.getSelectedRow();
-        if (selectedRow != -1) { //  si une ligne est sélectionnée
+        if (selectedRow != -1) {
             String login = (String) employesTable.getValueAt(selectedRow, 0);
             String prenom = (String) employesTable.getValueAt(selectedRow, 1);
             String nom = (String) employesTable.getValueAt(selectedRow, 2);
             String poste = (String) employesTable.getValueAt(selectedRow, 3);
             return new Employe(login,prenom, nom, poste);
         }
-        return null; // Aucune ligne sélectionnée
+        return null;
     }
-    //ajout compétence selectionner a tables des compétences ajoutées à la mission
+    /**
+     * Ajoute une compétence à la liste des compétences ajoutées
+     * @param cmp Compétence à ajouter
+     */
     public void ajouterCompetenceAjoutee(Competence cmp) {
         DefaultTableModel model = (DefaultTableModel) tableCompetencesAjoutees.getModel();
-        Object[] row = {cmp.getIdCmp(), cmp.getIdCatCmp(), cmp.getNomCmpEn(), cmp.getNomCmpFr()};//création de la ligne
+        Object[] row = {cmp.getIdCmp(), cmp.getIdCatCmp(), cmp.getNomCmpEn(), cmp.getNomCmpFr()};
         model.addRow(row);
     }
-    //ajout employé selectionner a tables des employés ajoutés à la mission
+    /**
+     * Ajoute un employé à la liste des employés ajoutés
+     * @param emp Employé à ajouter
+     */
     public void ajouterEmployesAjoutee(Employe emp) {
         DefaultTableModel model = (DefaultTableModel) tableEmployesAjoutee.getModel();
         Object[] row = {emp.getLogin(),emp.getPrenom(), emp.getNom(), emp.getPoste()};
         model.addRow(row);
     }
-
-    //retourne une liste des compétences ajoutées à la mission
+    /**
+     * Retourne la liste des compétences ajoutées à la mission
+     * @return Liste de compétences
+     */
     public List<Competence> getCompetencesAjoutees() {
         List<Competence> competences = new ArrayList<>();
         DefaultTableModel model = (DefaultTableModel) tableCompetencesAjoutees.getModel();
@@ -364,41 +381,46 @@ public class CreationMissionVue extends JPanel {
         }
         return competences;
     }
-    //retourne une liste d'employe (login) ajoutés à la mission pour insertion BD à creation mission
+    /**
+     * Retourne la liste des logins des employés ajoutés à la mission
+     * @return Liste des logins
+     */
     public List<String> getLogEmployeAjoutees() {
-        HashSet<String> empsALogin = new HashSet<>();//hashset permet de ne pas avoir de répétition
+        HashSet<String> empsALogin = new HashSet<>();
         DefaultTableModel model = (DefaultTableModel) tableEmployesAjoutee.getModel();
-        //recuperation des login des emp ajoutés pour comparaison
+        // Récuperation des logins des employés ajoutés pour comparaison
         for (int i = 0; i < model.getRowCount(); i++) {
-            String loginEmp = (String) model.getValueAt(i, 0);//recupere le login dans la table
+            String loginEmp = (String) model.getValueAt(i, 0);
             empsALogin.add(loginEmp);
-            System.out.println(loginEmp);
         }
-        List<String> resultSet = new ArrayList<>(empsALogin); //hashset transformé en ArrayList
+        // Hashset transformé en ArrayList
+        List<String> resultSet = new ArrayList<>(empsALogin);
         return  resultSet;
     }
 
-    //permet de rendre les choix de dates modifiables ou pas
+    /**
+     * Active ou désactive la modification des dates de mission
+     * @param b true pour activer, false pour désactiver
+     */
     public void setDatesModifiables(boolean b){
         this.dateDebutMisField.setEnabled(b);
         this.dateFinMisField.setEnabled(b);
     }
 
-    //remet à vide l'ensemble des champ du formulaire (appelé a la sortie de la vue)
+    /**
+     * Réinitialise tous les champs du formulaire
+     */
     public void resetFields() {
-        // Vider les champs de texte
+
         titreMisField.setText("");
         descriptionMisField.setText("");
         logEmpField.setText("");
 
-        // Réinitialiser les JDateChooser
         dateDebutMisField.setDate(null);
         dateFinMisField.setDate(null);
 
-        // Réinitialiser le JSpinner
-        nbEmpField.setValue(0); // ou 1, selon votre valeur par défaut souhaitée
+        nbEmpField.setValue(0);
 
-        // Réinitialiser les tableaux d'ajouts
         DefaultTableModel modelComp = (DefaultTableModel) tableCompetencesAjoutees.getModel();
         modelComp.setRowCount(0);
 

@@ -10,7 +10,10 @@ import javax.swing.text.DateFormatter;
 import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.util.Map;
-
+/**
+ * Vue permettant d'afficher les informations d'un employé
+ * Affiche les champs et la liste de ses compétences
+ */
 public class InformationEmpVue extends JPanel {
     private JButton croixRetour;
     private JTable tableCmp;
@@ -20,13 +23,16 @@ public class InformationEmpVue extends JPanel {
     private JFormattedTextField dateEntreeField;
     private JScrollPane scrollPaneCmp;
     private DAOEmploye daoEmp;
-
+    /**
+     * Constructeur de la vue qui initialise les champs et la mise en page
+     * @param daoEmploye DAOEmploye pour récupérer les compétences de l'employé
+     */
     public InformationEmpVue(DAOEmploye daoEmploye) {
         this.daoEmp = daoEmploye;
         setSize(new Dimension(500, 600));
         setLayout(new BorderLayout());
 
-        // Panel principal pour organiser haut/milieu/bas
+        // Panel principal
         JPanel panelHaut = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         JPanel panelMilieu = new JPanel(new GridBagLayout());
         JPanel panelBas = new JPanel(new BorderLayout());
@@ -90,17 +96,15 @@ public class InformationEmpVue extends JPanel {
         add(panelMilieu, BorderLayout.CENTER);
         add(panelBas, BorderLayout.SOUTH);
     }
-
-
+    /**
+     * Remplit les champs de la vue avec les informations de l'employé sélectionné
+     * Met à jour la table des compétences associées à l'employé
+     * @param emp Employé sélectionné
+     */
     public void setEmpSelectionne(Employe emp){
         this.prenomField.setText(emp.getPrenom());
         this.nomField.setText(emp.getNom());
         this.posteField.setText(emp.getPoste());
-
-
-        //this.dateEntreeField.setText(emp.getDateEntree().toString());
-
-        //this.dateEntreeField.setValue(emp.getDateEntree());
 
         String[] columnNames = {"Id", "Categorie","Nom (En)","Nom (FR)"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0){
@@ -120,7 +124,10 @@ public class InformationEmpVue extends JPanel {
 
         this.tableCmp.setModel(model);
     }
-
+    /**
+     * Retourne le bouton de retour
+     * @return JButton de retour
+     */
     public JButton getCroixRetour() {
         return this.croixRetour;
     }

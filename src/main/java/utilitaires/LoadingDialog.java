@@ -3,13 +3,19 @@ package utilitaires;
 import javax.swing.*;
 import java.awt.*;
 import java.net.URL;
-
+/**
+ * Boîte de dialogue pour une animation de chargement
+ */
 public class LoadingDialog extends JDialog {
-
+    /**
+     * Crée une boîte de dialogue de chargement avec un GIF
+     *
+     * @param parent la fenêtre parente de la boîte de dialogue
+     */
     public LoadingDialog(Window parent) {
         super(parent, "Chargement...", ModalityType.APPLICATION_MODAL);
 
-        // Charge le gif depuis les ressources
+        // Récupération du GIF
         URL imgURL = getClass().getResource("/G4g.gif");
         ImageIcon icon = imgURL != null ? new ImageIcon(imgURL) : null;
 
@@ -20,14 +26,18 @@ public class LoadingDialog extends JDialog {
             label.setText("Chargement...");
         }
 
+        // Ajout du label dans la boîte de dialogue
         add(label, BorderLayout.CENTER);
-        setUndecorated(true); // sans bordure de fenêtre (optionnel)
+
+        // Supprime les bordures et le titre de la fenêtre
+        setUndecorated(true);
         pack();
+
+        // Centre horizontalement en haut de l'écran
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int dialogWidth = getWidth();
-        int dialogHeight = getHeight();
         int x = (screenSize.width - dialogWidth) / 2;
-        int y = 0; // tout en haut
-        setLocation(x, y);// centre par rapport à la fenêtre parent
+        int y = 0;
+        setLocation(x, y);
     }
 }

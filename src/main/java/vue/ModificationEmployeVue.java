@@ -9,7 +9,10 @@ import java.awt.*;
 import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * Vue permettant de modifier un employé
+ * Affiche un formulaire avec ses informations et ses compétences
+ */
 public class ModificationEmployeVue extends JPanel {
     @Serial
     private static final long serialVersionUID = 1L;
@@ -30,7 +33,9 @@ public class ModificationEmployeVue extends JPanel {
     private static final String CATEGORIE = "Catégorie";
     private static final String COMPETENCE = "Compétence";
     private static final String TITRE = "Titre";
-
+    /**
+     * Construit la vue de modification d'un employé avec son formulaire et ses compétences
+     */
     public ModificationEmployeVue() {
         setLayout(new BorderLayout());
 
@@ -142,17 +147,16 @@ public class ModificationEmployeVue extends JPanel {
     public JTextField getPrenomField() { return prenomField; }
     public JTextField getNomField() { return nomField; }
     public JTextField getLoginField() { return loginField; }
-    public JPasswordField getMdpField() { return mdpField; }
     public JTextField getPosteField() { return posteField; }
-    public JSpinner getDateEntreeField() { return dateEntreeSpinner; }
-
     public JButton getButtonConfirmer() { return buttonConfirmer; }
     public JButton getButtonAjouter() { return buttonAjouter; }
     public JButton getButtonRetirer() { return buttonRetirer; }
-
     public JTable getTableCompetencesEmploye() { return tableCompetencesEmploye; }
     public JTable getTableToutesCompetences() { return tableToutesCompetences; }
-
+    /**
+     * Remplit la table de toutes les compétences disponibles
+     * @param competences liste de toutes les compétences
+     */
     public void setToutesCompetences(List<Competence> competences) {
         DefaultTableModel model = new DefaultTableModel(new String[]{CATEGORIE, COMPETENCE, TITRE}, 0);
         for (Competence cmp : competences) {
@@ -160,7 +164,10 @@ public class ModificationEmployeVue extends JPanel {
         }
         tableToutesCompetences.setModel(model);
     }
-
+    /**
+     * Remplit la table des compétences associées à l'employé
+     * @param competences liste des compétences de l'employé
+     */
     public void setTableCompetencesEmploye(List<Competence> competences) {
         DefaultTableModel model = new DefaultTableModel(new String[]{CATEGORIE, COMPETENCE, TITRE}, 0);
         for (Competence cmp : competences) {
@@ -168,7 +175,9 @@ public class ModificationEmployeVue extends JPanel {
         }
         tableCompetencesEmploye.setModel(model);
     }
-
+    /**
+     * @return la compétence sélectionnée dans la table de toutes les compétences
+     */
     public Competence getCompetenceSelectionneeToutesCmp() {
         int selectedRow = tableToutesCompetences.getSelectedRow();
         if (selectedRow != -1) {
@@ -179,7 +188,9 @@ public class ModificationEmployeVue extends JPanel {
         }
         return null;
     }
-
+    /**
+     * @return la compétence sélectionnée dans la table des compétences de l'employé
+     */
     public Competence getCompetenceSelectionneeEmploye() {
         int selectedRow = tableCompetencesEmploye.getSelectedRow();
         if (selectedRow != -1) {
@@ -190,7 +201,9 @@ public class ModificationEmployeVue extends JPanel {
         }
         return null;
     }
-
+    /**
+     * @return la liste des compétences affichées dans la table des compétences de l'employé
+     */
     public List<Competence> getCompetencesAjoutees() {
         List<Competence> competences = new ArrayList<>();
         DefaultTableModel model = (DefaultTableModel) tableCompetencesEmploye.getModel();
@@ -202,7 +215,10 @@ public class ModificationEmployeVue extends JPanel {
         }
         return competences;
     }
-
+    /**
+     * Remplit le formulaire avec les informations d'un employé
+     * @param employeSelectionne l'employé à afficher
+     */
     public void setEmploye(Employe employeSelectionne) {
         prenomField.setText(employeSelectionne.getPrenom());
         nomField.setText(employeSelectionne.getNom());
@@ -211,9 +227,10 @@ public class ModificationEmployeVue extends JPanel {
         posteField.setText(employeSelectionne.getPoste());
         dateEntreeSpinner.setValue(employeSelectionne.getDateEntree());
     }
-
-
-
+    /**
+     * Affiche un message d'erreur ou d'information
+     * @param message le message à afficher
+     */
     public void afficherMessage(String message) {
         messageLabel.setText(message);
     }

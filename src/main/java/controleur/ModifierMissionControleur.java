@@ -10,23 +10,62 @@ import vue.ModificationMissionVue;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ * Contrôleur chargé de la modification d'une mission existante à partir de la vue ModificationMissionVue
+ * Gère la mise à jour des champs, des compétences et des employés liés à une mission
+ */
 public class ModifierMissionControleur {
+    /**
+     * Vue de modification d'une mission
+     */
     private ModificationMissionVue modificationMV;
+    /**
+     * DAO pour les missions
+     */
     private DAOMission daoMission;
+    /**
+     * DAO pour les compétences
+     */
     private DAOCompetence daoCompetence;
+    /**
+     * DAO pour les employés
+     */
     private DAOEmploye daoEmploye;
+    /**
+     * Mission à modifier
+     */
     private Mission mission;
+    /**
+     * Liste des compétences sélectionnées
+     */
     private List<Competence> listeCompetencesSelectionnees;
+    /**
+     * Liste des employés sélectionnés
+     */
     private List<Employe> listeEmployesSelectiones;
+    /**
+     * Identifiant de la mission à modifier
+     */
     private int idMissionSelectMissionView;
+    /**
+     * Constante pour le nom de l'onglet des compétences
+     */
     private static final String MOT_TAB = "tabCompetences";
+    /**
+     * Constante pour le message d'erreur
+     */
     private static final String MOT_ERREUR = "Erreur";
-
+    /**
+     * Initialise le contrôleur et configure tous les événements de la vue
+     * @param modificationMV vue de modification de mission
+     * @param daoMission DAO mission
+     * @param daoComp DAO compétence
+     * @param daoEmp DAO employé
+     * @param mission mission à modifier
+     */
     public ModifierMissionControleur(ModificationMissionVue modificationMV, DAOMission daoMission, DAOCompetence daoComp, DAOEmploye daoEmp, Mission mission) {
         this.modificationMV = modificationMV;
         this.daoMission = daoMission;
@@ -34,34 +73,6 @@ public class ModifierMissionControleur {
         this.daoEmploye = daoEmp;
         this.mission = mission;
 
-
-       /* modificationMV.getButtonConfirmer().addActionListener(
-                new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e){
-                        Mission misInsert= new Mission(
-                                modificationMV.getTitreMisField(),
-                                modificationMV.getDateDebutMisField(),
-                                modificationMV.getDateFinMisField(),
-                                //Date.valueOf("1970-01-01"),
-                                //Date.valueOf("1970-01-01"),
-                                modificationMV.getDescriptionMisField(),
-                                new Date(System.currentTimeMillis()),
-                                //Date.valueOf("1970-01-01"),
-                                modificationMV.getNbEmpField(),
-                                modificationMV.getLogEmpField(),
-                                1
-                        );
-                        try {
-                            daoMission.ajouterMission(misInsert);
-                            navC.getVueV().getButtonMissions().doClick();
-                        } catch (SQLException ex) {
-                            throw new RuntimeException(ex);
-                        }
-
-                    }
-                }
-        );*/
         modificationMV.getButtonConfirmer().addActionListener(e -> {
             // Récupération des valeurs saisies
             String titre = modificationMV.getTitreMisField().trim();
@@ -78,7 +89,7 @@ public class ModifierMissionControleur {
                 return;
             }
 
-            // Vérifier que la date de début et la date de fin ne sont pas antérieures à aujourd'hui
+            // Vérifier que la date de début et la date de fin ne sont pas antérieures à la date du jour
             java.sql.Date today = new java.sql.Date(System.currentTimeMillis());
             if(dateDebut.before(today) || dateFin.before(today)) {
                 JOptionPane.showMessageDialog(null,
@@ -95,7 +106,7 @@ public class ModifierMissionControleur {
                 return;
             }
 
-            // Vérification de la validité du login employé via la méthode loginExist()
+            // Vérifier la validité du login employé
             try {
                 if(!daoEmploye.isLoginExists(login)) {
                     JOptionPane.showMessageDialog(null,
@@ -110,15 +121,6 @@ public class ModifierMissionControleur {
                 return;
             }
 
-            // Vérifier que le titre de mission n'existe pas déjà dans une mission non terminée
-           /*if(daoMission.missionTitleExists(titre)) {
-                JOptionPane.showMessageDialog(null,
-                        "Le titre de la mission existe déjà pour une mission non terminée. Veuillez choisir un autre titre.",
-                        MOT_ERREUR, JOptionPane.ERROR_MESSAGE);
-                return;
-            }*/
-
-            // Tout est validé, on peut créer la mission avec le statut "Préparation" (idSta = 1)
             Mission misInsert = new Mission(
                     titre,
                     description,
@@ -137,7 +139,7 @@ public class ModifierMissionControleur {
                 daoMission.ajouterCmpToMission(misInsert, cmpAjoutees);
                 daoMission.ajouterEmpToMission(misInsert, logEmpAjoutes);
 
-                // Si on a affecté au moins un employé, on met à jour le statut à "Planifiée" (idSta = 2)
+                // Si on a affecté au moins un employé, on met à jour le statut de la mission à "Planifiée"
                 if(!logEmpAjoutes.isEmpty()) {
                     daoMission.updateMissionStatus(misInsert, 2);
                 }
@@ -150,19 +152,10 @@ public class ModifierMissionControleur {
                 throw new RuntimeException(ex);
             }
         });
-        //boutons pour afficher les compétences disponibles ds creation mission
+        //bouton pour afficher les compétences disponibles
         modificationMV.getAjouterCompetences().addActionListener(
                 e -> modificationMV.showPage(MOT_TAB)
         );
-        //boutons pour afficher les employés dispo ds creation mission
-        /*modificationMV.getAjouterEmployes().addActionListener(
-                new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e){
-                        modificationMV.showPage("tabEmployes");
-                    }
-                }
-        );*/
 
         modificationMV.getAjouterEmployes().addActionListener(
                 e -> {
@@ -174,30 +167,31 @@ public class ModifierMissionControleur {
                     }
                 }
         );
-        //ajout compétences à table des compétences ajoutées
+        // Ajouter des compétences à table des compétences ajoutées
         modificationMV.getCompetenceTable().addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                if (evt.getClickCount() == 2) { //déclenchement au double click
+                if (evt.getClickCount() == 2) {
                     Competence cmp = modificationMV.getCompetenceSelectionnee();
                     if (cmp != null) {
                         modificationMV.ajouterCompetenceAjoutee(cmp);
                     }
                     List<Competence>  lcmpAjout= modificationMV.getCompetencesAjoutees();
                     List<Employe> listeEmployesSelectiones2 = daoEmploye.findEmpByCmp(lcmpAjout);
-                    modificationMV.setEmploye(listeEmployesSelectiones2); // Mise à jour de la table des employés
+                    // Mise à jour de la table des employés
+                    modificationMV.setEmploye(listeEmployesSelectiones2);
                 }
             }
         });
 
 
-        // Ajout employé à table des employés ajoutés
+        // Ajout d'employé à la table des employés ajoutés
         modificationMV.getEmployesTable().addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                if (evt.getClickCount() == 2) { //déclenchement au double click
-                    int nbEmpMax = modificationMV.getNbEmpField(); // valeur du champ nbEmp
-                    int nbEmpAjoutes = modificationMV.getTableEmployesAjoutes().getRowCount(); // nbr d'employé ajouté à mision
+                if (evt.getClickCount() == 2) {
+                    int nbEmpMax = modificationMV.getNbEmpField();
+                    int nbEmpAjoutes = modificationMV.getTableEmployesAjoutes().getRowCount();
 
                     if (nbEmpAjoutes < nbEmpMax) { //si nbEmp nécessaire pas encore atteind
                         Employe emp = modificationMV.getEmployeSelectionne();
@@ -213,11 +207,11 @@ public class ModifierMissionControleur {
         });
 
 
-        //retirer compétence des compétences ajoutées
+        // Retirer une compétence des compétences ajoutées
         modificationMV.getTableCompetencesAjoutees().addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                if (evt.getClickCount() == 2) {//déclenchement au double click
+                if (evt.getClickCount() == 2) {
                     int selectedRow = modificationMV.getTableCompetencesAjoutees().getSelectedRow();
                     if (selectedRow != -1) {
                         DefaultTableModel model = (DefaultTableModel) modificationMV.getTableCompetencesAjoutees().getModel();
@@ -229,11 +223,11 @@ public class ModifierMissionControleur {
                 }
             }
         });
-        //retirer employé des employés ajoutés
+        // Retirer un employé des employés ajoutés
         modificationMV.getTableEmployesAjoutes().addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                if (evt.getClickCount() == 2) { //déclenchement au double click
+                if (evt.getClickCount() == 2) {
                     int selectedRow = modificationMV.getTableEmployesAjoutes().getSelectedRow();
                     if (selectedRow != -1) {
                         DefaultTableModel model = (DefaultTableModel) modificationMV.getTableEmployesAjoutes().getModel();
@@ -250,8 +244,6 @@ public class ModifierMissionControleur {
         modificationMV.getBouttonConfirmerDates().addActionListener(
                 e -> {
                     modificationMV.setDatesModifiables(false);
-                    //daoEmp.setListeEmpCmp();
-                    //daoEmp.miseAJourEmpByCmpByDate(creationMV.getDateDebutMisField(), creationMV.getDateFinMisField());
                     try {
 
                         JOptionPane.showMessageDialog(null, "Lorsque vous modifiez les dates, les employés ajoutés sont éffacés !",
@@ -268,16 +260,24 @@ public class ModifierMissionControleur {
 
 
     }
-
+    /**
+     * Charge toutes les compétences disponibles dans la vue
+     */
     public void loadCompetences(){
         List<Competence> competencesTable = daoCompetence.findAll();
         modificationMV.setCompetencesAjout(competencesTable);
     }
+    /**
+     * Charge tous les employés disponibles dans la vue
+     */
     public void loadEmployes(){
         List<Employe> employeTable = daoEmploye.findAll();
         modificationMV.setEmploye(employeTable);
     }
-
+    /**
+     * Préremplit le formulaire de modification avec les données de la mission sélectionnée
+     * @throws SQLException en cas d'erreur lors de la récupération des données
+     */
     public void preRemplirFormulaire() throws SQLException {
         // Pré-remplissage du formulaire avec les données de la mission
         modificationMV.setMissionData(mission);
@@ -286,25 +286,17 @@ public class ModifierMissionControleur {
         List<Competence> competencesAssociees = daoMission.getCompetencesForMission(mission.getIdMission());
         modificationMV.remplirTableauCompetences(competencesAssociees);
 
-        // Récupération et affichage des employés associés à la mission
-        /*List<String> logins = daoMission.getLogEmployesForMission(mission.getIdMission());
-        List<Employe> employesAssocies = new ArrayList<>();
-        for (String login : logins) {
-            Employe emp = daoEmploye.getEmployeByLogin(login);
-            if (emp != null) {
-                employesAssocies.add(emp);
-            }
-        }
-        modificationMV.setEmploye(employesAssocies);*/
-
-        // Chargement des listes disponibles pour la sélection
+        // Chargement des listes disponibles
         loadCompetences();
         loadEmployes();
 
-        // Affiche par défaut la vue des compétences associées (ou selon ton choix)
+        // Affiche par défaut la vue des compétences
         modificationMV.showPage(MOT_TAB);
     }
-
+    /**
+     * Définit l'identifiant de la mission sélectionnée
+     * @param is identifiant de la mission
+     */
     public void setIdMissionSelect(int is){
         this.idMissionSelectMissionView=is;
     }

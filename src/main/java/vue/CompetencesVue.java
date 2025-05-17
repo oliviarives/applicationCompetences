@@ -7,12 +7,16 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
-
+/**
+ * Vue qui affiche la liste des compétences dans un tableau
+ */
 public class CompetencesVue extends JPanel{
     private JTable tableCompetences;
     private JScrollPane scrollCompetences;
 
-
+    /**
+     * Constructeur qui initialise l'interface graphique de la vue
+     */
     public CompetencesVue() {
         StyleManager.setupFlatLaf();
         setLayout(new BorderLayout());
@@ -22,7 +26,11 @@ public class CompetencesVue extends JPanel{
         this.scrollCompetences.setPreferredSize(new Dimension(800,300));
         add(scrollCompetences);
     }
-
+    /**
+     * Met à jour les données du tableau avec la liste des compétences fournies
+     *
+     * @param competences liste des compétences à afficher
+     */
     public void setCompetences(List<Competence> competences) {
         String[] columnNames = {"Id Competence", "Id Categorie","Nom (En)","Nom (FR)"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0){

@@ -11,12 +11,29 @@ import javax.swing.table.DefaultTableModel;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
-
+/**
+ * Contrôleur chargé de gérer l'ajout d'un nouvel employé
+ */
 public class AjouterEmployeControleur {
+    /**
+     * Vue d'ajout d'un employé
+     */
     private final AjoutEmployeVue ajoutPersonnelVue;
+    /**
+     * DAO pour la gestion des employés
+     */
     private final DAOEmploye daoEmploye;
+    /**
+     * DAO pour la gestion des compétences
+     */
     private final DAOCompetence daoCompetence;
 
+    /**
+     * Constructeur pour initialiser le contrôleur et configurer les actions des boutons de la vue
+     * @param ajoutPersonnelVue la vue qui permet d'ajouter un employé
+     * @param daoEmp DAO des employés
+     * @param daoCmp DAO des compétences
+     */
     public AjouterEmployeControleur(AjoutEmployeVue ajoutPersonnelVue, DAOEmploye daoEmp, DAOCompetence daoCmp) {
         this.ajoutPersonnelVue = ajoutPersonnelVue;
         this.daoEmploye = daoEmp;
@@ -40,6 +57,9 @@ public class AjouterEmployeControleur {
                 ajouterCompetenceEmploye());
     }
 
+    /**
+     * Ajoute un nouvel employé en base de données avec ses informations et ses compétences
+     */
     private void ajouterPersonnel() {
         String prenom = ajoutPersonnelVue.getPrenomField().getText();
         String nom = ajoutPersonnelVue.getNomField().getText();
@@ -72,12 +92,17 @@ public class AjouterEmployeControleur {
         }
     }
 
-
+    /**
+     * Charge la liste des compétences depuis la base de données
+     */
     public void loadCompetences() {
         List<Competence> competences = daoCompetence.findAll();
         ajoutPersonnelVue.setToutesCompetences(competences);
     }
 
+    /**
+     * Ajoute une compétence à un employé
+     */
     private void ajouterCompetenceEmploye() {
         Competence selected = ajoutPersonnelVue.getCompetenceSelectionneeToutesCmp();
         if (selected != null) {
@@ -92,6 +117,9 @@ public class AjouterEmployeControleur {
         }
     }
 
+    /**
+     * Retire une compétence à un employé
+     */
     public void retirerCompetenceEmploye() {
         Competence selected = ajoutPersonnelVue.getCompetenceSelectionneeEmploye();
         if (selected != null) {
@@ -106,6 +134,9 @@ public class AjouterEmployeControleur {
         }
     }
 
+    /**
+     * Réinitialise tous les champs de la vue et recharge les compétences disponibles
+     */
     private void effacerChamps() {
         ajoutPersonnelVue.getPrenomField().setText("");
         ajoutPersonnelVue.getNomField().setText("");
