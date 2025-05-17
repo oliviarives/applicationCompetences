@@ -11,6 +11,8 @@ import utilitaires.StyleManager;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
+import java.util.Comparator;
 import java.util.Map;
 
 public class AccueilVue extends JPanel {
@@ -126,9 +128,19 @@ public class AccueilVue extends JPanel {
 
         // Met à jour le dataset du bar chart
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        List<String> ordreMois = List.of(
+                "January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"
+        );
+
+
+        statsMois.entrySet().stream()
+                .sorted(Comparator.comparingInt(e -> ordreMois.indexOf(e.getKey())))
+                .forEach(entry -> dataset.addValue(entry.getValue(), "Missions", entry.getKey()));
         for (Map.Entry<String, Integer> entry : statsMois.entrySet()) {
             dataset.addValue(entry.getValue(), "Missions", entry.getKey());
         }
+
         JFreeChart updatedChart = ChartFactory.createBarChart(
                 "Résumé des derniers mois",
                 "Mois",
