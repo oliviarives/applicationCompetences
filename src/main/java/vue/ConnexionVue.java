@@ -52,7 +52,7 @@ public class ConnexionVue extends JDialog {
                 throw new SQLException("Impossible d'obtenir une connexion valide à la base de données.");
             }
 
-            SwingUtilities.invokeLater(() -> new ConnexionVue());
+            SwingUtilities.invokeLater(ConnexionVue::new);
 
         } catch (Exception e) {
             logger.severe("Erreur lors de la connexion : " + e.getMessage());
