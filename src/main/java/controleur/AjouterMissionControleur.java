@@ -25,7 +25,7 @@ public class AjouterMissionControleur {
     private InformationEmpVue informationEmpView;
     private List<Competence> listeCompetencesSelectionnees;
     private List<Employe> listeEmployesSelectiones;
-    final String MESSAGE_ERREUR = "ERREUR";
+    private static final String MESSAGE_ERREUR = "ERREUR";
 
     public AjouterMissionControleur(CreationMissionVue creationMV, DAOMission daoMission, NavigationControleur navigationC, DAOCompetence daoComp, DAOEmploye daoEmp, InformationEmpVue infoEmpV) {
         this.creationMV = creationMV;
