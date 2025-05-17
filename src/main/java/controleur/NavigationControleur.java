@@ -95,9 +95,9 @@ public class NavigationControleur {
         vueV.addPage("Vacance", vacanceVue);
         vueV.addPage("InfosEmp", infosEmpVue);
 
-        int nbEnPreparation = missionDao.countMissionsByStatus(1);
-        int nbEnCours = missionDao.countMissionsByStatus(2);
-        int nbTerminees = missionDao.countMissionsByStatus(3);
+        int nbEnPreparation = missionDao.countMissionsByStatus(2);
+        int nbEnCours = missionDao.countMissionsByStatus(3);
+        int nbTerminees = missionDao.countMissionsByStatus(4);
         Map<String, Integer> statsMois = missionDao.getMissionsStatsParMois();
 
         accueilV.updateDashboard(nbEnPreparation, nbEnCours, nbTerminees, statsMois);
