@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -15,41 +16,66 @@ public class MissionControleur {
 
     private MissionVue vueM;
     private DAOMission missionDAO;
+    private List<Mission> listMissionDaoFindAll;
 
     public MissionControleur(MissionVue vue, DAOMission daoM) {
         this.vueM = vue;
         this.missionDAO = daoM;
+        this.listMissionDaoFindAll = new ArrayList<>();
 
-        vueM.getBtnFiltrer().addActionListener(e -> {
-            String nomCritere = vueM.getTxtFiltreNom().getText().trim();
-            java.util.Date utilDate = vueM.getDateChooser().getDate();
-            Date dateCritere = (utilDate != null) ? new Date(utilDate.getTime()) : null;
-
-            String statutSelectionne = (String) vueM.getComboStatut().getSelectedItem();
-            Integer statutCritere = null;
-            if (!"Tous".equals(statutSelectionne)) {
-                if (statutSelectionne.equals("Préparation")) {
-                    statutCritere = 1;
-                } else if (statutSelectionne.equals("En cours")) {
-                    statutCritere = 2;
-                } else if (statutSelectionne.equals("Terminée")) {
-                    statutCritere = 3;
-                }
+        vueM.getBtnFiltrer().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                filterMissions();
             }
-
-            List<Mission> missionsFiltrees = missionDAO.filterMissions(nomCritere, dateCritere, statutCritere);
-
-            vueM.setMissions(missionsFiltrees);
         });
+
+        vueM.getBtnReset().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                vueM.setMissions(listMissionDaoFindAll);
+                vueM.ResetFiltres();
+            }
+        });
+
+
 }
 
     public void loadMissions() throws SQLException {
-        List<Mission> missions = missionDAO.findAll();
-        for (Mission mission : missions){
+        //List<Mission> missions = missionDAO.findAll();
+        this.listMissionDaoFindAll.clear();
+        this.listMissionDaoFindAll = missionDAO.findAll();
+        for (Mission mission : this.listMissionDaoFindAll) {
             updateMissionStatusIfNeeded(mission, new java.util.Date());
         }
-        vueM.setMissions(missions);
+        vueM.setMissions(this.listMissionDaoFindAll);
     }
+
+    public void filterMissions() {
+        List<Mission> listTrieeFinale = new ArrayList<>();
+
+        String nomCritere = vueM.getTxtFiltreNom().getText();
+       // java.util.Date utilDate = vueM.getDateChooser().getDate();
+        String statutSelectionne = (String) vueM.getComboStatut().getSelectedItem();
+
+        for (Mission m : this.listMissionDaoFindAll) {
+            boolean matchNom = (nomCritere == null || nomCritere.isEmpty())
+                    || m.getTitreMis().equalsIgnoreCase(nomCritere);
+
+
+
+            boolean matchStatut = ("Tous".equals(statutSelectionne))
+                    || statutSelectionne.equals(m.getNomSta());
+
+            if (matchNom && matchStatut) {
+                listTrieeFinale.add(m);
+            }
+        }
+
+        vueM.setMissions(listTrieeFinale);
+    }
+
+
 
     public void updateMissionStatusIfNeeded(Mission mission, java.util.Date now) throws SQLException {
         int currentStatus = mission.getIdSta();
