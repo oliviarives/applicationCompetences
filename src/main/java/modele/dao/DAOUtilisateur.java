@@ -7,23 +7,25 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
+/**
+ * DAO pour la gestion de l'authentification des utilisateurs
+ */
 public class DAOUtilisateur {
-
-    private Connection connexion;
-
     /**
-     * Constructeur avec injection de connexion à la base de données.
+     * Connexion à la base de données
+     */
+    private Connection connexion;
+    /**
+     * Initialise la connexion à la base
      */
     public DAOUtilisateur() {
         this.connexion = CictOracleDataSource.getConnectionBD();
     }
-
     /**
-     * Vérifie si un utilisateur existe avec les identifiants fournis.
-     * @param identifiant Identifiant saisi
-     * @param motDePasse Mot de passe saisi
-     * @return true si l'utilisateur est authentifié, false sinon
+     * Vérifie si un utilisateur existe avec l'identifiant et le mot de passe fournis
+     * @param identifiant identifiant de l'utilisateur
+     * @param motDePasse mot de passe de l'utilisateur
+     * @return true si les identifiants sont valides, false sinon
      */
     public boolean verifierUtilisateur(String identifiant, String motDePasse) {
         String query = "SELECT mdpEmp FROM Employe WHERE loginEmp = ?";

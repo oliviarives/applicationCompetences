@@ -16,28 +16,33 @@ import java.util.Comparator;
 import java.util.Map;
 
 public class AccueilVue extends JPanel {
+    // Contient les 3 cartes
     private final JPanel cardPanel;
+    // Contient le graphique
     private final ChartPanel chartPanel;
-
-    // On conserve des références aux cartes pour pouvoir les recréer lors de l'update
+    // Carte pour les missions en préparation
     private JPanel cardPrep;
+    // Carte pour les missions en cours
     private JPanel cardEnCours;
+    // Carte pour les missions terminées
     private JPanel cardTermine;
+    // Constantes pour les missions
     final String ZERO_MISSIONS = "0 MISSIONS";
     final String MOT_MISSION = "MISSIONS";
 
+    /**
+     * Constructeur de la vue Accueil
+     */
     public AccueilVue() {
-        // Appliquer les styles globaux
         StyleManager.setupFlatLaf();
-
         setLayout(new BorderLayout());
 
-        // Création du panel pour les cartes
+        // Panel des cartes
         cardPanel = new JPanel(new GridLayout(1, 3, 20, 0));
         cardPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         cardPanel.setOpaque(false);
 
-        // Création initiale des cartes avec des valeurs par défaut
+        // Création des cartes avec des valeurs par défaut
         cardPrep = createCard("A VENIR", ZERO_MISSIONS, StyleManager.BLEU_VERT);
         cardEnCours = createCard("EN COURS", ZERO_MISSIONS, StyleManager.BLEU_CLAIR);
         cardTermine = createCard("TERMINÉES", ZERO_MISSIONS, StyleManager.BLEU_SITE);
@@ -45,10 +50,9 @@ public class AccueilVue extends JPanel {
         cardPanel.add(cardPrep);
         cardPanel.add(cardEnCours);
         cardPanel.add(cardTermine);
-
         add(cardPanel, BorderLayout.NORTH);
 
-        // Création initiale du graphique (bar chart) vide
+        // Création du graphique vide
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         JFreeChart chart = ChartFactory.createBarChart(
                 "Résumé des derniers mois",
@@ -61,17 +65,22 @@ public class AccueilVue extends JPanel {
     }
 
     /**
-     * Crée une carte (tuile) personnalisée avec un dégradé vertical.
+     * Crée une carte avec un titret une valeur
+     *
+     * @param title Le titre de la carte
+     * @param value Le nombre de missions
+     * @param bgColor La couleur du fond
+     * @return JPanel représentant la carte
      */
     private JPanel createCard(String title, String value, Color bgColor) {
         JPanel card = getJPanel(bgColor);
 
-        // Label du titre
+        // Titre
         JLabel lblTitle = new JLabel(title, SwingConstants.CENTER);
         lblTitle.setForeground(Color.WHITE);
         lblTitle.setFont(lblTitle.getFont().deriveFont(Font.BOLD, 18f));
 
-        // Label de la valeur
+        // Valeur
         JLabel lblValue = new JLabel(value, SwingConstants.CENTER);
         lblValue.setForeground(Color.WHITE);
         lblValue.setFont(lblValue.getFont().deriveFont(Font.PLAIN, 16f));
@@ -79,7 +88,7 @@ public class AccueilVue extends JPanel {
         card.add(lblTitle, BorderLayout.NORTH);
         card.add(lblValue, BorderLayout.CENTER);
 
-        // arrondir les angles
+        // Angles
         card.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(bgColor.darker(), 1),
                 BorderFactory.createEmptyBorder(20, 20, 20, 20)
@@ -87,7 +96,11 @@ public class AccueilVue extends JPanel {
 
         return card;
     }
-
+    /**
+     * Crée un JPanel
+     * @param bgColor Couleur du fond du JPanel
+     * @return JPanel
+     */
     @NotNull
     private JPanel getJPanel(Color bgColor) {
         JPanel card = new JPanel() {
@@ -96,7 +109,6 @@ public class AccueilVue extends JPanel {
                 super.paintComponent(g);
                 Graphics2D g2 = (Graphics2D) g;
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                // Dégradé vertical du bgColor vers bgColor.darker()
                 GradientPaint gradient = new GradientPaint(
                         0, 0, bgColor,
                         0, getHeight(), bgColor.darker()
@@ -112,10 +124,15 @@ public class AccueilVue extends JPanel {
     }
 
     /**
-     * Met à jour les compteurs des cartes et le graphique en fonction des données.
+     * Met à jour les cartes et le graphique
+     *
+     * @param nbEnPreparation Nombre de missions en préparation
+     * @param nbEnCours Nombre de missions en cours
+     * @param nbTermine Nombre de missions terminées
+     * @param statsMois Statistiques mensuelles
      */
     public void updateDashboard(int nbEnPreparation, int nbEnCours, int nbTermine, Map<String, Integer> statsMois) {
-        // Recrée les cartes avec les nouvelles valeurs
+        // Mise à jour des cartes
         cardPanel.removeAll();
         cardPrep = createCard("A VENIR", nbEnPreparation + " " + MOT_MISSION, StyleManager.BLEU_VERT);
         cardEnCours = createCard("EN COURS", nbEnCours + " " + MOT_MISSION, StyleManager.BLEU_CLAIR);
@@ -126,13 +143,12 @@ public class AccueilVue extends JPanel {
         cardPanel.revalidate();
         cardPanel.repaint();
 
-        // Met à jour le dataset du bar chart
+        // Mise à jour du graphique
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         List<String> ordreMois = List.of(
                 "January", "February", "March", "April", "May", "June",
                 "July", "August", "September", "October", "November", "December"
         );
-
 
         statsMois.entrySet().stream()
                 .sorted(Comparator.comparingInt(e -> ordreMois.indexOf(e.getKey())))
@@ -148,10 +164,10 @@ public class AccueilVue extends JPanel {
                 dataset
         );
 
-        // Personnalisation du chart
-        updatedChart.setBackgroundPaint(StyleManager.BLANC); // Fond global
+        // Personnalisation de l'apparence du graphique
+        updatedChart.setBackgroundPaint(StyleManager.BLANC);
         CategoryPlot plot = (CategoryPlot) updatedChart.getPlot();
-        plot.setBackgroundPaint(StyleManager.BLANC); // Fond de la zone de tracé
+        plot.setBackgroundPaint(StyleManager.BLANC);
         plot.setDomainGridlinePaint(StyleManager.BLEU_SITE);
         plot.setRangeGridlinePaint(StyleManager.BLEU_SITE);
         plot.getDomainAxis().setTickLabelPaint(StyleManager.BLEU_SITE);

@@ -1,28 +1,22 @@
 package vue;
 
-import com.toedter.calendar.JDateChooser;
 import controleur.NavigationControleur;
 import modele.Mission;
-import modele.dao.DAOMission;
 import utilitaires.StyleManager;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-
+/**
+ * Vue permettant d'afficher et gérer la liste des missions
+ * Fournit des filtres par nom et statut, des boutons pour ajouter ou modifier une mission
+ * Affiche les missions dans un tableau
+ */
 public class MissionVue extends JPanel {
-    private static final long serialVersionUID = 1L;
     private JTextField txtFiltreNom;
-    //private final JDateChooser dateChooser;
     private JComboBox<String> comboStatut;
     private JButton btnFiltrer;
     private JTable tableMission;
@@ -31,12 +25,12 @@ public class MissionVue extends JPanel {
     private TableRowSorter<DefaultTableModel> sorter;
     private JButton ajouterMission;
     private JButton modifierMission;
-    private DAOMission missionDAO;
     private int idMissionSelect;
     private JButton btnReset;
 
-    private static final String FORMAT_DATE = "yyyy-MM-dd";//format utile pour l'insertion SQL
-
+    /**
+     * Constructeur qui initialise la vue Mission avec les champs, filtres et tableaux
+     */
     public MissionVue() {
         StyleManager.setupFlatLaf();
         setLayout(new BorderLayout());
@@ -47,14 +41,8 @@ public class MissionVue extends JPanel {
         panelFiltreMission.add(new JLabel("Nom :"));
         panelFiltreMission.add(txtFiltreNom);
 
-        /*dateChooser = new JDateChooser();
-        dateChooser.setDateFormatString(FORMAT_DATE);
-        panelFiltreMission.add(new JLabel("Date :"));
-        panelFiltreMission.add(dateChooser);*/
-
         comboStatut = new JComboBox<>();
 
-        // On peut remplir le combo avec "Tous" puis les statuts récupérés (ici on met en dur)
         comboStatut.addItem("Tous");
         comboStatut.addItem("En préparation");
         comboStatut.addItem("En cours");
@@ -62,61 +50,12 @@ public class MissionVue extends JPanel {
         panelFiltreMission.add(new JLabel("Statut :"));
         panelFiltreMission.add(comboStatut);
 
-        //Bouton pour lancer le filtre
+        // Bouton filtrer
         btnFiltrer = new JButton("Filtrer");
         panelFiltreMission.add(btnFiltrer);
-        /*btnFiltrer.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                List<RowFilter<Object, Object>> filters = new ArrayList<>();
 
-                //Filtre sur le nom (colonne 1 : Nom Mission)
-                String nom = txtFiltreNom.getText().trim();
-                if (!nom.isEmpty()) {
-                    filters.add(RowFilter.regexFilter("(?i)" + nom, 1));
-                }
-
-                //Filtre sur la date (colonne 2 : Date de début)
-                if (dateChooser.getDate() != null) {
-                    SimpleDateFormat sdf = new SimpleDateFormat(FORMAT_DATE);
-                    String dateStr = sdf.format(dateChooser.getDate());
-                    filters.add(RowFilter.regexFilter(dateStr, 2));
-                }
-
-                //Filtre sur le statut (colonne 5)
-                String statut = (String) comboStatut.getSelectedItem();
-                if (statut != null && !statut.equals("Tous")) {
-                    filters.add(RowFilter.regexFilter("(?i)" + statut, 5));
-                }
-
-                //Si aucun critère n'est saisi, réinitialise le filtre
-                if (filters.isEmpty()) {
-                    sorter.setRowFilter(null);
-                } else {
-                    try {
-                        sorter.setRowFilter(RowFilter.andFilter(filters));
-                    } catch (IllegalArgumentException ex) {
-                        // Si la combinaison de filtres échoue pour une raison quelconque, on réinitialise
-                        sorter.setRowFilter(null);
-                    }
-                }
-            }
-        });*/
+        // Bouton réinitialiser
         this.btnReset = new JButton("Réinitialiser");
-
-        /*btnReset.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                txtFiltreNom.setText("");
-                dateChooser.setDate(null);
-                comboStatut.setSelectedIndex(0); // Sélectionne "Tous"
-                if(sorter != null) {
-                    sorter.setRowFilter(null);
-                }
-                List<Mission> toutesLesMissions = missionDAO.findAll();
-                setMissions(toutesLesMissions);
-            }
-        });*/
         panelFiltreMission.add(btnReset);
 
         add(panelFiltreMission, BorderLayout.NORTH);
@@ -130,48 +69,16 @@ public class MissionVue extends JPanel {
         // Boutons d'ajout et de modification
         ajouterMission = new JButton("Créer une nouvelle mission");
         modifierMission = new JButton("Modifier une mission");
-        JPanel panelBtnModif = new JPanel(new FlowLayout(FlowLayout.CENTER));//panel recevant les boutons pour modifier et ajouter une mission
+        JPanel panelBtnModif = new JPanel(new FlowLayout(FlowLayout.CENTER));
         panelBtnModif.add(ajouterMission);
         panelBtnModif.add(modifierMission);
-        add(panelBtnModif, BorderLayout.SOUTH);//ajout du conteneur des boutons au conteneur de la vue
+        add(panelBtnModif, BorderLayout.SOUTH);
 
-        // Action sur le bouton "Filtrer"
-       /*btnFiltrer.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                List<RowFilter<Object, Object>> filters = new ArrayList<>();
-
-                // Filtre sur le nom (colonne 1 : Nom Mission)
-                String nom = txtFiltreNom.getText().trim();
-                if (!nom.isEmpty()) {
-                    // "(?i)" rend le filtre insensible à la casse
-                    filters.add(RowFilter.regexFilter("(?i)" + nom, 1));
-                }
-
-                // Filtre sur la date (colonne 2 : Date de début)
-                if (dateChooser.getDate() != null) {
-                    // On formate la date pour correspondre au format de la table
-                    SimpleDateFormat sdf = new SimpleDateFormat(FORMAT_DATE);
-                    String dateStr = sdf.format(dateChooser.getDate());
-                    // On applique le filtre sur la colonne 2 (date de début)
-                    filters.add(RowFilter.regexFilter(dateStr, 2));
-                }
-
-                // Filtre sur le statut (colonne 5)
-                String statut = (String) comboStatut.getSelectedItem();
-                if (statut != null && !statut.equals("Tous")) {
-                    filters.add(RowFilter.regexFilter("(?i)" + statut, 5));
-                }
-
-                // Combine les filtres avec AND (tous les critères doivent être respectés)
-                RowFilter<Object, Object> combinedFilter = RowFilter.andFilter(filters);
-                if (sorter != null) {
-                    sorter.setRowFilter(combinedFilter);
-                }
-            }
-        });*/
     }
-    //rempli le tableau de la liste de mission fournie
+    /**
+     * Remplit le tableau avec une liste de missions
+     * @param missions liste des missions à afficher
+     */
     public void setMissions(List<Mission> missions) {
         String[] columnNames = {"Id Mission", "Nom Mission", "Date de début", "Date de fin", "Description", "Statut"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
@@ -180,10 +87,6 @@ public class MissionVue extends JPanel {
                 return false;
             }
         };
-       // HashSet<String> statuts = new HashSet<>();
-        // On peut aussi mettre à jour le combo de statut à partir des données
-        //comboStatut.removeAllItems();
-        //comboStatut.addItem("Tous");
         for (Mission mission : missions) {
             if(mission.getIdSta()!=5){
             Object[] row = {
@@ -195,17 +98,12 @@ public class MissionVue extends JPanel {
                     mission.getNomSta()
             };
             model.addRow(row);
-           // statuts.add(mission.getNomSta());
         }}
-        // Remplissage du combo avec les statuts uniques
-        /*for (String s : statuts) {
-            comboStatut.addItem(s);
-        }*/
         tableMission.setModel(model);
         sorter = new TableRowSorter<>(model);
         tableMission.setRowSorter(sorter);
     }
-    // Méthodes d'accès pour le contrôleur
+    // Getters
     public JTextField getTxtFiltreNom() {
         return txtFiltreNom;
     }
@@ -213,11 +111,6 @@ public class MissionVue extends JPanel {
     public JButton getBtnReset(){
         return this.btnReset;
     }
-
-
-   /* public JDateChooser getDateChooser() {
-        return dateChooser;
-    }*/
 
     public JComboBox<String> getComboStatut() {
         return comboStatut;
@@ -235,7 +128,11 @@ public class MissionVue extends JPanel {
         return this.modifierMission;
     }
 
-    //permet de recupererer la mission selectionne dans le tableau
+    /**
+     * Retourne l'objet Mission sélectionné dans le tableau
+     * @return Mission sélectionnée ou null si aucune
+     * @throws SQLException en cas d'erreur lors de la récupération de la mission
+     */
     public Mission getMissionSelectionnee() throws SQLException {
         int selectedRow = tableMission.getSelectedRow();
         if (selectedRow == -1) {
@@ -243,7 +140,6 @@ public class MissionVue extends JPanel {
             return null;
         }
         int idMission = (int) tableMission.getValueAt(selectedRow, 0);
-        // Utiliser le DAO pour récupérer l'objet complet à partir de l'id
         Mission mission = NavigationControleur.getMissionDao().getMissionById(idMission);
         if(mission == null) {
             JOptionPane.showMessageDialog(this, "Aucune mission trouvée pour l'id " + idMission);
@@ -251,16 +147,16 @@ public class MissionVue extends JPanel {
         this.idMissionSelect = idMission;
         return mission;
     }
-
-    public JTable getMissionTable() {
-        return this.tableMission;
-    }
-
-    //retourne seulement l'id de la mission selectionnée
+    /**
+     * Retourne l'identifiant de la mission sélectionnée
+     * @return identifiant de la mission sélectionnée
+     */
     public int getIdMissionSelect(){
         return this.idMissionSelect;
     }
-
+    /**
+     * Réinitialise les champs de filtre
+     */
     public void ResetFiltres(){
         this.txtFiltreNom.setText("");
         this.comboStatut.setSelectedIndex(0);

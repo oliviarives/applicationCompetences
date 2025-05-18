@@ -5,15 +5,24 @@ import modele.Mission;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-
+/**
+ * Requête permettant d'ajouter une mission dans la base de données
+ */
 public class RequeteMissionAjouter extends RequeteMission {
-    //Ne retourne qu'un string contenant la requete avec valeurs vides
+    /**
+     * Retourne la requête d'insertion d'une mission
+     * @return requête SQL
+     */
     @Override
     public String requete() {
         return "INSERT INTO MISSION (IDMIS, TITREMIS, NBEMPMIS, DATEDEBUTMIS, DATEFINMIS, DESCRIPTION, DATECREATION, LOGINEMP, IDSTA) VALUES (SEQ_MISSION.NEXTVAL, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING idMis INTO ?";
     }
-
-
+    /**
+     * Définit les paramètres
+     * @param prSt statement préparé
+     * @param id tableau contenant les données de la mission
+     * @throws SQLException en cas d'erreur lors de l'injection
+     */
     @Override
     public void parametres(PreparedStatement prSt, String... id) throws SQLException {
         prSt.setInt(1, Integer.parseInt(id[0]));
@@ -26,7 +35,12 @@ public class RequeteMissionAjouter extends RequeteMission {
         prSt.setString(8, id[7]);
         prSt.setInt(9, Integer.parseInt(id[8]));
     }
-
+    /**
+     * Définit les paramètres du PreparedStatement à partir d'un objet Mission
+     * @param ps statement préparé
+     * @param mis mission à insérer
+     * @throws SQLException en cas d'erreur lors de l'injection
+     */
     @Override
     public void parametres(PreparedStatement ps, Mission mis) throws SQLException {
         ps.setString(1, mis.getTitreMis());
@@ -38,11 +52,4 @@ public class RequeteMissionAjouter extends RequeteMission {
         ps.setString(7, mis.getLoginEmp());
         ps.setInt(8, mis.getIdSta());
     }
-
-
-
-
-
-
-
 }

@@ -6,16 +6,20 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.Serial;
 import java.util.Date;
-
+/**
+ * Vue pour la déclaration de vacances d’un employé
+ */
 public class VacanceVue extends JPanel {
     @Serial
     private static final long serialVersionUID = 1L;
-
     private final JDateChooser dateDebutChooser;
     private final JDateChooser dateFinChooser;
     private final JButton validerBoutton;
     private final JTextField login;
-
+    /**
+     * Constructeur de la vue VacanceVue
+     * Initialise les composants de l’interface
+     */
     public VacanceVue() {
         setLayout(new BorderLayout());
 
@@ -31,7 +35,7 @@ public class VacanceVue extends JPanel {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.anchor = GridBagConstraints.CENTER;
 
-        // Date début
+        // Date de début des vacances
         gbc.gridx = 0;
         gbc.gridy = 0;
         formPanel.add(new JLabel("Date début:"), gbc);
@@ -41,7 +45,7 @@ public class VacanceVue extends JPanel {
         dateDebutChooser.setPreferredSize(new Dimension(150, 30));
         formPanel.add(dateDebutChooser, gbc);
 
-        // Date fin
+        // Date de fin des vacances
         gbc.gridx = 0;
         gbc.gridy = 1;
         formPanel.add(new JLabel("Date fin:"), gbc);
@@ -51,7 +55,7 @@ public class VacanceVue extends JPanel {
         dateFinChooser.setPreferredSize(new Dimension(150, 30));
         formPanel.add(dateFinChooser, gbc);
 
-        // Login
+        // Login de l'employé
         gbc.gridx = 0;
         gbc.gridy = 2;
         formPanel.add(new JLabel("Login:"), gbc);
@@ -72,15 +76,22 @@ public class VacanceVue extends JPanel {
 
         add(formPanel, BorderLayout.CENTER);
     }
-
+    /**
+     * Définit le login de l’employé affiché dans le champ de texte
+     * @param loginText identifiant de l’employé
+     */
     public void setLogin(String loginText) {
         login.setText(loginText);
     }
-
+    /**
+     * @return login de l’employé saisi (non éditable)
+     */
     public String getLogin() {
         return login.getText();
     }
-
+    /**
+     * @return date de début sélectionnée
+     */
     public String getDateDebut() {
         Date date = dateDebutChooser.getDate();
         if (date != null) {
@@ -88,7 +99,9 @@ public class VacanceVue extends JPanel {
         }
         return "";
     }
-
+    /**
+     * @return date de fin sélectionnée
+     */
     public String getDateFin() {
         Date date = dateFinChooser.getDate();
         if (date != null) {
@@ -96,12 +109,11 @@ public class VacanceVue extends JPanel {
         }
         return "";
     }
-
+    /**
+     * @return bouton permettant de valider la demande de vacances
+     */
     public JButton getValiderBoutton() {
         return validerBoutton;
     }
 
-    public void afficherMessage(String message) {
-        JOptionPane.showMessageDialog(this, message);
-    }
 }

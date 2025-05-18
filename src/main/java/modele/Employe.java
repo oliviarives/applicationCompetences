@@ -1,20 +1,56 @@
 package modele;
 
 import java.sql.Date;
-
-
+/**
+ * Représente un employé avec ses informations et ses compétences
+ */
 public class Employe {
+    /**
+     * Identifiant de connexion de l'employé
+     */
     private String login;
+    /**
+     * Prénom de l'employé
+     */
     private String prenom;
+    /**
+     * Nom de l'employé
+     */
     private String nom;
+    /**
+     * Mot de passe hashé de l'employé
+     */
     private String hashedPwd;
-    private Date dateEntree; 
+    /**
+     * Date d'entrée dans l'entreprise
+     */
+    private Date dateEntree;
+    /**
+     * Statut actif ou non de l'employé
+     */
     private boolean actif;
+    /**
+     * Poste occupé par l'employé
+     */
     private String poste;
+    /**
+     * Identifiant de catégorie de compétence
+     */
     private String idCatCmp;
+    /**
+     * Identifiant de compétence
+     */
     private int idcmp;
 
-    //constructeur from BD
+    /**
+     * Constructeur  utilisé lors de la récupération depuis la base
+     * @param prenom prénom de l'employé
+     * @param nom nom de l'employé
+     * @param login identifiant de connexion
+     * @param mdp mot de passe en clair (qui sera hashé)
+     * @param poste poste occupé
+     * @param dateEntree date d'entrée dans l'entreprise
+     */
     public Employe(String prenom, String nom, String login, String mdp, String poste, Date dateEntree) {
         this.prenom = prenom;
         this.nom = nom;
@@ -24,7 +60,13 @@ public class Employe {
         this.dateEntree = dateEntree;
         this.actif = true;
     }
-    //Constructeur pour affichage
+    /**
+     * Constructeur utilisé pour l'affichage
+     * @param log identifiant de connexion
+     * @param prenom prénom
+     * @param nom nom
+     * @param poste poste
+     */
     public Employe(String log, String prenom, String nom, String poste) {
         this.login = log;
         this.prenom = prenom;
@@ -32,7 +74,17 @@ public class Employe {
         this.poste = poste;
 
     }
-    //constructeur pour compétence
+    /**
+     * Constructeur qui inclut les compétences
+     * @param prenom prénom
+     * @param nom nom
+     * @param login identifiant de connexion
+     * @param mdp mot de passe en clair (quo sera hashé)
+     * @param poste poste
+     * @param dateEntree date d'entrée
+     * @param idcatc identifiant de catégorie de compétence
+     * @param idcmp identifiant de compétence
+     */
     public Employe(String prenom, String nom, String login, String mdp, String poste, Date dateEntree, String idcatc,int idcmp) {
         this.prenom = prenom;
         this.nom = nom;
@@ -44,95 +96,38 @@ public class Employe {
         this.idCatCmp = idcatc;
         this.idcmp = idcmp;
     }
-
+    /** @return login de l'employé */
     public String getLogin() {
         return this.login;
     }
-
+    /** @return prénom de l'employé */
     public String getPrenom() {
         return this.prenom;
     }
-
+    /** @return nom de l'employé */
     public String getNom() {
         return this.nom;
     }
-
+    /** @return poste de l'employé */
     public String getPoste(){
         return this.poste;
     }
-
+    /** @return date d'entrée dans l'entreprise */
     public Date getDateEntree() {
         return this.dateEntree;
     }
-
-    public boolean getActif() {
-        return this.actif;
-    }
-
+    /** @return mot de passe hashé de l'employé */
     public String gethashedPwd() {
     	return this.hashedPwd;
     }
-
+    /** @return identifiant de compétence */
     public int getIdcmp() {
         return this.idcmp;
     }
-
+    /** @return identifiant de catégorie de compétence */
     public String getIdCatCmp() {
         return this.idCatCmp;
-
     }
 }
 
-        /*if (services != null) {
-            for (Service service : services) {
-                this.addService(service);
-            }
-        }
-        if (competences != null) {
-            for (Competence competence : competences) {
-                this.addCompetence(competence);
-            }
-        }
-    }
-   
-    public void addCompetence(Competence competence) {
-        if (competence != null && this.competences.add(competence)) {
-            competence.addEmploye(this); // Mise à jour de l'autre côté
-        }
-    }
 
-    public void removeCompetence(Competence competence) {
-        if (competence != null && this.competences.remove(competence)) {
-            competence.removeEmploye(this); 
-        }
-    }
-
-    public void addService(Service service) {
-        if (service != null) {
-            this.services.add(service);
-        }
-    }
-
-    public void removeService(Service service) {
-        this.services.remove(service);
-    }
-    
-    public void addMission(DetailMission mission) {
-        if (mission != null) {
-            this.missions.add(mission);
-        }
-    }
-
-    public void removeMission(DetailMission mission) {
-        this.missions.remove(mission);
-    }
-
-    public Set<Competence> getCompetences() {
-        return this.competences;
-    }
-
-    public Set<Service> getServices() {
-        return this.services;
-    }
-
-}*/

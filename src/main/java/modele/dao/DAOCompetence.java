@@ -11,15 +11,29 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * DAO pour gérer l'accès aux données de la table COMPETENCE
+ * Fournit des méthodes pour récupérer les compétences en général ou par employé
+ */
 public class DAOCompetence {
+    /**
+     * Connexion à la base de données
+     */
     private Connection cn;
-
+    /**
+     * Initialise le DAO en récupérant une connexion à la base
+     * @throws SQLException si la connexion échoue
+     */
     public DAOCompetence() throws SQLException {
         this.cn = CictOracleDataSource.getConnectionBD();
 
     }
-
+    /**
+     * Crée une instance de Competence à partir d'un ResultSet
+     * @param rset résultat SQL
+     * @return une compétence construite à partir des données du résultat
+     * @throws SQLException en cas d'erreur d'accès aux colonnes
+     */
     protected Competence creerInstance(ResultSet rset) throws SQLException{
         return new Competence(
                 rset.getInt("idCmp"),
@@ -28,14 +42,12 @@ public class DAOCompetence {
                 rset.getString("nomCmpFr")
         );
     }
-
-
-    /*public void ajouterCompetence(Competence cmp) throws SQLException{
-        PreparedStatement ps = cn.prepareStatement(new RequeteCompetenceAjouter().requete());
-        new RequeteCompetenceAjouter().parametres(ps,cmp);
-        ps.executeUpdate();
-    }*/
-
+    /**
+     * Récupère la liste des compétences possédées par un employé
+     * @param login identifiant de l'employé
+     * @return liste des compétences
+     * @throws SQLException en cas d'erreur SQL
+     */
     public List<Competence> findCmpByLoginEmp(String login) throws SQLException {
         RequeteCompetenceEmploye req = new RequeteCompetenceEmploye();
         List<Competence> liste = new ArrayList<>();
@@ -52,8 +64,10 @@ public class DAOCompetence {
             }
         return liste;
     }
-
-
+    /**
+     * Récupère toutes les compétences de la table COMPETENCE
+     * @return liste de toutes les compétences
+     */
     public List<Competence> findAll() {
         List<Competence> resultats = new ArrayList<>();
         try {
@@ -71,6 +85,4 @@ public class DAOCompetence {
         }
         return resultats;
     }
-
-
 }
