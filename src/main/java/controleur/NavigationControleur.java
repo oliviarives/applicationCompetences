@@ -184,7 +184,7 @@ public class NavigationControleur {
         vueV.getButtonEmploye().addActionListener(e -> {
             loadEmploye();
             vueV.showPage("Employe");
-        }); 
+        });
 
         empV.getButtonAjouterEmploye().addActionListener(e -> vueV.showPage("AjouterEmploye"));
 
@@ -276,8 +276,7 @@ public class NavigationControleur {
      * Recharge les employés et les met à jour dans la vue employé
      */
     public static void loadEmploye() {
-       // List<Employe> emp = employeDao.findAll();
-        List<Employe> emp = employeDao.getAllDataEmploye();
+        List<Employe> emp = employeDao.findAll();
         empV.setEmploye(emp);
     }
     /**
@@ -294,5 +293,4 @@ public class NavigationControleur {
     public static NavigationVue getVueV() {
         return vueV;
     }
-
 }

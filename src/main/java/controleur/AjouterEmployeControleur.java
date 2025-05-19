@@ -44,6 +44,10 @@ public class AjouterEmployeControleur {
 
         vue.getButtonConfirmer().addActionListener(e -> {
             ajouterPersonnel();
+            effacerChamps();
+            NavigationControleur.loadEmploye();
+            NavigationControleur.getVueV().getButtonEmploye().doClick();
+
         });
 
         vue.getButtonEffacer().addActionListener(e -> effacerChamps());
@@ -142,7 +146,6 @@ public class AjouterEmployeControleur {
      * Réinitialise tous les champs de la vue et recharge les compétences disponibles
      */
     private void effacerChamps() {
-        System.out.println("Hello");
         ajoutPersonnelVue.getPrenomField().setText("");
         ajoutPersonnelVue.getNomField().setText("");
         ajoutPersonnelVue.getLoginField().setText("");

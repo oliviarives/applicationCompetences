@@ -154,14 +154,14 @@ public class AjoutEmployeVue extends JPanel {
          *
          * @param competences liste des compétences à afficher
          */
-    public void setToutesCompetences(List<Competence> competences) {
-        DefaultTableModel model = (DefaultTableModel) tableToutesCompetences.getModel();
-        model.setRowCount(0);
-        for (Competence cmp : competences) {
-            model.addRow(new Object[]{cmp.getIdCatCmp(), cmp.getIdCmp(), cmp.getNomCmpFr()});
+        public void setToutesCompetences(List<Competence> competences) {
+            DefaultTableModel model = (DefaultTableModel) tableToutesCompetences.getModel();
+            model.setRowCount(0);
+            for (Competence cmp : competences) {
+                model.addRow(new Object[]{cmp.getIdCatCmp(), cmp.getIdCmp(), cmp.getNomCmpFr()});
+            }
         }
-    }
-    
+
     /**
      * Récupère la compétence sélectionnée dans la table des compétences disponibles
      *
