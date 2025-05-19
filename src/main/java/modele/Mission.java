@@ -66,7 +66,7 @@ public class Mission {
     /**
      * Constructeur pour modification d'une mission existante
      */
-    public Mission(String titreMis, String description, Date dateDebutMis, Date dateFinMis, String loginEmp, int nbEmp,int idm) {
+   /* public Mission(String titreMis, String description, Date dateDebutMis, Date dateFinMis, String loginEmp, int nbEmp,int idm) {
         this.titreMis = titreMis;
         this.dateDebutMis = dateDebutMis;
         this.dateFinMis = dateFinMis;
@@ -74,7 +74,7 @@ public class Mission {
         this.loginEmp = loginEmp;
         this.idMis = idm;
 
-    }
+    }*/
 
     /** @return id de la mission */
     public int getIdMission() {

@@ -74,13 +74,7 @@ public class ConnexionVue extends JDialog {
         }
     }
 
-   /* public void afficherChargement(boolean visible) {
-        if (loadingGifLabel != null) {
-            loadingGifLabel.setVisible(visible);
-            loadingGifLabel.revalidate();
-            loadingGifLabel.repaint();
-        }
-    }*/
+
 
 }
 
