@@ -34,9 +34,10 @@ public class ModifierEmployeControleur {
 
     /**
      * Initialise le contrôleur, configure les actions de la vue et prépare les boutons
+     *
      * @param modifPersonnelVue vue de modification employé
-     * @param daoEmp DAO employé
-     * @param daoCmp DAO compétence
+     * @param daoEmp            DAO employé
+     * @param daoCmp            DAO compétence
      */
     public ModifierEmployeControleur(ModificationEmployeVue modifPersonnelVue, DAOEmploye daoEmp, DAOCompetence daoCmp) {
         this.modifPersonnelVue = modifPersonnelVue;
@@ -95,7 +96,7 @@ public class ModifierEmployeControleur {
     /**
      * Modifie les informations de l'employé et met à jour ses compétences
      */
-    private void modifierPersonnel () {
+    private void modifierPersonnel() {
         String prenom = modifPersonnelVue.getPrenomField().getText();
         String nom = modifPersonnelVue.getNomField().getText();
         String login = modifPersonnelVue.getLoginField().getText();
@@ -132,12 +133,14 @@ public class ModifierEmployeControleur {
             e.printStackTrace();
         }
     }
+
     /**
      * Charge toutes les compétences disponibles et les affiche dans la vue
      */
     public void loadCompetences() {
         modifPersonnelVue.setToutesCompetences(daoCompetence.findAll());
     }
+
     /**
      * Charge les compétences de l'employé sélectionné et les affiche dans la vue
      */
@@ -149,4 +152,5 @@ public class ModifierEmployeControleur {
             modifPersonnelVue.afficherMessage("Erreur chargement compétences employé.");
         }
     }
+}
 

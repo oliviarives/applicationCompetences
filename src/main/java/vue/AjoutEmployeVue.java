@@ -149,17 +149,14 @@ public class AjoutEmployeVue extends JPanel {
     public JTable getTableCompetencesEmploye() { return tableCompetencesEmploye; }
     public JTable getTableToutesCompetences() { return tableToutesCompetences; }
 
-    public void setToutesCompetences(List<Competence> competences) {
-        DefaultTableModel model = (DefaultTableModel) tableToutesCompetences.getModel();
-        model.setRowCount(0);
-
         /**
          * Remplit la table avec toutes les compétences disponibles
          *
          * @param competences liste des compétences à afficher
          */
-    public void setToutesCompetences(java.util.List<Competence> competences) {
-        DefaultTableModel model = new DefaultTableModel(new String[]{MOT_CATEGORIE, MOT_COMPETENCE, MOT_TITRE}, 0);
+    public void setToutesCompetences(List<Competence> competences) {
+        DefaultTableModel model = (DefaultTableModel) tableToutesCompetences.getModel();
+        model.setRowCount(0);
         for (Competence cmp : competences) {
             model.addRow(new Object[]{cmp.getIdCatCmp(), cmp.getIdCmp(), cmp.getNomCmpFr()});
         }

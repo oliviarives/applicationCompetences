@@ -31,16 +31,14 @@ public class AjouterEmployeControleur {
      */
     private final DAOCompetence daoCompetence;
 
-    public AjouterEmployeControleur(AjoutEmployeVue vue, DAOEmploye daoEmp, DAOCompetence daoCmp) {
-        this.ajoutPersonnelVue = vue;
     /**
      * Constructeur pour initialiser le contrôleur et configurer les actions des boutons de la vue
-     * @param ajoutPersonnelVue la vue qui permet d'ajouter un employé
+     * @param vue la vue qui permet d'ajouter un employé
      * @param daoEmp DAO des employés
      * @param daoCmp DAO des compétences
      */
-    public AjouterEmployeControleur(AjoutEmployeVue ajoutPersonnelVue, DAOEmploye daoEmp, DAOCompetence daoCmp) {
-        this.ajoutPersonnelVue = ajoutPersonnelVue;
+    public AjouterEmployeControleur(AjoutEmployeVue vue, DAOEmploye daoEmp, DAOCompetence daoCmp) {
+        this.ajoutPersonnelVue = vue;
         this.daoEmploye = daoEmp;
         this.daoCompetence = daoCmp;
 
@@ -145,6 +143,7 @@ public class AjouterEmployeControleur {
      * Réinitialise tous les champs de la vue et recharge les compétences disponibles
      */
     private void effacerChamps() {
+        System.out.println("Hello");
         ajoutPersonnelVue.getPrenomField().setText("");
         ajoutPersonnelVue.getNomField().setText("");
         ajoutPersonnelVue.getLoginField().setText("");
