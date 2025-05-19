@@ -54,7 +54,7 @@ public class MissionControleur {
         });
 
 
-}
+    }
     /**
      * Charge toutes les missions, met à jour les statuts si nécessaire et les transmet à la vue
      * @throws SQLException en cas d'erreur lors de la récupération ou de la mise à jour des missions
@@ -104,4 +104,3 @@ public class MissionControleur {
             missionDAO.updateMissionStatus(mission, 4);    }}
 
 }
-

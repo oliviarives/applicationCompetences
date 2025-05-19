@@ -29,14 +29,9 @@ public class ConnexionVue extends JDialog {
     private JLabel loadingGifLabel;
     private JPanel gifPanel;
 
-
-
-
     public ConnexionVue() {
         super();
         setContentPane(page);
-
-
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         pack();

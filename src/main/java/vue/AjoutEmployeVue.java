@@ -22,8 +22,6 @@ public class AjoutEmployeVue extends JPanel {
     private final static String MOT_TITRE = "Titre";
     private final JButton buttonConfirmer;
     private final JButton buttonEffacer;
-    private final JButton buttonAjouter;
-    private final JButton buttonRetirer;
     private final JTextField prenomField;
     private final JTextField nomField;
     private final JTextField loginField;
@@ -45,10 +43,8 @@ public class AjoutEmployeVue extends JPanel {
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
         splitPane.setDividerLocation(550);
 
-        //panel gauche (formulaire + compétences emp)
         JPanel panelGauche = new JPanel(new BorderLayout());
 
-        //formulaire
         JPanel formulaire = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
@@ -94,13 +90,11 @@ public class AjoutEmployeVue extends JPanel {
 
         panelGauche.add(formulaire, BorderLayout.NORTH);
 
-        // === Tableau compétences employé + titre ===
         JPanel panelTableEmploye = new JPanel(new BorderLayout());
         panelTableEmploye.add(new JLabel("Compétences de l'employé", SwingConstants.CENTER), BorderLayout.NORTH);
+
         DefaultTableModel modelCompetencesEmploye = new DefaultTableModel(new String[]{MOT_CATEGORIE, MOT_COMPETENCE, MOT_TITRE}, 0) {
-            public boolean isCellEditable(int row, int col) {  //cellules de la table ne sont plus editables
-                return false;
-            }
+            public boolean isCellEditable(int row, int col) { return false; }
         };
         tableCompetencesEmploye = new JTable(modelCompetencesEmploye);
         JScrollPane scrollCompetences = new JScrollPane(tableCompetencesEmploye);
@@ -108,38 +102,27 @@ public class AjoutEmployeVue extends JPanel {
         panelTableEmploye.add(scrollCompetences, BorderLayout.CENTER);
         panelGauche.add(panelTableEmploye, BorderLayout.CENTER);
 
-        //panel droite : Toutes les compétences + flèches
-        JPanel panelDroite = new JPanel(new BorderLayout());
+        tableCompetencesEmploye.getColumnModel().getColumn(0).setPreferredWidth(40);
+        tableCompetencesEmploye.getColumnModel().getColumn(1).setPreferredWidth(60);
+        tableCompetencesEmploye.getColumnModel().getColumn(2).setPreferredWidth(400);
 
+        JPanel panelDroite = new JPanel(new BorderLayout());
         panelDroite.add(new JLabel("Liste des compétences", SwingConstants.CENTER), BorderLayout.NORTH);
 
         DefaultTableModel modelToutesCompetences = new DefaultTableModel(new String[]{MOT_CATEGORIE, MOT_COMPETENCE, MOT_TITRE}, 0) {
-            public boolean isCellEditable(int row, int col) {  //cellules de la table ne sont plus editables
-                return false;
-            }
+            public boolean isCellEditable(int row, int col) { return false; }
         };
-
         tableToutesCompetences = new JTable(modelToutesCompetences);
         JScrollPane scrollToutesCompetences = new JScrollPane(tableToutesCompetences);
         panelDroite.add(scrollToutesCompetences, BorderLayout.CENTER);
 
-        JPanel panelCentre = new JPanel();
-        panelCentre.setLayout(new BoxLayout(panelCentre, BoxLayout.Y_AXIS));
-        buttonAjouter = new JButton("←");
-        buttonRetirer = new JButton("→");
-        buttonAjouter.setAlignmentX(Component.CENTER_ALIGNMENT);
-        buttonRetirer.setAlignmentX(Component.CENTER_ALIGNMENT);
-        panelCentre.add(Box.createVerticalGlue());
-        panelCentre.add(buttonAjouter);
-        panelCentre.add(Box.createRigidArea(new Dimension(0, 10)));
-        panelCentre.add(buttonRetirer);
-        panelCentre.add(Box.createVerticalGlue());
+        tableToutesCompetences.getColumnModel().getColumn(0).setPreferredWidth(40);
+        tableToutesCompetences.getColumnModel().getColumn(1).setPreferredWidth(60);
+        tableToutesCompetences.getColumnModel().getColumn(2).setPreferredWidth(400);
 
         splitPane.setLeftComponent(panelGauche);
         splitPane.setRightComponent(panelDroite);
-
         add(splitPane, BorderLayout.CENTER);
-        add(panelCentre, BorderLayout.EAST);
 
         messageLabel = new JLabel("", SwingConstants.CENTER);
         messageLabel.setForeground(Color.RED);
@@ -162,24 +145,23 @@ public class AjoutEmployeVue extends JPanel {
 
     public JButton getButtonConfirmer() { return buttonConfirmer; }
     public JButton getButtonEffacer() { return buttonEffacer; }
-    public JButton getButtonAjouter() { return buttonAjouter; }
-    public JButton getButtonRetirer() { return buttonRetirer; }
 
     public JTable getTableCompetencesEmploye() { return tableCompetencesEmploye; }
     public JTable getTableToutesCompetences() { return tableToutesCompetences; }
 
-    /**
-     * Remplit la table avec toutes les compétences disponibles
-     *
-     * @param competences liste des compétences à afficher
-     */
-    public void setToutesCompetences(java.util.List<Competence> competences) {
-        DefaultTableModel model = new DefaultTableModel(new String[]{MOT_CATEGORIE, MOT_COMPETENCE, MOT_TITRE}, 0);
-        for (Competence cmp : competences) {
-            model.addRow(new Object[]{cmp.getIdCatCmp(), cmp.getIdCmp(), cmp.getNomCmpFr()});
+        /**
+         * Remplit la table avec toutes les compétences disponibles
+         *
+         * @param competences liste des compétences à afficher
+         */
+        public void setToutesCompetences(List<Competence> competences) {
+            DefaultTableModel model = (DefaultTableModel) tableToutesCompetences.getModel();
+            model.setRowCount(0);
+            for (Competence cmp : competences) {
+                model.addRow(new Object[]{cmp.getIdCatCmp(), cmp.getIdCmp(), cmp.getNomCmpFr()});
+            }
         }
-        tableToutesCompetences.setModel(model);
-    }
+
     /**
      * Récupère la compétence sélectionnée dans la table des compétences disponibles
      *
@@ -191,7 +173,6 @@ public class AjoutEmployeVue extends JPanel {
             String idCategorie = (String) tableToutesCompetences.getValueAt(selectedRow, 0);
             int idCompetence = (int) tableToutesCompetences.getValueAt(selectedRow, 1);
             String nomFr = (String) tableToutesCompetences.getValueAt(selectedRow, 2);
-
             return new Competence(idCompetence, idCategorie, null, nomFr);
         }
         return null;
@@ -207,7 +188,6 @@ public class AjoutEmployeVue extends JPanel {
             String idCategorie = (String) tableCompetencesEmploye.getValueAt(selectedRow, 0);
             int idCompetence = (int) tableCompetencesEmploye.getValueAt(selectedRow, 1);
             String nomFr = (String) tableCompetencesEmploye.getValueAt(selectedRow, 2);
-
             return new Competence(idCompetence, idCategorie, null, nomFr);
         }
         return null;

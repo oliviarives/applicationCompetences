@@ -83,15 +83,11 @@ public class VacanceVue extends JPanel {
     public void setLogin(String loginText) {
         login.setText(loginText);
     }
-    /**
-     * @return login de l’employé saisi (non éditable)
-     */
+
     public String getLogin() {
         return login.getText();
     }
-    /**
-     * @return date de début sélectionnée
-     */
+
     public String getDateDebut() {
         Date date = dateDebutChooser.getDate();
         if (date != null) {
@@ -99,9 +95,7 @@ public class VacanceVue extends JPanel {
         }
         return "";
     }
-    /**
-     * @return date de fin sélectionnée
-     */
+
     public String getDateFin() {
         Date date = dateFinChooser.getDate();
         if (date != null) {
@@ -109,9 +103,7 @@ public class VacanceVue extends JPanel {
         }
         return "";
     }
-    /**
-     * @return bouton permettant de valider la demande de vacances
-     */
+
     public JButton getValiderBoutton() {
         return validerBoutton;
     }

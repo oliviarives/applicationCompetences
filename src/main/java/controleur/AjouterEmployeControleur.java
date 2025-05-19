@@ -7,7 +7,10 @@ import modele.dao.DAOCompetence;
 import modele.dao.DAOEmploye;
 import vue.AjoutEmployeVue;
 
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
@@ -30,31 +33,39 @@ public class AjouterEmployeControleur {
 
     /**
      * Constructeur pour initialiser le contrôleur et configurer les actions des boutons de la vue
-     * @param ajoutPersonnelVue la vue qui permet d'ajouter un employé
+     * @param vue la vue qui permet d'ajouter un employé
      * @param daoEmp DAO des employés
      * @param daoCmp DAO des compétences
      */
-    public AjouterEmployeControleur(AjoutEmployeVue ajoutPersonnelVue, DAOEmploye daoEmp, DAOCompetence daoCmp) {
-        this.ajoutPersonnelVue = ajoutPersonnelVue;
+    public AjouterEmployeControleur(AjoutEmployeVue vue, DAOEmploye daoEmp, DAOCompetence daoCmp) {
+        this.ajoutPersonnelVue = vue;
         this.daoEmploye = daoEmp;
         this.daoCompetence = daoCmp;
 
-        ajoutPersonnelVue.getButtonConfirmer().addActionListener(e -> {
+        vue.getButtonConfirmer().addActionListener(e -> {
             ajouterPersonnel();
             effacerChamps();
             NavigationControleur.loadEmploye();
-            NavigationControleur.getVueV().getButtonEmploye().doClick();
-
+            //NavigationControleur.getVueV().getButtonEmploye().doClick();
         });
 
-        ajoutPersonnelVue.getButtonEffacer().addActionListener (e ->
-                effacerChamps());
+        vue.getButtonEffacer().addActionListener(e -> effacerChamps());
 
-        ajoutPersonnelVue.getButtonRetirer().addActionListener(e ->
-                retirerCompetenceEmploye());
+        vue.getTableToutesCompetences().addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    ajouterCompetenceEmploye();
+                }
+            }
+        });
 
-        ajoutPersonnelVue.getButtonAjouter().addActionListener(e ->
-                ajouterCompetenceEmploye());
+        vue.getTableCompetencesEmploye().addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    retirerCompetenceEmploye();
+                }
+            }
+        });
     }
 
     /**
@@ -64,7 +75,7 @@ public class AjouterEmployeControleur {
         String prenom = ajoutPersonnelVue.getPrenomField().getText();
         String nom = ajoutPersonnelVue.getNomField().getText();
         String login = ajoutPersonnelVue.getLoginField().getText();
-        String mdp = ajoutPersonnelVue.getMdpField().toString();
+        String mdp = new String(ajoutPersonnelVue.getMdpField().getPassword());
         String poste = ajoutPersonnelVue.getPosteField().getText();
         java.util.Date utilDate = (java.util.Date) ajoutPersonnelVue.getDateEntreeField().getValue();
         Date dateEntree = new Date(utilDate.getTime());
@@ -76,28 +87,26 @@ public class AjouterEmployeControleur {
 
         try {
             if (daoEmploye.isLoginExists(login)) {
-                ajoutPersonnelVue.afficherMessage("Ce login est déjà utilisé, veuillez en choisir un autre.");
+                ajoutPersonnelVue.afficherMessage("Ce login est déjà utilisé.");
                 return;
             }
+
             String mdpHashed = MdpUtils.hashPassword(mdp);
             Employe employe = new Employe(prenom, nom, login, mdpHashed, poste, dateEntree);
             daoEmploye.ajouterEmploye(employe);
+            daoEmploye.getAllDataEmploye().add(employe);
+
             for (Competence cmp : ajoutPersonnelVue.getCompetencesAjoutees()) {
                 daoEmploye.ajouterCmpToEmp(employe.getLogin(), cmp);
                 daoEmploye.getHashMapEmpCmp().put(employe, cmp);
             }
-        } catch (SQLException ex) {
-            ajoutPersonnelVue.afficherMessage("Erreur lors de l'ajout de l'employé.");
-            ex.printStackTrace();
+            effacerChamps();
+            ajoutPersonnelVue.afficherMessage("");
+            NavigationControleur.getVueV().getButtonEmploye().doClick();
+        } catch (SQLException e) {
+            ajoutPersonnelVue.afficherMessage("Erreur lors de l'ajout.");
+            e.printStackTrace();
         }
-    }
-
-    /**
-     * Charge la liste des compétences depuis la base de données
-     */
-    public void loadCompetences() {
-        List<Competence> competences = daoCompetence.findAll();
-        ajoutPersonnelVue.setToutesCompetences(competences);
     }
 
     /**
@@ -108,10 +117,9 @@ public class AjouterEmployeControleur {
         if (selected != null) {
             DefaultTableModel modelToutes = (DefaultTableModel) ajoutPersonnelVue.getTableToutesCompetences().getModel();
             DefaultTableModel modelEmploye = (DefaultTableModel) ajoutPersonnelVue.getTableCompetencesEmploye().getModel();
-
-            int selectedRow = ajoutPersonnelVue.getTableToutesCompetences().getSelectedRow();
-            if (selectedRow != -1) {
-                modelToutes.removeRow(selectedRow);
+            int row = ajoutPersonnelVue.getTableToutesCompetences().getSelectedRow();
+            if (row != -1) {
+                modelToutes.removeRow(row);
                 modelEmploye.addRow(new Object[]{selected.getIdCatCmp(), selected.getIdCmp(), selected.getNomCmpFr()});
             }
         }
@@ -125,10 +133,9 @@ public class AjouterEmployeControleur {
         if (selected != null) {
             DefaultTableModel modelToutes = (DefaultTableModel) ajoutPersonnelVue.getTableToutesCompetences().getModel();
             DefaultTableModel modelEmploye = (DefaultTableModel) ajoutPersonnelVue.getTableCompetencesEmploye().getModel();
-
-            int selectedRow = ajoutPersonnelVue.getTableCompetencesEmploye().getSelectedRow();
-            if (selectedRow != -1) {
-                modelEmploye.removeRow(selectedRow);
+            int row = ajoutPersonnelVue.getTableCompetencesEmploye().getSelectedRow();
+            if (row != -1) {
+                modelEmploye.removeRow(row);
                 modelToutes.addRow(new Object[]{selected.getIdCatCmp(), selected.getIdCmp(), selected.getNomCmpFr()});
             }
         }
@@ -142,10 +149,23 @@ public class AjouterEmployeControleur {
         ajoutPersonnelVue.getNomField().setText("");
         ajoutPersonnelVue.getLoginField().setText("");
         ajoutPersonnelVue.getMdpField().setText("");
+        ajoutPersonnelVue.getPosteField().setText("");
         ajoutPersonnelVue.getDateEntreeField().setValue(new java.util.Date());
-        ((DefaultTableModel) ajoutPersonnelVue.getTableCompetencesEmploye().getModel()).setRowCount(0);
-        ((DefaultTableModel) ajoutPersonnelVue.getTableToutesCompetences().getModel()).setRowCount(0);
+
+        DefaultTableModel modelEmploye = (DefaultTableModel) ajoutPersonnelVue.getTableCompetencesEmploye().getModel();
+        modelEmploye.setRowCount(0);
+
+        DefaultTableModel modelToutes = (DefaultTableModel) ajoutPersonnelVue.getTableToutesCompetences().getModel();
+        modelToutes.setRowCount(0);
+
         loadCompetences();
     }
 
+        /**
+         * Charge la liste des compétences depuis la base de données
+         */
+    public void loadCompetences() {
+        List<Competence> competences = daoCompetence.findAll();
+        ajoutPersonnelVue.setToutesCompetences(competences);
+    }
 }

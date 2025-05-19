@@ -89,16 +89,16 @@ public class MissionVue extends JPanel {
         };
         for (Mission mission : missions) {
             if(mission.getIdSta()!=5){
-            Object[] row = {
-                    mission.getIdMission(),
-                    mission.getTitreMis(),
-                    mission.getDateDebutMis(),
-                    mission.getDateFinMis(),
-                    mission.getDescription(),
-                    mission.getNomSta()
-            };
-            model.addRow(row);
-        }}
+                Object[] row = {
+                        mission.getIdMission(),
+                        mission.getTitreMis(),
+                        mission.getDateDebutMis(),
+                        mission.getDateFinMis(),
+                        mission.getDescription(),
+                        mission.getNomSta()
+                };
+                model.addRow(row);
+            }}
         tableMission.setModel(model);
         sorter = new TableRowSorter<>(model);
         tableMission.setRowSorter(sorter);
@@ -162,4 +162,3 @@ public class MissionVue extends JPanel {
         this.comboStatut.setSelectedIndex(0);
     }
 }
-

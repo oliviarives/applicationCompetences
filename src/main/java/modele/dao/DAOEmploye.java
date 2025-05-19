@@ -328,4 +328,8 @@ public class DAOEmploye {
             System.out.println("Vacances ajoutées");
         }
     }
+
+    public List<Employe> getAllDataEmploye(){
+        return this.dataAllEmploye;
+    }
 }
