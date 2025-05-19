@@ -145,7 +145,7 @@ public class AccueilVue extends JPanel {
 
         // Mise à jour du graphique
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-        List<String> ordreMois = List.of(
+        List<String> ordreMois = List.of (
                 "Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
                 "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"
         );
