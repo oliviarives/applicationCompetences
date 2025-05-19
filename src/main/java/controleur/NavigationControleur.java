@@ -184,7 +184,7 @@ public class NavigationControleur {
         vueV.getButtonEmploye().addActionListener(e -> {
             loadEmploye();
             vueV.showPage("Employe");
-        });
+        }); 
 
         empV.getButtonAjouterEmploye().addActionListener(e -> vueV.showPage("AjouterEmploye"));
 

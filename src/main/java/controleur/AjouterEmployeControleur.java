@@ -97,10 +97,9 @@ public class AjouterEmployeControleur {
                 daoEmploye.ajouterCmpToEmp(employe.getLogin(), cmp);
                 daoEmploye.getHashMapEmpCmp().put(employe, cmp);
             }
-            NavigationControleur.getVueV().getButtonEmploye().doClick();
             effacerChamps();
             ajoutPersonnelVue.afficherMessage("");
-
+            NavigationControleur.getVueV().getButtonEmploye().doClick();
         } catch (SQLException e) {
             ajoutPersonnelVue.afficherMessage("Erreur lors de l'ajout.");
             e.printStackTrace();

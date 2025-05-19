@@ -161,6 +161,7 @@ public class AjoutEmployeVue extends JPanel {
             model.addRow(new Object[]{cmp.getIdCatCmp(), cmp.getIdCmp(), cmp.getNomCmpFr()});
         }
     }
+    
     /**
      * Récupère la compétence sélectionnée dans la table des compétences disponibles
      *
