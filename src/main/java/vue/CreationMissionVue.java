@@ -70,7 +70,8 @@ public class CreationMissionVue extends JPanel {
 
         // Champs du formulaire
         this.titreMisField = new JTextField(20);
-        this.descriptionMisField = new JTextArea(3,30);
+        this.descriptionMisField = new JTextArea(3,10);
+        this.descriptionMisField.setPreferredSize(new Dimension(350,10));
         this.dateDebutMisField = new JDateChooser();
         dateDebutMisField.setDateFormatString(FORMAT_DATE);
         dateDebutMisField.setDate(new java.util.Date());

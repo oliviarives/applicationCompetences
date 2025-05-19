@@ -81,6 +81,7 @@ public class ModifierMissionControleur {
             java.sql.Date dateFin = modificationMV.getDateFinMisField();
             String description = modificationMV.getDescriptionMisField();
 
+
             // Vérification des champs obligatoires
             if(titre.isEmpty() || login.isEmpty() || dateDebut == null || dateFin == null) {
                 JOptionPane.showMessageDialog(null,
@@ -121,18 +122,26 @@ public class ModifierMissionControleur {
                 return;
             }
 
-            Mission misInsert = new Mission(
-                    titre,
-                    description,
-                    dateDebut,
-                    dateFin,
-                    login,
-                    modificationMV.getNbEmpField(),
-                    idMissionSelectMissionView
-            );
-
             List<Competence> cmpAjoutees = modificationMV.getCompetencesAjoutees();
             List<String> logEmpAjoutes = modificationMV.getLogEmployeAjoutees();
+
+            int idStatut = 1;
+            if(!logEmpAjoutes.isEmpty()) {
+                idStatut=2;
+            }
+
+            Mission misInsert = new Mission(
+                    titre,
+                    dateDebut,
+                    dateFin,
+                    description,
+                    new java.sql.Date(System.currentTimeMillis()),
+                    modificationMV.getNbEmpField(),
+                    login,
+                    1
+            );
+
+
 
             try {
                 daoMission.updateMissionModifier(misInsert);

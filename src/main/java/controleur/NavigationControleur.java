@@ -216,10 +216,11 @@ public class NavigationControleur {
             try {
                 Mission missionSelectionnee = missionV.getMissionSelectionnee();
                 // Griser les champs de la vue modification mission si le statut n'est pas "En préparation"
-                if (missionSelectionnee.getIdSta() != 1) {
-                    ModifierMissionControleur modifMC = new ModifierMissionControleur(
-                            modifMissionV, missionDao, competenceDao, employeDao, missionSelectionnee);
-                    modifMC.preRemplirFormulaire();
+                ModifierMissionControleur modifMC = new ModifierMissionControleur(
+                        modifMissionV, missionDao, competenceDao, employeDao, missionSelectionnee);
+                modifMC.preRemplirFormulaire();
+                if (missionSelectionnee.getIdSta() != 1 ) {
+
 
                     int is = missionV.getIdMissionSelect();
                     modifMC.setIdMissionSelect(is);
@@ -239,9 +240,9 @@ public class NavigationControleur {
                     modifMissionV.getBouttonConfirmerDates().setEnabled(false);
                     modifMissionV.getBoutonModifierDates().setEnabled(false);
                 } else {
-                    ModifierMissionControleur modifMC = new ModifierMissionControleur(
+                    /*ModifierMissionControleur modifMC = new ModifierMissionControleur(
                             modifMissionV, missionDao, competenceDao, employeDao, missionSelectionnee);
-                    modifMC.preRemplirFormulaire();
+                    modifMC.preRemplirFormulaire();*/
 
                     int is = missionV.getIdMissionSelect();
                     modifMC.setIdMissionSelect(is);
