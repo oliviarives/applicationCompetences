@@ -46,8 +46,7 @@ public class AjouterEmployeControleur {
             ajouterPersonnel();
             effacerChamps();
             NavigationControleur.loadEmploye();
-            NavigationControleur.getVueV().getButtonEmploye().doClick();
-
+            //NavigationControleur.getVueV().getButtonEmploye().doClick();
         });
 
         vue.getButtonEffacer().addActionListener(e -> effacerChamps());
