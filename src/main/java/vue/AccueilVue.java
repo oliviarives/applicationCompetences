@@ -146,10 +146,9 @@ public class AccueilVue extends JPanel {
         // Mise à jour du graphique
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         List<String> ordreMois = List.of(
-                "January", "February", "March", "April", "May", "June",
-                "July", "August", "September", "October", "November", "December"
+                "janvier", "février", "mars", "avril", "mai", "juin",
+                "juillet", "août", "septembre", "octobre", "novembre", "décembre"
         );
-
         statsMois.entrySet().stream()
                 .sorted(Comparator.comparingInt(e -> ordreMois.indexOf(e.getKey())))
                 .forEach(entry -> dataset.addValue(entry.getValue(), "Missions", entry.getKey()));
